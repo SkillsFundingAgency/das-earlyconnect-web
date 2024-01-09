@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "das-earlyconnect-web", "das-earlyconnect-web.csproj", "{FFD7FD6F-A668-4F83-9F14-A98C1ED310FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFD7FD6F-A668-4F83-9F14-A98C1ED310FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD7FD6F-A668-4F83-9F14-A98C1ED310FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD7FD6F-A668-4F83-9F14-A98C1ED310FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD7FD6F-A668-4F83-9F14-A98C1ED310FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58945AA0-00FC-4E22-80D6-BC724AF0DDCF}
+	EndGlobalSection
+EndGlobal
