@@ -6,7 +6,7 @@ trigger:
 
 variables:
 - name: SolutionBaseName
-  value: das-earlyconnect-web
+  value: SFA.DAS.EarlyConnect.Web
 - name: BuildConfiguration
   value: release
 - name: BuildPlatform
