@@ -6,5 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>das_earlyconnect_web</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+    <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.21" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EarlyConnect.Application\SFA.DAS.EarlyConnect.Application.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EarlyConnect.Domain\SFA.DAS.EarlyConnect.Domain.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EarlyConnect.Infrastructure\SFA.DAS.EarlyConnect.Infrastructure.csproj" />
+  </ItemGroup>
 
 </Project>
