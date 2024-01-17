@@ -11,7 +11,6 @@ builder.Services.AddOptions();
 builder.Services.AddConfigurationOptions(rootConfiguration);
 
 builder.Services.AddLogging();
-builder.Services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
 builder.Services.AddServiceRegistration();
 

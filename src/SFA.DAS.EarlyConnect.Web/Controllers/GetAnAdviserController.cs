@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using SFA.DAS.EarlyConnect.Api.Models;
-using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 
 
@@ -21,11 +19,7 @@ public class GetAnAdviserController : Controller
     [Route("", Name = RouteNames.ServiceStartDefault, Order = 0)]
     public async Task<IActionResult> Index()
     {
-        string surveyGuid = "FF8E9040-3167-4D49-E408-08DC12C62C9B";
-
-        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = surveyGuid });
-
-        return View((GetStudentTriageDataBySurveyIdResponse)result);
+        return View();
     }
 }
 
