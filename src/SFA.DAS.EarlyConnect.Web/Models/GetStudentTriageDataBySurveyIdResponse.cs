@@ -1,7 +1,7 @@
 ﻿using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 
-namespace SFA.DAS.EarlyConnect.Api.Models
+namespace SFA.DAS.EarlyConnect.Web.Models
 {
     public class GetStudentTriageDataBySurveyIdResponse
     {
