@@ -2,6 +2,6 @@
 
 public class EarlyConnectOuterApi
 {
-    public string? Key { get; set; }
-    public string? BaseUrl { get; set; }
+    public string? SubscriptionKey { get; set; }
+    public string? ApiBaseUrl { get; set; }
 }

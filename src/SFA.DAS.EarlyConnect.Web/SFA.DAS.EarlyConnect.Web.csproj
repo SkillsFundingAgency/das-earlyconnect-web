@@ -19,5 +19,8 @@
     <ProjectReference Include="..\SFA.DAS.EarlyConnect.Domain\SFA.DAS.EarlyConnect.Domain.csproj" />
     <ProjectReference Include="..\SFA.DAS.EarlyConnect.Infrastructure\SFA.DAS.EarlyConnect.Infrastructure.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
 
 </Project>
