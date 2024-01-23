@@ -1,0 +1,38 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Configuration
+@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@using SFA.DAS.EarlyConnect.Web.ViewModels
+@model EmailAddressViewModel
+@{
+    ViewBag.Title = "Get an apprenticeship adviser";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState, OrderedFieldNames = Model.OrderedFieldNames }' />
+
+            <form asp-route="@RouteNames.EmailAddress_Post">
+                <h1 class="govuk-heading-xl">What is your email address?</h1>
+
+                <div esfa-validation-marker-for="Email" class="govuk-form-group-compound govuk-form-group">
+                    <span esfa-validation-message-for="Email" class="govuk-error-message"></span>
+                    <input asp-for="Email" class="govuk-input" id="email" name="email" spellcheck="false" />
+                </div>
+                
+                <p class="govuk-body">
+                    To confirm it is your email address we will send you a code.
+                </p>
+
+                <button type="submit" class="govuk-button govuk-button--start" esfa-automation="continue-button">
+                    Continue
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+
+</main>

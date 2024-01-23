@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
+using SFA.DAS.EarlyConnect.Web.Configuration;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -40,6 +41,8 @@ public class GetAnAdviserController : Controller
     [Route("dummy", Name = RouteNames.Dummy)]
     public IActionResult Dummy(string lepsCode)
     {
+        var tempData = TempData[TempDataKeys.EmailAuthenticationCode];
+        
         return View();
     }
 }
