@@ -32,7 +32,7 @@ public class GetAnAdviserController : Controller
     [Route("{lepsCode}", Name = RouteNames.GetAnAdviser_Post, Order = 0)]
     public IActionResult GetAnAdviser_Post(string lepsCode)
     {
-        return RedirectToRoute(RouteNames.Dummy, new { lepsCode = lepsCode });
+        return RedirectToRoute(RouteNames.EmailAddress_Get, new { lepsCode = lepsCode});
 
     }
 
