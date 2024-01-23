@@ -15,6 +15,11 @@ namespace SFA.DAS.EarlyConnect.Web.Services
 
         public bool IsValidLepsCode(string lepsCode)
         {
+            if (_config.LepCodes == null)
+            {
+                return false;
+            }
+
             return _config.LepCodes.Split(',').Contains(lepsCode.Trim().ToUpper());
         }
     }
