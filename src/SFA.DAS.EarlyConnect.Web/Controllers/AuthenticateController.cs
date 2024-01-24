@@ -10,7 +10,7 @@ using SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.CreateOtherStudentTriageData;
-using Esfa.Recruit.Provider.Web.Configuration;
+using SFA.DAS.EarlyConnect.Web.Configuration;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -125,8 +125,8 @@ public class AuthenticateController : Controller
     }
 
     [HttpGet]
-    [Route("emailaddress/{lepsCode}", Name = RouteNames.Email_Get, Order = 0)]
-    public IActionResult EmailAddress(string lepsCode)
+    [Route("email", Name = RouteNames.Email_Get, Order = 0)]
+    public IActionResult EmailAddress(string? lepsCode)
     {
         var model = new EmailAddressViewModel
         {
@@ -136,7 +136,7 @@ public class AuthenticateController : Controller
     }
 
     [HttpPost]
-    [Route("emailaddress", Name = RouteNames.Email_Post, Order = 0)]
+    [Route("email", Name = RouteNames.Email_Post, Order = 0)]
     public async Task<IActionResult> EmailAddress(EmailAddressViewModel model)
     {
         try

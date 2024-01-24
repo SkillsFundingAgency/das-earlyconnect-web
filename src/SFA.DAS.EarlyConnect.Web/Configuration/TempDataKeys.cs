@@ -1,4 +1,4 @@
-﻿namespace Esfa.Recruit.Provider.Web.Configuration
+﻿namespace SFA.DAS.EarlyConnect.Web.Configuration
 {
     public static class TempDataKeys
     {
