@@ -81,7 +81,7 @@ public class AuthenticateController : Controller
 
             await SignInUser(viewModel.Email, viewModel.StudentSurveyId);
 
-            return RedirectToRoute(RouteNames.Dummy, new { viewModel.StudentSurveyId });
+            return RedirectToRoute(RouteNames.Name_Get, new { viewModel.StudentSurveyId });
         }
 
         return NotFound();
@@ -141,10 +141,10 @@ public class AuthenticateController : Controller
     {
         try
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(model);
+            //}
 
             var response = await _mediator.Send(new CreateOtherStudentTriageDataCommand
             {

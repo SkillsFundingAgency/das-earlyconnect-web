@@ -12,4 +12,6 @@ public static class RouteNames
     public const string Email_Post = "Email_Post";
     public const string StartAgain_Get = "StartAgain_Get";
     public const string Dummy = "Dummy";
+    public const string Name_Get = "Name_Get";
+    public const string Name_Post = "Name_Post";
 }
