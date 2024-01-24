@@ -10,9 +10,9 @@ using NUnit.Framework;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
+using SFA.DAS.EarlyConnect.Web.Configuration;
 using SFA.DAS.EarlyConnect.Web.Controllers;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
-using SFA.DAS.EarlyConnect.Web.Validations;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
