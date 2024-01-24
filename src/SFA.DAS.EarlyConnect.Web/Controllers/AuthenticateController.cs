@@ -126,7 +126,7 @@ public class AuthenticateController : Controller
 
     [HttpGet]
     [Route("email", Name = RouteNames.Email_Get, Order = 0)]
-    public IActionResult EmailAddress(string? lepsCode)
+    public IActionResult Email(string? lepsCode)
     {
         var model = new EmailAddressViewModel
         {
@@ -137,15 +137,10 @@ public class AuthenticateController : Controller
 
     [HttpPost]
     [Route("email", Name = RouteNames.Email_Post, Order = 0)]
-    public async Task<IActionResult> EmailAddress(EmailAddressViewModel model)
+    public async Task<IActionResult> Email(EmailAddressViewModel model)
     {
         try
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             var response = await _mediator.Send(new CreateOtherStudentTriageDataCommand
             {
                 StudentTriageData = new OtherStudentTriageData()

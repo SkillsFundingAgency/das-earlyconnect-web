@@ -58,7 +58,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.Dummy, Is.EqualTo(result.RouteName));
+            Assert.That(RouteNames.Email_Get, Is.EqualTo(result.RouteName));
             Assert.That("someLepsCode", Is.EqualTo(result.RouteValues["lepsCode"]));
         }
     }
