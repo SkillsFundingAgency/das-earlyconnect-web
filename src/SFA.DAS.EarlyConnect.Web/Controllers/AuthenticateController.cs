@@ -10,6 +10,7 @@ using SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.CreateOtherStudentTriageData;
+using SFA.DAS.EarlyConnect.Web.Configuration;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -130,6 +131,57 @@ public class AuthenticateController : Controller
         }
 
         return NotFound();
+    }
+
+    [HttpGet]
+    [Route("email", Name = RouteNames.Email_Get, Order = 0)]
+    public IActionResult EmailAddress(string? lepsCode)
+    {
+        var model = new EmailAddressViewModel
+        {
+            LepsCode = lepsCode
+        };
+        return View(model);
+    }
+
+    [HttpPost]
+    [Route("email", Name = RouteNames.Email_Post, Order = 0)]
+    public async Task<IActionResult> EmailAddress(EmailAddressViewModel model)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var response = await _mediator.Send(new CreateOtherStudentTriageDataCommand
+            {
+                StudentTriageData = new OtherStudentTriageData()
+                {
+                    Email = model.Email,
+                    LepsCode = model.LepsCode
+                }
+            });
+
+            var authenticateViewModel = new AuthenticateViewModel
+            {
+                AuthCode = response.AuthCode,
+                ExpiryDate = response.ExpiryDate,
+                StudentSurveyId = response.StudentSurveyId,
+                LepsCode = model.LepsCode,
+                Email = model.Email
+            };
+
+            TempData[TempDataKeys.TempDataAuthenticateModel] = JsonConvert.SerializeObject(authenticateViewModel);
+
+            return RedirectToRoute(RouteNames.Authenticate_Get);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error posting email address");
+            return BadRequest();
+        }
     }
 
     private async Task SignInUser(String email, string StudentSurveyId)
