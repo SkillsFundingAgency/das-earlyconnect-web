@@ -3,19 +3,20 @@
 @using SFA.DAS.EarlyConnect.Web.Views
 @model SFA.DAS.EarlyConnect.Web.ViewModels.EmailAddressViewModel
 @{
-    ViewBag.Title = "Get an apprenticeship adviser";
+    ViewBag.Title = "What is your email address?";
 }
 
+@section BackLink 
+{
+    <a asp-route="@RouteNames.ServiceStartDefault" asp-route-lepscode="@Model.LepsCode" esfa-automation="link-back" class="govuk-back-link">Back</a>
+}
 <main class="govuk-main-wrapper " id="main-content" role="main">
-
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-
             <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState, OrderedFieldNames = Model.OrderedFieldNames }' />
-
+            
             <form asp-route="@RouteNames.Email_Post">
-                @Html.HiddenFor(model => model.LepsCode);
+                @Html.HiddenFor(model => model.LepsCode)
                 
                 <h1 class="govuk-heading-xl">What is your email address?</h1>
 
@@ -34,8 +35,5 @@
 
             </form>
         </div>
-        </div>
     </div>
-
-
 </main>
