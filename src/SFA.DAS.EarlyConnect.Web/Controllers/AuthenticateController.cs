@@ -14,14 +14,12 @@ using SFA.DAS.EarlyConnect.Web.Configuration;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
-
 public class AuthenticateController : Controller
 {
     private readonly IMediator _mediator;
     private readonly ILogger<AuthenticateController> _logger;
     private readonly IUrlValidator _urlValidator;
     private readonly IDataProtectorService _dataProtectorService;
-    private const string TempDataAuthenticateModel = "AuthenticateModel";
 
     public AuthenticateController(IMediator mediator,
         ILogger<AuthenticateController> logger,
@@ -39,20 +37,13 @@ public class AuthenticateController : Controller
     [Route("authenticate", Name = RouteNames.Authenticate_Get, Order = 0)]
     public IActionResult Authenticate()
     {
-        if (TempData[TempDataAuthenticateModel] is string model)
+        var viewModel = GetViewModelFromTempData();
+
+        if (viewModel != null && _urlValidator.IsValidLepsCode(viewModel.LepsCode))
         {
-            var viewModel = JsonConvert.DeserializeObject<AuthenticateViewModel>(model);
-            if (_urlValidator.IsValidLepsCode(viewModel.LepsCode))
-            {
-                TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
+            SetTempData(viewModel);
 
-                var authCodeViewModel = new AuthCodeViewModel()
-                {
-                    LepsCode = viewModel.LepsCode
-                };
-
-                return View(authCodeViewModel);
-            }
+            return View(new AuthCodeViewModel { LepsCode = viewModel.LepsCode });
         }
 
         return NotFound();
@@ -62,25 +53,19 @@ public class AuthenticateController : Controller
     [Route("authenticate", Name = RouteNames.Authenticate_Post, Order = 0)]
     public async Task<IActionResult> Authenticate(AuthCodeViewModel request)
     {
-        if (TempData[TempDataAuthenticateModel] is string model)
-        {
-            var viewModel = JsonConvert.DeserializeObject<AuthenticateViewModel>(model);
+        var viewModel = GetViewModelFromTempData();
 
+        if (viewModel != null)
+        {
             var decryptedAuthCode = _dataProtectorService.DecodeData(viewModel.AuthCode);
 
             if (request.AuthCode != decryptedAuthCode)
-            {
-                TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
-                ModelState.AddModelError(nameof(request.AuthCode), "Enter the correct confirmation code.");
-                return RedirectToRoute(RouteNames.Authenticate_Get, new { viewModel.LepsCode });
-            }
+                return HandleAuthCodeError("Enter the correct confirmation code.", viewModel.LepsCode, viewModel);
+
 
             if (viewModel.ExpiryDate < DateTime.Now)
-            {
-                TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
-                ModelState.AddModelError(nameof(request.AuthCode), "The code you entered has expired.Enter the latest confirmation code.");
-                return RedirectToRoute(RouteNames.Authenticate_Get, new { viewModel.LepsCode });
-            }
+                return HandleAuthCodeError("The code you entered has expired. Enter the latest confirmation code.", viewModel.LepsCode, viewModel);
+
 
             await SignInUser(viewModel.Email, viewModel.StudentSurveyId);
 
@@ -101,9 +86,10 @@ public class AuthenticateController : Controller
     [Route("send-code", Name = RouteNames.SendCode_Post, Order = 0)]
     public async Task<IActionResult> SendCode()
     {
-        if (TempData[TempDataAuthenticateModel] is string model)
+        var viewModel = GetViewModelFromTempData();
+
+        if (viewModel != null)
         {
-            var viewModel = JsonConvert.DeserializeObject<AuthenticateViewModel>(model);
             var response = await _mediator.Send(new CreateOtherStudentTriageDataCommand
             {
                 StudentTriageData = new OtherStudentTriageData
@@ -121,7 +107,8 @@ public class AuthenticateController : Controller
                 StudentSurveyId = viewModel.StudentSurveyId
             };
 
-            TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(authenticateViewModel);
+            SetTempData(authenticateViewModel);
+
             return RedirectToRoute(RouteNames.Authenticate_Get, new { viewModel.LepsCode });
         }
 
@@ -174,6 +161,28 @@ public class AuthenticateController : Controller
         }
     }
 
+    private void SetTempData(AuthenticateViewModel viewModel)
+    {
+        TempData[TempDataKeys.TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
+    }
+
+    private AuthenticateViewModel GetViewModelFromTempData()
+    {
+        if (TempData[TempDataKeys.TempDataAuthenticateModel] is string model)
+        {
+            return JsonConvert.DeserializeObject<AuthenticateViewModel>(model);
+        }
+
+        return null;
+    }
+
+    private IActionResult HandleAuthCodeError(string errorMessage, string lepsCode, AuthenticateViewModel viewModel)
+    {
+        TempData[TempDataKeys.TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
+        ModelState.AddModelError(nameof(AuthCodeViewModel.AuthCode), errorMessage);
+        return RedirectToRoute(RouteNames.Authenticate_Get, new { lepsCode });
+    }
+
     private async Task SignInUser(String email, string StudentSurveyId)
     {
         // Create claims for the authenticated user
@@ -182,13 +191,11 @@ public class AuthenticateController : Controller
             new Claim(ClaimTypes.Email, email),
             new Claim(ClaimTypes.Role, "user"),
             new Claim("StudentSurveyId", StudentSurveyId)
-            // Add any other claims as needed
         };
 
         var identity = new ClaimsIdentity(claims, "cookie");
         var principal = new ClaimsPrincipal(identity);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-        // Sign in the user
     }
 }
 

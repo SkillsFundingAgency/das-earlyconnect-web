@@ -5,7 +5,7 @@
 @using SFA.DAS.EarlyConnect.Web.Views
 @model SFA.DAS.EarlyConnect.Web.ViewModels.AuthCodeViewModel
 @{
-    ViewBag.Title = "Get an apprenticeship adviser";
+    ViewBag.Title = "Authenticate user";
 }
 
 @section BackLink
@@ -40,16 +40,16 @@
                         <span esfa-validation-message-for="AuthCode" class="govuk-error-message"></span>
                         <input asp-for="AuthCode" id="AuthCode" name="AuthCode" class="govuk-input govuk-input--width-10" type="text">
                     </div>
-
-                    <p class="govuk-body">
-                        Not received an email?
-                        <a href="@Url.RouteUrl(RouteNames.SendCode_Post)" class="govuk-link govuk-link--no-visited-state">Send the code again</a>.
-                    </p>
-
-                    <button type="submit" class="govuk-button govuk-button--start">
-                        Continue
-                    </button>
                 </div>
+                <p class="govuk-body">
+                    Not received an email?
+                    <a href="@Url.RouteUrl(RouteNames.SendCode_Post)" class="govuk-link govuk-link--no-visited-state">Send the code again</a>.
+                </p>
+
+                <button type="submit" class="govuk-button govuk-button--start">
+                    Continue
+                </button>
+
             </form>
         </div>
     </div>
