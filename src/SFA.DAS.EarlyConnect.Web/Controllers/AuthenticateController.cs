@@ -39,16 +39,6 @@ public class AuthenticateController : Controller
     [Route("authenticate", Name = RouteNames.Authenticate_Get, Order = 0)]
     public IActionResult Authenticate()
     {
-        var authenticateViewModel = new AuthenticateViewModel
-        {
-            AuthCode = "NDM0NzAy",
-            Email = "ratheesh@education.com",
-            ExpiryDate = DateTime.Now,
-            LepsCode = "E37000025",
-            StudentSurveyId = "abc"
-        };
-        TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(authenticateViewModel);
-
         if (TempData[TempDataAuthenticateModel] is string model)
         {
             var viewModel = JsonConvert.DeserializeObject<AuthenticateViewModel>(model);
@@ -56,7 +46,12 @@ public class AuthenticateController : Controller
             {
                 TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
 
-                return View();
+                var authCodeViewModel = new AuthCodeViewModel()
+                {
+                    LepsCode = viewModel.LepsCode
+                };
+
+                return View(authCodeViewModel);
             }
         }
 
@@ -77,15 +72,14 @@ public class AuthenticateController : Controller
             {
                 TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
                 ModelState.AddModelError(nameof(request.AuthCode), "Enter the correct confirmation code.");
-
-                return View(request);
+                return RedirectToRoute(RouteNames.Authenticate_Get, new { viewModel.LepsCode });
             }
 
-            if (viewModel.ExpiryDate > DateTime.Now)
+            if (viewModel.ExpiryDate < DateTime.Now)
             {
                 TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
                 ModelState.AddModelError(nameof(request.AuthCode), "The code you entered has expired.Enter the latest confirmation code.");
-                return View(request);
+                return RedirectToRoute(RouteNames.Authenticate_Get, new { viewModel.LepsCode });
             }
 
             await SignInUser(viewModel.Email, viewModel.StudentSurveyId);
@@ -126,6 +120,7 @@ public class AuthenticateController : Controller
                 LepsCode = viewModel.LepsCode,
                 StudentSurveyId = viewModel.StudentSurveyId
             };
+
             TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(authenticateViewModel);
             return RedirectToRoute(RouteNames.Authenticate_Get, new { viewModel.LepsCode });
         }
@@ -167,7 +162,7 @@ public class AuthenticateController : Controller
             var authenticateViewModel = new AuthenticateViewModel
             {
                 AuthCode = response.AuthCode,
-                ExpiryDate = response.ExpiryDate,
+                ExpiryDate = response.Expiry,
                 StudentSurveyId = response.StudentSurveyId,
                 LepsCode = model.LepsCode,
                 Email = model.Email
@@ -191,7 +186,7 @@ public class AuthenticateController : Controller
         {
             new Claim(ClaimTypes.Email, email),
             new Claim(ClaimTypes.Role, "user"),
-            new Claim("StudentSurveyId", "StudentSurveyId")
+            new Claim("StudentSurveyId", StudentSurveyId)
             // Add any other claims as needed
         };
 
