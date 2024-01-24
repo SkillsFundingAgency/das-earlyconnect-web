@@ -14,7 +14,7 @@
 
             <h1 class="govuk-heading-l">Check your email</h1>
 
-            <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState, OrderedFieldNames = Model.OrderedFieldNames }' />
+            <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState}' />
 
             <div class="govuk-inset-text">
                 We’ve sent an email to <b>emailaddress@domain.com</b>
@@ -25,7 +25,7 @@
                 It may take a few minutes for the email to arrive. The code will expire after 30 minutes.
             </p>
 
-            <form asp-route="@RouteNames.Authenticate_Post">
+            <form asp-route="@RouteNames.Authenticate_Post" novalidate>
                 <div esfa-validation-marker-for="AuthCode" class="govuk-form-group">
 
                     <div class="govuk-form-group">
@@ -40,7 +40,6 @@
                         Not received an email?
                         <a href="@Url.RouteUrl(RouteNames.SendCode_Post)" class="govuk-link govuk-link--no-visited-state">Send the code again</a>.
                     </p>
-
 
                     <button type="submit" class="govuk-button govuk-button--start" esfa-automation="continue-button">
                         Continue

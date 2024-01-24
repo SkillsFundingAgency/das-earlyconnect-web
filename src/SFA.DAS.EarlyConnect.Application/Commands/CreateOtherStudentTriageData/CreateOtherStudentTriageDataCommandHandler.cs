@@ -25,7 +25,7 @@ namespace SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData
             {
                 StudentSurveyId = response.Body.StudentSurveyId,
                 AuthCode = response.Body.AuthCode,
-                ExpiryDate = response.Body.ExpiryDate
+                Expiry = response.Body.Expiry
             };
         }
     }

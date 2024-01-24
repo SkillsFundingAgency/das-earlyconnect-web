@@ -35,12 +35,5 @@ public class GetAnAdviserController : Controller
         return RedirectToRoute(RouteNames.Dummy, new { lepsCode = lepsCode });
 
     }
-
-    [HttpGet]
-    [Route("dummy", Name = RouteNames.Dummy)]
-    public IActionResult Dummy(string lepsCode)
-    {
-        return View();
-    }
 }
 

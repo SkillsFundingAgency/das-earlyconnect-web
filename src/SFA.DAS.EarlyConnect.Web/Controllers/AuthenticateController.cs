@@ -40,7 +40,7 @@ public class AuthenticateController : Controller
     {
         var authenticateViewModel = new AuthenticateViewModel
         {
-            AuthCode = "Test",
+            AuthCode = "NDM0NzAy",
             Email = "ratheesh@education.com",
             ExpiryDate = DateTime.Now,
             LepsCode = "E37000025",
@@ -55,12 +55,7 @@ public class AuthenticateController : Controller
             {
                 TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
 
-                var authCodeViewModel = new AuthCodeViewModel()
-                {
-                    AuthCode = authenticateViewModel.AuthCode
-                };
-
-                return View(authCodeViewModel);
+                return View();
             }
         }
 
@@ -74,18 +69,22 @@ public class AuthenticateController : Controller
         if (TempData[TempDataAuthenticateModel] is string model)
         {
             var viewModel = JsonConvert.DeserializeObject<AuthenticateViewModel>(model);
+
             var decryptedAuthCode = _dataProtectorService.DecodeData(viewModel.AuthCode);
 
             if (request.AuthCode != decryptedAuthCode)
             {
-                ModelState.AddModelError(nameof(request.AuthCode), "Enter the correct confirmation code");
+                TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
+                ModelState.AddModelError(nameof(request.AuthCode), "Enter the correct confirmation code.");
 
                 return View(request);
             }
 
             if (viewModel.ExpiryDate > DateTime.Now)
             {
-                return RedirectToRoute(RouteNames.StartAgain_Get, new { viewModel.LepsCode });
+                TempData[TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
+                ModelState.AddModelError(nameof(request.AuthCode), "The code you entered has expired.Enter the latest confirmation code.");
+                return View(request);
             }
 
             await SignInUser(viewModel.Email, viewModel.StudentSurveyId);
@@ -105,7 +104,7 @@ public class AuthenticateController : Controller
 
     [HttpGet]
     [Route("send-code", Name = RouteNames.SendCode_Post, Order = 0)]
-    public async Task<IActionResult> SendCode(string authcode)
+    public async Task<IActionResult> SendCode()
     {
         if (TempData[TempDataAuthenticateModel] is string model)
         {
@@ -122,7 +121,7 @@ public class AuthenticateController : Controller
             {
                 AuthCode = response.AuthCode,
                 Email = viewModel.Email,
-                ExpiryDate = response.ExpiryDate,
+                ExpiryDate = response.Expiry,
                 LepsCode = viewModel.LepsCode,
                 StudentSurveyId = viewModel.StudentSurveyId
             };
