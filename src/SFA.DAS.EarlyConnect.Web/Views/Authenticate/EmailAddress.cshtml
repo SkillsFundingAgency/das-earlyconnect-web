@@ -6,6 +6,10 @@
     ViewBag.Title = "What is your email address?";
 }
 
+@section BackLink {
+    <a asp-route="@RouteNames.ServiceStartDefault" asp-route-lepscode="@Model.LepsCode" esfa-automation="link-back" class="govuk-back-link">Back</a>
+}
+
 <main class="govuk-main-wrapper " id="main-content" role="main">
 
 

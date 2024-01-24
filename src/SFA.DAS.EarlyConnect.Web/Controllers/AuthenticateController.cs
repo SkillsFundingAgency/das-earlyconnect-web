@@ -125,8 +125,8 @@ public class AuthenticateController : Controller
     }
 
     [HttpGet]
-    [Route("email", Name = RouteNames.Email_Get, Order = 0)]
-    public IActionResult Email(string? lepsCode)
+    [Route("emailaddress", Name = RouteNames.Email_Get, Order = 0)]
+    public IActionResult EmailAddress(string? lepsCode)
     {
         var model = new EmailAddressViewModel
         {
@@ -136,8 +136,8 @@ public class AuthenticateController : Controller
     }
 
     [HttpPost]
-    [Route("email", Name = RouteNames.Email_Post, Order = 0)]
-    public async Task<IActionResult> Email(EmailAddressViewModel model)
+    [Route("emailaddress", Name = RouteNames.Email_Post, Order = 0)]
+    public async Task<IActionResult> EmailAddress(EmailAddressViewModel model)
     {
         try
         {
