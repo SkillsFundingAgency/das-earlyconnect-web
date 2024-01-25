@@ -57,6 +57,9 @@ public class AuthenticateController : Controller
 
         if (viewModel != null)
         {
+            if (viewModel.AuthCode == null)
+                return HandleAuthCodeError("Enter the correct confirmation code.", viewModel.LepsCode, viewModel);
+
             var decryptedAuthCode = _dataProtectorService.DecodeData(viewModel.AuthCode);
 
             if (request.AuthCode != decryptedAuthCode)
