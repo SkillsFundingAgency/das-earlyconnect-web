@@ -18,7 +18,7 @@ public class ApiClient : IApiClient
     {
         _httpClient = httpClient;
         _config = config.Value;
-        _httpClient.BaseAddress = new Uri(config.Value.BaseUrl);
+        _httpClient.BaseAddress = new Uri(config.Value.ApiBaseUrl);
     }
 
     public async Task<ApiResponse<TResponse>> Post<TResponse>(IPostApiRequest request, bool includeResponse = true)
@@ -106,7 +106,7 @@ public class ApiClient : IApiClient
 
     private void AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
     {
-        httpRequestMessage.Headers.Add("Ocp-Apim-Subscription-Key", _config.Key);
+        httpRequestMessage.Headers.Add("Ocp-Apim-Subscription-Key", _config.SubscriptionKey);
         httpRequestMessage.Headers.Add("X-Version", "1");
     }
 }

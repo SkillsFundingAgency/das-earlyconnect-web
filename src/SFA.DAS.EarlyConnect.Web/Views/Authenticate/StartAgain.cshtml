@@ -1,0 +1,22 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@{
+    ViewBag.Title = "You need to start again";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">You need to start again</h1>
+
+            <div class="govuk-inset-text">
+                We’ve sent an email to <b>emailaddress@domain.com</b>
+            </div>
+            <p class="govuk-body">The email contains a 6 digit confirmation code.
+
+            <p class="govuk-body">
+                This is because you entered the wrong code. To get help finding apprenticeships with early connect,
+                <a href="@Url.RouteUrl(RouteNames.Email_Get, new {@Model })">start again</a>.
+            </p>
+        </div>
+    </div>
+</main>

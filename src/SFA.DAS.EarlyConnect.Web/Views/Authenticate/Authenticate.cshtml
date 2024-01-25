@@ -1,0 +1,56 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SFA.DAS.EarlyConnect.Application.TagHelpers
+@using SFA.DAS.EarlyConnect.Web.ViewModels
+@using SFA.DAS.EarlyConnect.Web.Views
+@model SFA.DAS.EarlyConnect.Web.ViewModels.AuthCodeViewModel
+@{
+    ViewBag.Title = "Authenticate user";
+}
+
+@section BackLink
+{
+    <a asp-route="@RouteNames.Email_Get" asp-route-lepsCode="@Model.LepsCode" class="govuk-back-link">Back</a>
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l">Check your email</h1>
+
+            <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState}' />
+
+            <div class="govuk-inset-text">
+                We’ve sent an email to <b>emailaddress@domain.com</b>
+            </div>
+            <p class="govuk-body">The email contains a 6 digit confirmation code.
+
+            <p class="govuk-body">
+                It may take a few minutes for the email to arrive. The code will expire after 30 minutes.
+            </p>
+
+            <form asp-route="@RouteNames.Authenticate_Post" novalidate>
+                <div esfa-validation-marker-for="AuthCode" class="govuk-form-group">
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="confirmation-code">
+                            Enter the code
+                        </label>
+                        <span esfa-validation-message-for="AuthCode" class="govuk-error-message"></span>
+                        <input asp-for="AuthCode" id="AuthCode" name="AuthCode" class="govuk-input govuk-input--width-10" type="text">
+                    </div>
+                </div>
+                <p class="govuk-body">
+                    Not received an email?
+                    <a href="@Url.RouteUrl(RouteNames.SendCode_Post)" class="govuk-link govuk-link--no-visited-state">Send the code again</a>.
+                </p>
+
+                <button type="submit" class="govuk-button govuk-button--start">
+                    Continue
+                </button>
+
+            </form>
+        </div>
+    </div>
+</main>

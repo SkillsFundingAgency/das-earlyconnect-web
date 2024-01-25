@@ -9,6 +9,8 @@ public static class AddConfigurationOptionsExtension
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.Configure<EarlyConnectWeb>(configuration.GetSection(nameof(EarlyConnectWeb)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EarlyConnectWeb>>().Value);
         services.Configure<EarlyConnectOuterApi>(configuration.GetSection(nameof(EarlyConnectOuterApi)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EarlyConnectOuterApi>>().Value);
     }
