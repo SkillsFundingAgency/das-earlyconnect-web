@@ -17,5 +17,6 @@ public static class AddServiceRegistrationExtension
         services.AddTransient<IDataProtectorService, DataProtectorService>();
         services.AddSingleton<IValidator<AuthCodeViewModel>, AuthCodeModelValidator>();
         services.AddSingleton<IValidator<EmailAddressViewModel>, EmailAddressModelValidator>();
+        services.AddTransient<IAuthenticateService, AuthenticateService>();
     }
 }

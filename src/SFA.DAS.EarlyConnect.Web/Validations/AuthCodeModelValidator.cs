@@ -9,7 +9,7 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
         {
             RuleFor(x => x.AuthCode)
                 .NotNull()
-                .WithMessage("Enter the 6 character confirmation code");                             
+                .WithMessage("Enter the 6 character confirmation code.");                             
         }
     }
 }
