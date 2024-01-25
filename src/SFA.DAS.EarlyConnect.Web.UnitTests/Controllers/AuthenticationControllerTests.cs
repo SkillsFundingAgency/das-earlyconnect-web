@@ -39,7 +39,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller =
                 new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object);
 
-            var result = controller.Email("lepsCode") as ViewResult;
+            var result = controller.EmailAddress("lepsCode") as ViewResult;
 
             Assert.That(result, Is.Not.Null);
         }
@@ -76,7 +76,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 LepsCode = "someLepsCode"
             };
 
-            var result = controller.Email(model).GetAwaiter().GetResult() as RedirectToRouteResult;
+            var result = controller.EmailAddress(model).GetAwaiter().GetResult() as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(RouteNames.Authenticate_Get, Is.EqualTo(result.RouteName));
