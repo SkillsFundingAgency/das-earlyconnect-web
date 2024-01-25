@@ -36,6 +36,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 var loggerMock = new Mock<ILogger<AuthenticateController>>();
                 var urlValidatorMock = new Mock<IUrlValidator>();
                 var dataProtectorServiceMock = new Mock<IDataProtectorService>();
+                var authenticateService = new Mock<IAuthenticateService>();
 
                 var httpContext = new DefaultHttpContext();
                 var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
@@ -50,7 +51,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
                 var controller =
                     new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object,
-                        dataProtectorServiceMock.Object)
+                        dataProtectorServiceMock.Object, authenticateService.Object)
                     {
                         TempData = tempData
                     };
@@ -68,10 +69,11 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<AuthenticateController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectorServiceMock = new Mock<IDataProtectorService>();
+            var authenticateService = new Mock<IAuthenticateService>();
 
             var lepsCode = "E37000025";
 
-            var controller = new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object);
+            var controller = new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object, authenticateService.Object);
 
             var result = controller.StartAgain(lepsCode) as ViewResult;
 
@@ -85,6 +87,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<AuthenticateController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectorServiceMock = new Mock<IDataProtectorService>();
+            var authenticateService = new Mock<IAuthenticateService>();
 
             var createCommandResult = _fixture.Build<CreateOtherStudentTriageDataCommandResult>()
                 .With(x => x.AuthCode, "1234")
@@ -104,7 +107,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             tempData["AuthenticateModel"] = serializedViewModel;
 
             var controller =
-                new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object)
+                new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object, authenticateService.Object)
                 {
                     TempData = tempData
                 };
@@ -122,12 +125,64 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         }
 
         [Test]
+        public async Task Authenticate_Post_ValidAuthCode_ReturnsRedirectToRouteResult()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<AuthenticateController>>();
+            var urlValidatorMock = new Mock<IUrlValidator>();
+            var dataProtectorServiceMock = new Mock<IDataProtectorService>();
+            var authenticateService = new Mock<IAuthenticateService>();
+
+            var httpContext = new DefaultHttpContext();
+            var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
+
+            var viewModel = new AuthenticateViewModel
+            {
+                AuthCode = "decrypted_auth_code",
+                Email = "ratheesh@education.com",
+                ExpiryDate = DateTime.Now.AddDays(1),
+                LepsCode = "E37000025",
+                StudentSurveyId = "abc"
+            };
+
+            var serializedViewModel = JsonConvert.SerializeObject(viewModel);
+
+            tempData["AuthenticateModel"] = serializedViewModel;
+
+            var controller =
+                new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object,
+                    dataProtectorServiceMock.Object, authenticateService.Object)
+                {
+                    TempData = tempData
+                };
+
+            var authCodeViewModel = new AuthCodeViewModel
+            {
+                AuthCode = "decrypted_auth_code"
+            };
+
+            dataProtectorServiceMock.Setup(x => x.DecodeData(It.IsAny<string>())).Returns("decrypted_auth_code");
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
+            var result = await controller.Authenticate(authCodeViewModel) as RedirectToRouteResult;
+
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.Dummy));
+        }
+
+        [Test]
         public async Task Authenticate_Post_InvalidAuthCode_ReturnsRedirectToRouteResult()
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<AuthenticateController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectorServiceMock = new Mock<IDataProtectorService>();
+            var authenticateService = new Mock<IAuthenticateService>();
 
             var httpContext = new DefaultHttpContext();
             var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
@@ -147,7 +202,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             var controller =
                 new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object,
-                    dataProtectorServiceMock.Object)
+                    dataProtectorServiceMock.Object, authenticateService.Object)
                 {
                     TempData = tempData
                 };
@@ -176,9 +231,10 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<AuthenticateController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectorServiceMock = new Mock<IDataProtectorService>();
+            var authenticateService = new Mock<IAuthenticateService>();
 
             var controller =
-                new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object);
+                new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object, authenticateService.Object);
 
             var result = controller.EmailAddress("lepsCode") as ViewResult;
 
@@ -192,6 +248,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<AuthenticateController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectorServiceMock = new Mock<IDataProtectorService>();
+             var authenticateService = new Mock<IAuthenticateService>();
 
             var createCommandResult = _fixture.Build<CreateOtherStudentTriageDataCommandResult>()
                 .With(x => x.AuthCode, "1234")
@@ -206,7 +263,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 .ReturnsAsync(createCommandResult);
 
             var controller =
-                new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object)
+                new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object, authenticateService.Object)
                 {
                     TempData = tempData
                 };

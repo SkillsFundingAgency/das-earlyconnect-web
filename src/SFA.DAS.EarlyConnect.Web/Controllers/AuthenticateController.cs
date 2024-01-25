@@ -1,8 +1,5 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using Newtonsoft.Json;
@@ -20,17 +17,20 @@ public class AuthenticateController : Controller
     private readonly ILogger<AuthenticateController> _logger;
     private readonly IUrlValidator _urlValidator;
     private readonly IDataProtectorService _dataProtectorService;
+    private readonly IAuthenticateService _authenticateService;
 
     public AuthenticateController(IMediator mediator,
         ILogger<AuthenticateController> logger,
         IUrlValidator urlValidator,
-        IDataProtectorService dataProtectorService
+        IDataProtectorService dataProtectorService,
+        IAuthenticateService authenticateService
         )
     {
         _mediator = mediator;
         _logger = logger;
         _urlValidator = urlValidator;
         _dataProtectorService = dataProtectorService;
+        _authenticateService = authenticateService;
     }
 
     [HttpGet]
@@ -66,8 +66,7 @@ public class AuthenticateController : Controller
             if (viewModel.ExpiryDate < DateTime.Now)
                 return HandleAuthCodeError("The code you entered has expired. Enter the latest confirmation code.", viewModel.LepsCode, viewModel);
 
-
-            await SignInUser(viewModel.Email, viewModel.StudentSurveyId);
+            await _authenticateService.SignInUser(viewModel.Email, viewModel.StudentSurveyId);
 
             return RedirectToRoute(RouteNames.Dummy, new { viewModel.StudentSurveyId });
         }
@@ -181,21 +180,6 @@ public class AuthenticateController : Controller
         TempData[TempDataKeys.TempDataAuthenticateModel] = JsonConvert.SerializeObject(viewModel);
         ModelState.AddModelError(nameof(AuthCodeViewModel.AuthCode), errorMessage);
         return RedirectToRoute(RouteNames.Authenticate_Get, new { lepsCode });
-    }
-
-    private async Task SignInUser(String email, string StudentSurveyId)
-    {
-        // Create claims for the authenticated user
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Role, "user"),
-            new Claim("StudentSurveyId", StudentSurveyId)
-        };
-
-        var identity = new ClaimsIdentity(claims, "cookie");
-        var principal = new ClaimsPrincipal(identity);
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
     }
 }
 
