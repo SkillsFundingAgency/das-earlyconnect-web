@@ -75,13 +75,6 @@ public class AuthenticateController : Controller
     }
 
     [HttpGet]
-    [Route("start-again", Name = RouteNames.StartAgain_Get, Order = 0)]
-    public IActionResult StartAgain(string lepsCode)
-    {
-        return View(lepsCode);
-    }
-
-    [HttpGet]
     [Route("send-code", Name = RouteNames.SendCode_Post, Order = 0)]
     public async Task<IActionResult> SendCode()
     {
