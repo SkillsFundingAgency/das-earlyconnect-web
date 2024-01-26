@@ -154,7 +154,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.RouteName, Is.EqualTo(RouteNames.Dummy));
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.Name_Get));
         }
 
         [Test]

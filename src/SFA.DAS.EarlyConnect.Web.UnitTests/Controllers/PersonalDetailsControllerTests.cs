@@ -1,18 +1,12 @@
 ﻿using AutoFixture;
-using Esfa.Recruit.Provider.Web.Configuration;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
-using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
-using SFA.DAS.EarlyConnect.Domain.Interfaces;
-using SFA.DAS.EarlyConnect.Web.Configuration;
 using SFA.DAS.EarlyConnect.Web.Controllers;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
@@ -54,7 +48,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(surveyResponse);
 
-            var result = await controller.Name("12345", false) as ViewResult;
+            var result = await controller.Name(new Guid(), false) as ViewResult;
 
             Assert.That(result, Is.Not.Null);
 
@@ -95,7 +89,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 FirstName = "Mr",
                 LastName = "Greene",
                 IsCheck = false,
-                StudentSurveyId = new Guid().ToString()
+                StudentSurveyId = new Guid()
             };
 
             var result = controller.Name(model).GetAwaiter().GetResult() as RedirectToRouteResult;
@@ -128,7 +122,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 FirstName = "Mr",
                 LastName = "Greene",
                 IsCheck = true,
-                StudentSurveyId = new Guid().ToString()
+                StudentSurveyId = new Guid()
             };
 
             var result = controller.Name(model).GetAwaiter().GetResult() as RedirectToRouteResult;
