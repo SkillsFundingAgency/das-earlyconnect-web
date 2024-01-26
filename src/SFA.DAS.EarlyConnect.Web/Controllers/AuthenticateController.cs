@@ -64,8 +64,7 @@ public class AuthenticateController : Controller
 
             if (request.AuthCode != decryptedAuthCode)
                 return HandleAuthCodeError("Enter the correct confirmation code.", viewModel.LepsCode, viewModel);
-
-
+            
             if (viewModel.ExpiryDate < DateTime.Now)
                 return HandleAuthCodeError("The code you entered has expired. Enter the latest confirmation code.", viewModel.LepsCode, viewModel);
 
