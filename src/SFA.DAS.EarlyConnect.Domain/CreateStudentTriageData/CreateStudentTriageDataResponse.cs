@@ -1,7 +1,8 @@
 ﻿namespace SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData
 {
-    public class CreateStudentDataResponse
+    public class CreateStudentTriageDataResponse
     {
+        public string Message { get; set; }
     }
 }
 

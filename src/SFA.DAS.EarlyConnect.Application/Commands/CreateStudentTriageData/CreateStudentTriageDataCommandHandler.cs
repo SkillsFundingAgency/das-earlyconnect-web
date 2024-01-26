@@ -5,7 +5,7 @@ using SFA.DAS.EarlyConnect.Domain.Interfaces;
 
 namespace SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData
 {
-    public class CreateStudentTriageDataCommandHandler : IRequestHandler<CreateStudentTriageDataCommand, Unit>
+    public class CreateStudentTriageDataCommandHandler : IRequestHandler<CreateStudentTriageDataCommand, CreateStudentTriageDataCommandResult>
     {
 
         private readonly IApiClient _apiClient;
@@ -15,13 +15,16 @@ namespace SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData
             _apiClient = apiClient;
         }
 
-        public async Task<Unit> Handle(CreateStudentTriageDataCommand request, CancellationToken cancellationToken)
+        public async Task<CreateStudentTriageDataCommandResult> Handle(CreateStudentTriageDataCommand request, CancellationToken cancellationToken)
         {
-            var response = await _apiClient.Post<CreateStudentDataResponse>(new CreateStudentTriageDataRequest(request.SurveyGuid, request.StudentData), true);
+            var response = await _apiClient.Post<CreateStudentTriageDataResponse>(new CreateStudentTriageDataRequest(request.SurveyGuid, request.StudentData), true);
 
             response.EnsureSuccessStatusCode();
 
-            return Unit.Value;
+            return new CreateStudentTriageDataCommandResult
+            {
+                Message = response.Body.Message
+            };
         }
     }
 }

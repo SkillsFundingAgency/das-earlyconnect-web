@@ -4,7 +4,7 @@ using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
 
 namespace SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData
 {
-    public class CreateStudentTriageDataCommand : IRequest<Unit>
+    public class CreateStudentTriageDataCommand : IRequest<CreateStudentTriageDataCommandResult>
     {
         public StudentTriageData StudentData { get; set; }
 
