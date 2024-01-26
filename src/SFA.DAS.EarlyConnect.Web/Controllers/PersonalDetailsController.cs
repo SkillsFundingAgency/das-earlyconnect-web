@@ -1,14 +1,11 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
-using System.Reflection;
+using SFA.DAS.EarlyConnect.Web.Mappers;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -27,8 +24,42 @@ public class PersonalDetailsController : Controller
     }
 
     [HttpGet]
+    [Route("postcode", Name = RouteNames.Postcode_Get, Order = 0)]
+    public async Task<IActionResult> Postcode(PostcodeViewModel m)
+    {
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
+
+        return View(new PostcodeEditViewModel
+        {
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
+            Postcode = result.Postcode
+        });
+    }
+
+    [HttpPost]
+    [Route("postcode", Name = RouteNames.Postcode_Post, Order = 0)]
+    public async Task<IActionResult> Postcode(PostcodeEditViewModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = m.MapFromPostcodeRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Telephone_Get;
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
+    }
+
+    [HttpGet]
     [Route("name", Name = RouteNames.Name_Get, Order = 0)]
-    public async Task<IActionResult> Name(string studentSurveyId, bool? isSummaryReview)
+    public async Task<IActionResult> Name(Guid studentSurveyId, bool? isSummaryReview)
     {
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
@@ -50,7 +81,7 @@ public class PersonalDetailsController : Controller
     {
         try
         {
-            var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery 
+            var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
             {
                 SurveyGuid = model.StudentSurveyId
             });
@@ -70,7 +101,7 @@ public class PersonalDetailsController : Controller
                     Industry = studentSurveyResponse.Industry,
                     StudentSurvey = studentSurveyResponse.StudentSurvey
                 },
-                SurveyGuid = new Guid(model.StudentSurveyId)
+                SurveyGuid = model.StudentSurveyId
             });
 
             if (model.IsCheck)
