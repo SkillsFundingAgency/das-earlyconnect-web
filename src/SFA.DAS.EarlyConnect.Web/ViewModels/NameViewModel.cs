@@ -10,5 +10,6 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
             nameof(FirstName),
             nameof(LastName),
         };
+        public bool IsCheck { get; set; }
     }
 }

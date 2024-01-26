@@ -14,4 +14,5 @@ public static class RouteNames
     public const string Dummy = "Dummy";
     public const string Name_Get = "Name_Get";
     public const string Name_Post = "Name_Post";
+    public const string CheckYourAnswers_Get = "Check_Get";
 }

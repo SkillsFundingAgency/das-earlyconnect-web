@@ -9,13 +9,15 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
         {
             RuleFor(x => x.FirstName)
                 .NotNull()
-                .MaximumLength(150)
-                .WithMessage("Enter a first name");
+                .WithMessage("Enter a first name")
+                .MaximumLength(35)
+                .WithMessage("First name must not be more than 35 characters");
 
             RuleFor(x => x.FirstName)
                 .NotNull()
-                .MaximumLength(150)
-                .WithMessage("Enter a last name");
+                .WithMessage("Enter a last name")
+                .MaximumLength(35)
+                .WithMessage("Last name must not be more than 35 characters");
         }
     }
 }

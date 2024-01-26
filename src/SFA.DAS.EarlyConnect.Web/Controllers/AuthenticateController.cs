@@ -141,11 +141,6 @@ public class AuthenticateController : Controller
     {
         try
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model);
-            //}
-
             var response = await _mediator.Send(new CreateOtherStudentTriageDataCommand
             {
                 StudentTriageData = new OtherStudentTriageData()

@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
-using Newtonsoft.Json;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
-using SFA.DAS.EarlyConnect.Application.Services;
-using SFA.DAS.EarlyConnect.Domain.CreateOtherStudentTriageData;
-using SFA.DAS.EarlyConnect.Web.Configuration;
+using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
+using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
+using System.Reflection;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -30,13 +28,20 @@ public class PersonalDetailsController : Controller
 
     [HttpGet]
     [Route("name", Name = RouteNames.Name_Get, Order = 0)]
-    public IActionResult Name(string? studentSurveyId)
+    public async Task<IActionResult> Name(string studentSurveyId, bool? isSummaryReview)
     {
-        var model = new NameViewModel 
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
-            StudentSurveyId = studentSurveyId
-        };
-        return View(model);
+            SurveyGuid = studentSurveyId
+        });
+
+        return View(new NameViewModel
+        {
+            StudentSurveyId = studentSurveyId,
+            IsCheck = isSummaryReview.GetValueOrDefault(),
+            FirstName = studentSurveyResponse.FirstName,
+            LastName = studentSurveyResponse.LastName
+        });
     }
 
     [HttpPost]
@@ -45,53 +50,43 @@ public class PersonalDetailsController : Controller
     {
         try
         {
-            //var studentSurveyResponse = _mediator.Send(modelnew Create)
+            var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery 
+            {
+                SurveyGuid = model.StudentSurveyId
+            });
 
+            var response = await _mediator.Send(new CreateStudentTriageDataCommand
+            {
+                StudentData = new StudentTriageData
+                {
+                    Id = studentSurveyResponse.Id,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    DateOfBirth = studentSurveyResponse.DateOfBirth.GetValueOrDefault(),
+                    Email = studentSurveyResponse.Email,
+                    Postcode = studentSurveyResponse.Postcode,
+                    Telephone = studentSurveyResponse.Telephone,
+                    DataSource = studentSurveyResponse.DataSource,
+                    Industry = studentSurveyResponse.Industry,
+                    StudentSurvey = studentSurveyResponse.StudentSurvey
+                },
+                SurveyGuid = new Guid(model.StudentSurveyId)
+            });
 
-            //var response = await _mediator.Send(new CreateOtherStudent
-            //{
-            //    StudentTriageData = new OtherStudentTriageData()
-            //    {
-            //        Email = model.Email,
-            //        LepsCode = model.LepsCode
-            //    }
-            //});
-
-            //var authenticateViewModel = new AuthenticateViewModel
-            //{
-            //    AuthCode = response.AuthCode,
-            //    ExpiryDate = response.ExpiryDate,
-            //    StudentSurveyId = response.StudentSurveyId,
-            //    LepsCode = model.LepsCode,
-            //    Email = model.Email
-            //};
-
-            //TempData[TempDataKeys.TempDataAuthenticateModel] = JsonConvert.SerializeObject(authenticateViewModel);
-
-            return RedirectToRoute(RouteNames.Authenticate_Get);
+            if (model.IsCheck)
+            {
+                return RedirectToRoute(RouteNames.CheckYourAnswers_Get, new { model.StudentSurveyId });
+            }
+            else
+            {
+                return RedirectToRoute(RouteNames.StartAgain_Get);
+            }
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error posting email address");
+            _logger.LogError(e, "Error posting Name");
             return BadRequest();
         }
-    }
-
-    private async Task SignInUser(String email, string StudentSurveyId)
-    {
-        // Create claims for the authenticated user
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Role, "user"),
-            new Claim("StudentSurveyId", "StudentSurveyId")
-            // Add any other claims as needed
-        };
-
-        var identity = new ClaimsIdentity(claims, "cookie");
-        var principal = new ClaimsPrincipal(identity);
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-        // Sign in the user
     }
 }
 
