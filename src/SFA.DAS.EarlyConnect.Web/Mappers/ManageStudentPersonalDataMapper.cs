@@ -19,6 +19,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
+            manageStudentPersonalData.StudentSurvey.LastUpdated = DateTime.Now;
             return manageStudentPersonalData;
         }
     }

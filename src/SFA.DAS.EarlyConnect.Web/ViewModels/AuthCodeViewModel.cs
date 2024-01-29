@@ -4,5 +4,6 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
     {
         public string? AuthCode { get; set; }
         public string? LepsCode { get; set; }
+        public string? Email { get; set; }
     }
 }
