@@ -21,10 +21,10 @@ namespace SFA.DAS.EarlyConnect.Web.Controllers;
 public class TriageDataController : Controller
 {
     private readonly IMediator _mediator;
-    private readonly ILogger<AuthenticateController> _logger;
+    private readonly ILogger<TriageDataController> _logger;
 
     public TriageDataController(IMediator mediator,
-        ILogger<AuthenticateController> logger
+        ILogger<TriageDataController> logger
         
         )
     {
