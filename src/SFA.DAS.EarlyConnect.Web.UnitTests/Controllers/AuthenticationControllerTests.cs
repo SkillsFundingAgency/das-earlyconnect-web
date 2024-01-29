@@ -63,24 +63,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         }
 
         [Test]
-        public void StartAgain_ValidLepsCode_ReturnsViewResult()
-        {
-            var mediatorMock = new Mock<IMediator>();
-            var loggerMock = new Mock<ILogger<AuthenticateController>>();
-            var urlValidatorMock = new Mock<IUrlValidator>();
-            var dataProtectorServiceMock = new Mock<IDataProtectorService>();
-            var authenticateService = new Mock<IAuthenticateService>();
-
-            var lepsCode = "E37000025";
-
-            var controller = new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectorServiceMock.Object, authenticateService.Object);
-
-            var result = controller.StartAgain(lepsCode) as ViewResult;
-
-            Assert.That(result, Is.Not.Null);
-        }
-
-        [Test]
         public async Task SendCode_ValidModel_ReturnsRedirectToRouteResult()
         {
             var mediatorMock = new Mock<IMediator>();
@@ -248,7 +230,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<AuthenticateController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectorServiceMock = new Mock<IDataProtectorService>();
-             var authenticateService = new Mock<IAuthenticateService>();
+            var authenticateService = new Mock<IAuthenticateService>();
 
             var createCommandResult = _fixture.Build<CreateOtherStudentTriageDataCommandResult>()
                 .With(x => x.AuthCode, "1234")

@@ -10,7 +10,7 @@
 
 @section BackLink
 {
-    <a asp-route="@RouteNames.Email_Get" asp-route-lepsCode="@Model.LepsCode" class="govuk-back-link">Back</a>
+    <a asp-route="@RouteNames.Email_Get" asp-route-lepsCode="@Model.LepsCode" esfa-automation="link-back" class="govuk-back-link">Back</a>
 }
 
 <main class="govuk-main-wrapper " id="main-content" role="main">
@@ -38,7 +38,7 @@
                             Enter the code
                         </label>
                         <span esfa-validation-message-for="AuthCode" class="govuk-error-message"></span>
-                        <input asp-for="AuthCode" id="AuthCode" name="AuthCode" class="govuk-input govuk-input--width-10" type="text">
+                        <input asp-for="AuthCode" id="authcode" name="authcode" class="govuk-input govuk-input--width-10" type="text">
                     </div>
                 </div>
                 <p class="govuk-body">
@@ -46,10 +46,9 @@
                     <a href="@Url.RouteUrl(RouteNames.SendCode_Post)" class="govuk-link govuk-link--no-visited-state">Send the code again</a>.
                 </p>
 
-                <button type="submit" class="govuk-button govuk-button--start">
+                <button type="submit" class="govuk-button govuk-button--start" esfa-automation="continue-button">
                     Continue
                 </button>
-
             </form>
         </div>
     </div>
