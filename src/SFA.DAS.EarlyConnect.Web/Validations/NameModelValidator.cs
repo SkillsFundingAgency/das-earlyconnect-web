@@ -13,7 +13,7 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
                 .MaximumLength(35)
                 .WithMessage("First name must not be more than 35 characters");
 
-            RuleFor(x => x.FirstName)
+            RuleFor(x => x.LastName)
                 .NotNull()
                 .WithMessage("Enter a last name")
                 .MaximumLength(35)

@@ -28,7 +28,7 @@ public class PersonalDetailsController : Controller
 
     [HttpGet]
     [Route("name", Name = RouteNames.Name_Get, Order = 0)]
-    public async Task<IActionResult> Name(string studentSurveyId, bool? isSummaryReview)
+    public async Task<IActionResult> Name(Guid studentSurveyId, bool? isSummaryReview)
     {
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
@@ -70,7 +70,7 @@ public class PersonalDetailsController : Controller
                     Industry = studentSurveyResponse.Industry,
                     StudentSurvey = studentSurveyResponse.StudentSurvey
                 },
-                SurveyGuid = new Guid(model.StudentSurveyId)
+                SurveyGuid = model.StudentSurveyId
             });
 
             if (model.IsCheck)

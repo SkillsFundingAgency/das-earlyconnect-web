@@ -2,7 +2,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
 {
     public class NameViewModel
     {
-        public string? StudentSurveyId { get; set; }
+        
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public IList<string> OrderedFieldNames => new List<string>
@@ -11,5 +11,17 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
             nameof(LastName),
         };
         public bool IsCheck { get; set; }
+        public Guid StudentSurveyId { get; set; }
+        public Dictionary<string, string> RouteDictionary
+        {
+            get
+            {
+                var routeDictionary = new Dictionary<string, string>
+                {
+                    {"studentSurveyId", StudentSurveyId.ToString()}
+                };
+                return routeDictionary;
+            }
+        }
     }
 }

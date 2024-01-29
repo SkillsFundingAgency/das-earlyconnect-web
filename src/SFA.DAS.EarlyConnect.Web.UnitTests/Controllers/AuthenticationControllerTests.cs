@@ -79,7 +79,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var result = controller.EmailAddress(model).GetAwaiter().GetResult() as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.Dummy, Is.EqualTo(result.RouteName));
+            Assert.That(RouteNames.Authenticate_Get, Is.EqualTo(result.RouteName));
             Assert.That(controller.TempData.Keys.First(), Is.EqualTo(TempDataKeys.TempDataAuthenticateModel));
         }
     }

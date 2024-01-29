@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using Esfa.Recruit.Provider.Web.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +53,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(surveyResponse);
 
-            var result = await controller.Name("12345", false) as ViewResult;
+            var result = await controller.Name(new Guid(), false) as ViewResult;
 
             Assert.That(result, Is.Not.Null);
 
@@ -95,7 +94,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 FirstName = "Mr",
                 LastName = "Greene",
                 IsCheck = false,
-                StudentSurveyId = new Guid().ToString()
+                StudentSurveyId = new Guid()
             };
 
             var result = controller.Name(model).GetAwaiter().GetResult() as RedirectToRouteResult;
@@ -128,7 +127,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 FirstName = "Mr",
                 LastName = "Greene",
                 IsCheck = true,
-                StudentSurveyId = new Guid().ToString()
+                StudentSurveyId = new Guid()
             };
 
             var result = controller.Name(model).GetAwaiter().GetResult() as RedirectToRouteResult;

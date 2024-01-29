@@ -37,10 +37,29 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<TriageDataController>>();
 
+            var surveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                Id = 1,
+                DateOfBirth = new DateTime(),
+                FirstName ="First",
+                LastName = "Last",
+                Email = "test@example.com",
+                Postcode = "CH67 6TY",
+                Telephone = "123456",
+                DataSource = "None",
+                Industry = "Sector 1|Sector 8",
+                StudentSurvey = new StudentSurveyDto()
+            };
+
+            mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(surveyResponse);
+
             var controller =
                 new TriageDataController(mediatorMock.Object, loggerMock.Object);
 
-            var result = await controller.Industry("12345", false) as ViewResult;
+
+
+            var result = await controller.Industry(new Guid(), false) as ViewResult;
 
             Assert.That(result, Is.Not.Null);
 
@@ -80,13 +99,13 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var model = new IndustryViewModel
             {
                 IsCheck = false,
-                StudentSurveyId = new Guid().ToString()
+                StudentSurveyId = new Guid()
             };
 
             var result = controller.Industry(model, new List<string> { "Area 1", "Area 5", "Area 10"}).GetAwaiter().GetResult() as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.Dummy, Is.EqualTo(result.RouteName));
+            Assert.That(RouteNames.School_Get, Is.EqualTo(result.RouteName));
         }
 
         [Test]
@@ -123,7 +142,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var model = new IndustryViewModel
             {
                 IsCheck = true,
-                StudentSurveyId = new Guid().ToString()
+                StudentSurveyId = new Guid()
             };
 
             var result = controller.Industry(model, new List<string> { "Area 1", "Area 5", "Area 10" }).GetAwaiter().GetResult() as RedirectToRouteResult;

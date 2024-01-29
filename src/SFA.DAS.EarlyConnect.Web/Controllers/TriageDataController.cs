@@ -34,7 +34,7 @@ public class TriageDataController : Controller
 
     [HttpGet]
     [Route("industry", Name = RouteNames.Industry_Get, Order = 0)]
-    public async Task<IActionResult> Industry(string ? studentSurveyId, bool? isSummaryReview)
+    public async Task<IActionResult> Industry(Guid studentSurveyId, bool? isSummaryReview)
     {
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
@@ -75,7 +75,7 @@ public class TriageDataController : Controller
                 Industry = string.Join("|", sector),
                 StudentSurvey = studentSurveyResponse.StudentSurvey
             },
-            SurveyGuid = new Guid(model.StudentSurveyId)
+            SurveyGuid = model.StudentSurveyId
         });
 
         if (model.IsCheck)
@@ -84,7 +84,7 @@ public class TriageDataController : Controller
         }
         else
         {
-            return RedirectToRoute(RouteNames.Dummy, new { studentSurveyId = model.StudentSurveyId });
+            return RedirectToRoute(RouteNames.School_Get, new { studentSurveyId = model.StudentSurveyId });
         }
     }
 
