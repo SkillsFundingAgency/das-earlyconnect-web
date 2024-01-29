@@ -79,7 +79,7 @@ public class PersonalDetailsController : Controller
             }
             else
             {
-                return RedirectToRoute(RouteNames.StartAgain_Get);
+                return RedirectToRoute(RouteNames.Industry_Get, new { model.StudentSurveyId });
             }
         }
         catch (Exception e)
