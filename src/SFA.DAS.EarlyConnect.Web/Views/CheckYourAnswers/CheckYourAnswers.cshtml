@@ -1,0 +1,22 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@using SFA.DAS.EarlyConnect.Web.ViewModels
+@using SFA.DAS.EarlyConnect.Web.Views
+@model SFA.DAS.EarlyConnect.Web.ViewModels.CheckYourAnswersViewModel
+@{
+    ViewBag.Title = "Check your answers before sending your request";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            
+            <p class="govuk-body">
+                <a href="@Url.RouteUrl(RouteNames.Name_Get, new {studentSurveyId = Model.StudentSurveyId, isSummaryReview = true})" class="govuk-link govuk-link--no-visited-state">Change Name</a>
+            </p>
+        </div>
+    </div>
+
+
+</main>
