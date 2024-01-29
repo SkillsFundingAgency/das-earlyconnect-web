@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using Esfa.Recruit.Provider.Web.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
