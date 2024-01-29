@@ -70,7 +70,7 @@ public class AuthenticateController : Controller
 
             await _authenticateService.SignInUser(viewModel.Email, viewModel.StudentSurveyId);
 
-            return RedirectToRoute(RouteNames.Dummy, new { viewModel.StudentSurveyId });
+            return RedirectToRoute(RouteNames.Name_Get, new { viewModel.StudentSurveyId });
         }
 
         return NotFound();
