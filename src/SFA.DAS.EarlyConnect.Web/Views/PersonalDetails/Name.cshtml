@@ -29,7 +29,7 @@
                             First name
                         </label>
                         <span esfa-validation-message-for="FirstName" class="govuk-error-message"></span>
-                        <input asp-for="FirstName" class="govuk-input govuk-input--width-25" type="text">
+                        <input asp-for="FirstName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="given-name"> 
                     </div>
                 </div>
 
@@ -39,11 +39,11 @@
                             Last name
                         </label>
                         <span esfa-validation-message-for="LastName" class="govuk-error-message"></span>
-                        <input asp-for="LastName" class="govuk-input govuk-input--width-25" type="text">
+                        <input asp-for="LastName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="family-name">
                     </div>
                 </div>
 
-                <button type="submit" class="govuk-button govuk-button--start" esfa-automation="continue-button">
+                <button type="submit" class="govuk-button" esfa-automation="continue-button">
                     Continue
                 </button>
             </form>
