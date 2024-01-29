@@ -7,8 +7,6 @@ using SFA.DAS.EarlyConnect.Domain.ApiResponse;
 using SFA.DAS.EarlyConnect.Domain.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Domain.Exceptions;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
-using System.Net;
-using System.Reflection.Metadata;
 
 namespace SFA.DAS.EarlyConnect.Application.UnitTests.Commands
 {
@@ -44,7 +42,7 @@ namespace SFA.DAS.EarlyConnect.Application.UnitTests.Commands
             var response = new CreateOtherStudentTriageDataResponse
             {
                 AuthCode = "1234",
-                ExpiryDate = DateTime.UtcNow,
+                Expiry = DateTime.UtcNow,
                 StudentSurveyId = "1"
             };
  
@@ -62,7 +60,7 @@ namespace SFA.DAS.EarlyConnect.Application.UnitTests.Commands
             // Assert
             Assert.AreEqual(expectedResponse.Body.StudentSurveyId, result.StudentSurveyId);
             Assert.AreEqual(expectedResponse.Body.AuthCode, result.AuthCode);
-            Assert.AreEqual(expectedResponse.Body.ExpiryDate, result.ExpiryDate);
+            Assert.AreEqual(expectedResponse.Body.Expiry, result.Expiry);
         }
 
         [Test]
@@ -74,7 +72,7 @@ namespace SFA.DAS.EarlyConnect.Application.UnitTests.Commands
             var response = new CreateOtherStudentTriageDataResponse
             {
                 AuthCode = "1234",
-                ExpiryDate = DateTime.UtcNow,
+                Expiry = DateTime.UtcNow,
                 StudentSurveyId = "1"
             };
 
