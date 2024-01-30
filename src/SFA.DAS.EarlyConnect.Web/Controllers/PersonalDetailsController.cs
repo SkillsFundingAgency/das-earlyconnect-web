@@ -138,20 +138,23 @@ public class PersonalDetailsController : Controller
 
     [HttpPost]
     [Route("telephone", Name = RouteNames.Telephone_Post)]
-    public async Task<IActionResult> Postcode(TelephoneEditViewModel m)
+    public async Task<IActionResult> Telephone(TelephoneEditViewModel m)
     {
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
             SurveyGuid = m.StudentSurveyId
         });
 
-        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        if (m.Telephone != null) 
         {
-            StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
-            SurveyGuid = m.StudentSurveyId
-        });
+            var response = await _mediator.Send(new CreateStudentTriageDataCommand
+            {
+                StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
+                SurveyGuid = m.StudentSurveyId
+            });
+        }
 
-        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : "IndustryRoute";
+        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get;
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }

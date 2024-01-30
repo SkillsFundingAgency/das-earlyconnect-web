@@ -257,7 +257,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 });
             mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
 
-            var result = await controller.Postcode(viewModel) as RedirectToRouteResult;
+            var result = await controller.Telephone(viewModel) as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(RouteNames.CheckYourAnswers_Get, Is.EqualTo(result.RouteName));
