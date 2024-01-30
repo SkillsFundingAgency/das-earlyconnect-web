@@ -9,6 +9,7 @@ using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Controllers;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
+using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
