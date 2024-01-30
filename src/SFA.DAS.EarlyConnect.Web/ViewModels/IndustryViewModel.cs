@@ -1,21 +1,10 @@
+using Esfa.Recruit.Employer.Web.RouteModel;
+
 namespace SFA.DAS.EarlyConnect.Web.ViewModels
 {
-    public class IndustryViewModel 
+    public class IndustryViewModel : TriageRouteModel
     {
         public List<string> Areas { get; set; } = new List<string>();
         public IList<string> OrderedFieldNames => new List<string>();
-        public bool IsCheck { get; set; }
-        public Guid StudentSurveyId { get; set; }
-        public Dictionary<string, string> RouteDictionary
-        {
-            get
-            {
-                var routeDictionary = new Dictionary<string, string>
-                {
-                    {"studentSurveyId", StudentSurveyId.ToString()}
-                };
-                return routeDictionary;
-            }
-        }
     }
 }
