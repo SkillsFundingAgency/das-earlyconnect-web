@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using Esfa.Recruit.Employer.Web.RouteModel;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -175,7 +176,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var result = controller.Name(model).GetAwaiter().GetResult() as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.StartAgain_Get, Is.EqualTo(result.RouteName));
+            Assert.That(RouteNames.Postcode_Get, Is.EqualTo(result.RouteName));
         }
 
         [Test]
@@ -210,6 +211,57 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             Assert.That(result, Is.Not.Null);
             Assert.That(RouteNames.CheckYourAnswers_Get, Is.EqualTo(result.RouteName));
+        }
+
+
+        [Test]
+        public async Task Telephone_Get_ReturnsCorrectViewModel()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+
+            var surveyId = new Guid();
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { Telephone = "07546666666" };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
+
+            var result = await controller.Telephone(new TriageRouteModel { StudentSurveyId = surveyId }) as ViewResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Model, Is.InstanceOf<TelephoneEditViewModel>());
+            var viewModel = (TelephoneEditViewModel)result.Model;
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
+            Assert.That(viewModel.Telephone, Is.EqualTo(queryResult.Telephone));
+        }
+
+        [Test]
+        public async Task Telephone_Post_RedirectsToCheckYourAnswers()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new TelephoneEditViewModel
+            {
+                StudentSurveyId = new Guid(),
+                IsCheck = true,
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+                {
+                    StudentSurvey = Survey
+                });
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = await controller.Postcode(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(RouteNames.CheckYourAnswers_Get, Is.EqualTo(result.RouteName));
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
         }
     }
 }
