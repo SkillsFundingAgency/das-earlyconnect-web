@@ -1,18 +1,17 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
-using System.Reflection;
+using SFA.DAS.EarlyConnect.Web.Mappers;
+using Microsoft.AspNetCore.Authorization;
+using Esfa.Recruit.Employer.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
-
+[Authorize]
 public class PersonalDetailsController : Controller
 {
     private readonly IMediator _mediator;
@@ -24,6 +23,40 @@ public class PersonalDetailsController : Controller
     {
         _mediator = mediator;
         _logger = logger;
+    }
+
+    [HttpGet]
+    [Route("postcode", Name = RouteNames.Postcode_Get, Order = 0)]
+    public async Task<IActionResult> Postcode(PostcodeViewModel m)
+    {
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
+
+        return View(new PostcodeEditViewModel
+        {
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
+            Postcode = result.Postcode
+        });
+    }
+
+    [HttpPost]
+    [Route("postcode", Name = RouteNames.Postcode_Post, Order = 0)]
+    public async Task<IActionResult> Postcode(PostcodeEditViewModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = m.MapFromPostcodeRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Telephone_Get;
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
 
     [HttpGet]
@@ -50,7 +83,7 @@ public class PersonalDetailsController : Controller
     {
         try
         {
-            var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery 
+            var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
             {
                 SurveyGuid = model.StudentSurveyId
             });
@@ -79,7 +112,7 @@ public class PersonalDetailsController : Controller
             }
             else
             {
-                return RedirectToRoute(RouteNames.Industry_Get, new { model.StudentSurveyId });
+                return RedirectToRoute(RouteNames.Postcode_Get, new { model.StudentSurveyId });
             }
         }
         catch (Exception e)
@@ -87,6 +120,43 @@ public class PersonalDetailsController : Controller
             _logger.LogError(e, "Error posting Name");
             return BadRequest();
         }
+    }
+
+    [HttpGet]
+    [Route("telephone", Name = RouteNames.Telephone_Get)]
+    public async Task<IActionResult> Telephone(TriageRouteModel m)
+    {
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
+
+        return View(new TelephoneEditViewModel
+        {
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
+            Telephone = result.Telephone
+        });
+    }
+
+    [HttpPost]
+    [Route("telephone", Name = RouteNames.Telephone_Post)]
+    public async Task<IActionResult> Telephone(TelephoneEditViewModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        if (m.Telephone != null) 
+        {
+            var response = await _mediator.Send(new CreateStudentTriageDataCommand
+            {
+                StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
+                SurveyGuid = m.StudentSurveyId
+            });
+        }
+
+        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get;
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
 }
 

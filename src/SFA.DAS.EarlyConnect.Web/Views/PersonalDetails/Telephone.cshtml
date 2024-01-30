@@ -1,0 +1,42 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SFA.DAS.EarlyConnect.Application.TagHelpers
+@using SFA.DAS.EarlyConnect.Web.ViewModels
+@using SFA.DAS.EarlyConnect.Web.Views
+@model SFA.DAS.EarlyConnect.Web.ViewModels.TelephoneEditViewModel
+@{
+    ViewBag.Title = "What is your telephone number?";
+}
+
+@section BackLink
+{
+    <a asp-show="!@Model.IsCheck" asp-route="@RouteNames.Postcode_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+    <a asp-show="@Model.IsCheck" asp-route="@RouteNames.CheckYourAnswers_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+}
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState }' />
+            <form asp-route="@RouteNames.Telephone_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
+                @Html.HiddenFor(model => model.IsCheck)
+                <div class="govuk-form-group">
+                    <h1 class="govuk-label-wrapper">
+                        <label class="govuk-label govuk-label--l" for="telephone">
+                            What's your telephone number? (optional)
+                        </label>
+                    </h1>
+                    <div esfa-validation-marker-for="Telephone" class="govuk-form-group">
+                        <div id="telephone-hint" class="govuk-hint">
+                            Your adviser may phone you to talk about apprenticeships. Enter your phone number if you’re happy to be contacted by phone
+                        </div>
+                        <span esfa-validation-message-for="Telephone" class="govuk-error-message"></span>
+                        <input asp-for="Telephone" id="telephone" name="telephone" class="govuk-input govuk-input--width-20" type="text">
+                    </div>
+                </div>
+                <button type="submit" class="govuk-button" data-module="govuk-button" esfa-automation="continue-button">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
