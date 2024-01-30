@@ -6,11 +6,6 @@
     ViewBag.Title = "What's your name?";
 }
 
-@section BackLink {
-    <a asp-show="!@Model.IsCheck" asp-route="@RouteNames.Authenticate_Get" esfa-automation="link-back" class="govuk-back-link">Back</a>
-    <a asp-show="@Model.IsCheck" asp-route="@RouteNames.CheckYourAnswers_Get" esfa-automation="link-back" class="govuk-back-link">Back</a>
-}
-
 <main class="govuk-main-wrapper " id="main-content" role="main">
 
     <div class="govuk-grid-row">
@@ -18,9 +13,8 @@
 
             <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState, OrderedFieldNames = Model.OrderedFieldNames }' />
 
-            <form asp-route="@RouteNames.Name_Post">
-                @Html.HiddenFor(model => model.StudentSurveyId);
-                @Html.HiddenFor(model => model.IsCheck);
+            <form asp-route="@RouteNames.Name_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
+                @Html.HiddenFor(model => model.IsCheck)
 
                 <h1 class="govuk-heading-xl">What's your name?</h1>
 
@@ -30,7 +24,7 @@
                             First name
                         </label>
                         <span esfa-validation-message-for="FirstName" class="govuk-error-message"></span>
-                        <input asp-for="FirstName" class="govuk-input govuk-input--width-25" type="text">
+                        <input asp-for="FirstName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="given-name"> 
                     </div>
                 </div>
 
@@ -40,11 +34,11 @@
                             Last name
                         </label>
                         <span esfa-validation-message-for="LastName" class="govuk-error-message"></span>
-                        <input asp-for="LastName" class="govuk-input govuk-input--width-25" type="text">
+                        <input asp-for="LastName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="family-name">
                     </div>
                 </div>
 
-                <button type="submit" class="govuk-button govuk-button--start" esfa-automation="continue-button">
+                <button type="submit" class="govuk-button" esfa-automation="continue-button">
                     Continue
                 </button>
             </form>

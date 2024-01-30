@@ -2,8 +2,8 @@
 
 namespace SFA.DAS.EarlyConnect.Web.ViewModels
 {
-    public class TelephoneEditViewModel : TriageRouteModel
+    public class IndustryEditModel : TriageRouteModel
     {
-        public string? Telephone { get; set; }
+        public List<string> Sectors { get; set; }
     }
 }

@@ -1,8 +1,9 @@
+using SFA.DAS.EarlyConnect.Web.RouteModel;
+
 namespace SFA.DAS.EarlyConnect.Web.ViewModels
 {
-    public class NameViewModel
+    public class NameViewModel : TriageRouteModel
     {
-        public Guid StudentSurveyId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public IList<string> OrderedFieldNames => new List<string>
@@ -10,6 +11,5 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
             nameof(FirstName),
             nameof(LastName),
         };
-        public bool IsCheck { get; set; }
     }
 }
