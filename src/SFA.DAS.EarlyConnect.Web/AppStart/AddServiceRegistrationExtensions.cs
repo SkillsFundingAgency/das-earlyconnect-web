@@ -18,6 +18,7 @@ public static class AddServiceRegistrationExtension
         services.AddSingleton<IValidator<AuthCodeViewModel>, AuthCodeModelValidator>();
         services.AddSingleton<IValidator<EmailAddressViewModel>, EmailAddressModelValidator>();
         services.AddSingleton<IValidator<PostcodeEditViewModel>, PostcodeModelValidator>();
+        services.AddSingleton<IValidator<TelephoneEditViewModel>, TelephoneModelValidator>();
         services.AddSingleton<IValidator<NameViewModel>, NameModelValidator>();
         services.AddTransient<IAuthenticateService, AuthenticateService>();
     }

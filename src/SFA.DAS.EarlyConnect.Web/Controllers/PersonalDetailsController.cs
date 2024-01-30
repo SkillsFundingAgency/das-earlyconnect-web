@@ -7,6 +7,7 @@ using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
 using SFA.DAS.EarlyConnect.Web.Mappers;
 using Microsoft.AspNetCore.Authorization;
+using Esfa.Recruit.Employer.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -111,7 +112,7 @@ public class PersonalDetailsController : Controller
             }
             else
             {
-                return RedirectToRoute(RouteNames.StartAgain_Get);
+                return RedirectToRoute(RouteNames.Postcode_Get, new { model.StudentSurveyId });
             }
         }
         catch (Exception e)
@@ -119,6 +120,43 @@ public class PersonalDetailsController : Controller
             _logger.LogError(e, "Error posting Name");
             return BadRequest();
         }
+    }
+
+    [HttpGet]
+    [Route("telephone", Name = RouteNames.Telephone_Get)]
+    public async Task<IActionResult> Telephone(TriageRouteModel m)
+    {
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
+
+        return View(new TelephoneEditViewModel
+        {
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
+            Telephone = result.Telephone
+        });
+    }
+
+    [HttpPost]
+    [Route("telephone", Name = RouteNames.Telephone_Post)]
+    public async Task<IActionResult> Telephone(TelephoneEditViewModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        if (m.Telephone != null) 
+        {
+            var response = await _mediator.Send(new CreateStudentTriageDataCommand
+            {
+                StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
+                SurveyGuid = m.StudentSurveyId
+            });
+        }
+
+        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get;
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
 }
 
