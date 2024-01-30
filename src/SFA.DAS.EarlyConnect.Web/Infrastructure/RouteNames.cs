@@ -16,14 +16,14 @@ public static class RouteNames
     public const string Postcode_Post = "Postcode_Post";
     public const string SchoolName_Get = "SchoolName_Get";
     public const string SchoolName_Post = "SchoolName_Post";
+    public const string Industry_Get = "Industry_Get";
+    public const string Industry_Post = "Industry_Post";
     public const string Name_Get = "Name_Get";
     public const string Name_Post = "Name_Post";
     public const string Telephone_Get = "Telephone_Get";
     public const string Telephone_Post = "Telephone_Post";
     public const string CheckYourAnswers_Get = "Check_Get";
     public const string CheckYourAnswersDummy_Get = "CheckYourAnswersDummy_Get";
-    public const string Industry_Get = "Industry_Get";
-    public const string Industry_Post = "Industry_Post";
     public const string Levelofapprenticeship_Get = "Levelofapprenticeship_Get";
     public const string Levelofapprenticeship_Post = "Levelofapprenticeship_Post";
 }
