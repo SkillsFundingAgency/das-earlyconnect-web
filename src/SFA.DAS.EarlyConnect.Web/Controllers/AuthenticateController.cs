@@ -67,17 +67,17 @@ public class AuthenticateController : Controller
             var viewModel = JsonConvert.DeserializeObject<AuthenticateViewModel>(model);
             var decryptedAuthCode = _dataProtectorService.DecodeData(viewModel.AuthCode);
 
-            //if (request.AuthCode != decryptedAuthCode)
-            //{
-            //    ModelState.AddModelError(nameof(request.AuthCode), "Enter the correct confirmation code");
+            if (request.AuthCode != decryptedAuthCode)
+            {
+                ModelState.AddModelError(nameof(request.AuthCode), "Enter the correct confirmation code");
 
-            //    return View(request);
-            //}
+                return View(request);
+            }
 
-            //if (viewModel.ExpiryDate > DateTime.Now)
-            //{
-            //    return RedirectToRoute(RouteNames.StartAgain_Get, new { viewModel.LepsCode });
-            //}
+            if (viewModel.ExpiryDate > DateTime.Now)
+            {
+                return RedirectToRoute(RouteNames.StartAgain_Get, new { viewModel.LepsCode });
+            }
 
             await SignInUser(viewModel.Email, viewModel.StudentSurveyId);
 
