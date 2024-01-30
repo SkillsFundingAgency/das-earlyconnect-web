@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace SFA.DAS.EarlyConnect.Application.TagHelpers
+namespace SFA.DAS.EarlyConnect.Web.TagHelpers
 {
     [HtmlTargetElement("div", Attributes = ValidationForAttributeName)]
     public class EsfaValidationMarkerForTagHelper : TagHelper

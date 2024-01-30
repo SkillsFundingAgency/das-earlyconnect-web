@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace SFA.DAS.EarlyConnect.Application.TagHelpers
+namespace SFA.DAS.EarlyConnect.Web.TagHelpers
 {    
     [HtmlTargetElement(Attributes = "asp-hide")]
     public class HideTagHelper : TagHelper
