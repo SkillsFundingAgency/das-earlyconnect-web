@@ -14,6 +14,7 @@ public static class RouteNames
     public const string Dummy = "Dummy";
     public const string Postcode_Get = "Postcode_Get";
     public const string Postcode_Post = "Postcode_Post";
+    public const string School_Get = "School_Get";
     public const string SchoolName_Get = "SchoolName_Get";
     public const string SchoolName_Post = "SchoolName_Post";
     public const string Industry_Get = "Industry_Get";
