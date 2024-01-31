@@ -36,7 +36,7 @@ public class PersonalDetailsController : Controller
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
             SchoolName = result.SchoolName,
-            IsOther = result.DataSource == StudentDatasource.Datasource.UCAS.ToString()
+            IsOther = result.DataSource == Datasource.Others
         });
     }
 

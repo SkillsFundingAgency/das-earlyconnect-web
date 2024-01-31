@@ -1,10 +1,7 @@
 ﻿
 namespace SFA.DAS.EarlyConnect.Web.Infrastructure;
-public static class StudentDatasource
+public static class Datasource
 {
-    public enum Datasource
-    {
-        UCAS,
-        Other,
-    }
+    public const string Ucas = "UCAS";
+    public const string Others = "Other";
 }
