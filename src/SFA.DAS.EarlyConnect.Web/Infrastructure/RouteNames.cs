@@ -21,5 +21,7 @@ public static class RouteNames
     public const string Name_Post = "Name_Post";
     public const string Telephone_Get = "Telephone_Get";
     public const string Telephone_Post = "Telephone_Post";
+    public const string DateOfBirth_Get = "DateOfBirth_Get";
+    public const string DateOfBirth_Post = "DateOfBirth_Post";
     public const string CheckYourAnswers_Get = "Check_Get";
 }

@@ -90,30 +90,13 @@ public class PersonalDetailsController : Controller
 
             var response = await _mediator.Send(new CreateStudentTriageDataCommand
             {
-                StudentData = new StudentTriageData
-                {
-                    Id = studentSurveyResponse.Id,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    DateOfBirth = studentSurveyResponse.DateOfBirth.GetValueOrDefault(),
-                    Email = studentSurveyResponse.Email,
-                    Postcode = studentSurveyResponse.Postcode,
-                    Telephone = studentSurveyResponse.Telephone,
-                    DataSource = studentSurveyResponse.DataSource,
-                    Industry = studentSurveyResponse.Industry,
-                    StudentSurvey = studentSurveyResponse.StudentSurvey
-                },
+                StudentData = model.MapFromNameRequest(studentSurveyResponse),
                 SurveyGuid = model.StudentSurveyId
             });
 
-            if (model.IsCheck)
-            {
-                return RedirectToRoute(RouteNames.CheckYourAnswers_Get, new { model.StudentSurveyId });
-            }
-            else
-            {
-                return RedirectToRoute(RouteNames.Postcode_Get, new { model.StudentSurveyId });
-            }
+            var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.DateOfBirth_Get;
+
+            return RedirectToRoute(routeName, new { model.StudentSurveyId });
         }
         catch (Exception e)
         {
@@ -155,6 +138,42 @@ public class PersonalDetailsController : Controller
         }
 
         var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get;
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
+    }
+
+    [HttpGet]
+    [Route("dateofbirth", Name = RouteNames.DateOfBirth_Get, Order = 0)]
+    public async Task<IActionResult> DateOfBirth(Guid studentSurveyId, bool? isReview)
+    {
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = studentSurveyId });
+
+        return View(new DateOfBirthEditViewModel
+        {
+            StudentSurveyId = studentSurveyId,
+            IsCheck = isReview.GetValueOrDefault(),
+            Day = $"{ (result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : 00)}",
+            Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : 00)}",
+            Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : 00)}",
+        });
+    }
+
+    [HttpPost]
+    [Route("DateOfBirth", Name = RouteNames.DateOfBirth_Post, Order = 0)]
+    public async Task<IActionResult> DateOfBirth(DateOfBirthEditViewModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = m.MapFromDateOfBirthRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Postcode_Get;
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
