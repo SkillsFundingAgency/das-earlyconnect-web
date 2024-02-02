@@ -144,14 +144,14 @@ public class PersonalDetailsController : Controller
 
     [HttpGet]
     [Route("dateofbirth", Name = RouteNames.DateOfBirth_Get, Order = 0)]
-    public async Task<IActionResult> DateOfBirth(Guid studentSurveyId, bool? isReview)
+    public async Task<IActionResult> DateOfBirth(TriageRouteModel m)
     {
-        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = studentSurveyId });
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
         return View(new DateOfBirthEditViewModel
         {
-            StudentSurveyId = studentSurveyId,
-            IsCheck = isReview.GetValueOrDefault(),
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
             Day = $"{ (result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : 00)}",
             Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : 00)}",
             Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : 00)}",
