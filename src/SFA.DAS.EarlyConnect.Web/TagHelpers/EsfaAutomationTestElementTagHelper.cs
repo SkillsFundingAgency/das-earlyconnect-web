@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using SFA.DAS.EarlyConnect.Web.Configuration;
 
-namespace Esfa.Recruit.Shared.Web.TagHelpers
+namespace SFA.DAS.EarlyConnect.Web.TagHelpers
 {
     [HtmlTargetElement(Attributes = TagAttributeName)]
     public class EsfaAutomationTestElementTagHelper : TagHelper
