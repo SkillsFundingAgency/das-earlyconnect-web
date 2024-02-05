@@ -14,6 +14,8 @@ using SFA.DAS.EarlyConnect.Web.Configuration;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using System.Reflection;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
+using SFA.DAS.EarlyConnect.Web.RouteModel;
+using SFA.DAS.EarlyConnect.Web.Mappers;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -78,14 +80,56 @@ public class TriageDataController : Controller
             SurveyGuid = model.StudentSurveyId
         });
 
-        if (model.IsCheck)
+
+        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.School_Get;
+
+        return RedirectToRoute(routeName, new { model.StudentSurveyId });
+
+    }
+
+    [HttpGet]
+    [Route("move", Name = RouteNames.Move_Get, Order = 0)]
+    public async Task<IActionResult> Move(TriageRouteModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
-            return RedirectToRoute(RouteNames.CheckYourAnswers_Get, new { studentSurveyId = model.StudentSurveyId });
-        }
-        else
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var relocateQuestion = studentSurveyResponse.SurveyQuestions.Where(q => q.SortOrder == 4).First();
+        var studentAnswers = studentSurveyResponse.StudentSurvey.ResponseAnswers.Where(a => a.QuestionId == relocateQuestion.Id).Select(a => a.AnswerId.Value).ToList();
+
+        MoveEditViewModel editModel = new MoveEditViewModel()
         {
-            return RedirectToRoute(RouteNames.School_Get, new { studentSurveyId = model.StudentSurveyId });
-        }
+            QuestionId = relocateQuestion.Id,
+            QuestionText = relocateQuestion.QuestionText,
+            Answers = relocateQuestion.Answers.ToList(),
+            SelectedAnswerId = studentAnswers,
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck
+        };
+
+        return View(editModel);
+    }
+
+    [HttpPost]
+    [Route("move", Name = RouteNames.Move_Post, Order = 0)]
+    public async Task<IActionResult> Move(MoveEditViewModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = m.MapFromMoveRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.AreasOfSupport_Get;
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
 
 }

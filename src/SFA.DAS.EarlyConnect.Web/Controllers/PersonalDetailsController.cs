@@ -61,17 +61,17 @@ public class PersonalDetailsController : Controller
 
     [HttpGet]
     [Route("name", Name = RouteNames.Name_Get, Order = 0)]
-    public async Task<IActionResult> Name(Guid studentSurveyId, bool? isSummaryReview)
+    public async Task<IActionResult> Name(TriageRouteModel m)
     {
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
-            SurveyGuid = studentSurveyId
+            SurveyGuid = m.StudentSurveyId
         });
 
         return View(new NameViewModel
         {
-            StudentSurveyId = studentSurveyId,
-            IsCheck = isSummaryReview.GetValueOrDefault(),
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
             FirstName = studentSurveyResponse.FirstName,
             LastName = studentSurveyResponse.LastName
         });
@@ -90,30 +90,14 @@ public class PersonalDetailsController : Controller
 
             var response = await _mediator.Send(new CreateStudentTriageDataCommand
             {
-                StudentData = new StudentTriageData
-                {
-                    Id = studentSurveyResponse.Id,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    DateOfBirth = studentSurveyResponse.DateOfBirth.GetValueOrDefault(),
-                    Email = studentSurveyResponse.Email,
-                    Postcode = studentSurveyResponse.Postcode,
-                    Telephone = studentSurveyResponse.Telephone,
-                    DataSource = studentSurveyResponse.DataSource,
-                    Industry = studentSurveyResponse.Industry,
-                    StudentSurvey = studentSurveyResponse.StudentSurvey
-                },
+                StudentData = model.MapFromNameRequest(studentSurveyResponse),
                 SurveyGuid = model.StudentSurveyId
             });
 
-            if (model.IsCheck)
-            {
-                return RedirectToRoute(RouteNames.CheckYourAnswers_Get, new { model.StudentSurveyId });
-            }
-            else
-            {
-                return RedirectToRoute(RouteNames.Postcode_Get, new { model.StudentSurveyId });
-            }
+            var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Move_Get;
+
+            return RedirectToRoute(routeName, new { model.StudentSurveyId });
+
         }
         catch (Exception e)
         {

@@ -130,7 +130,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(surveyResponse);
 
-            var result = await controller.Name(new Guid(), false) as ViewResult;
+            var result = await controller.Name(new TriageRouteModel { IsCheck = false, StudentSurveyId = new Guid()}) as ViewResult;
 
             Assert.That(result, Is.Not.Null);
         }

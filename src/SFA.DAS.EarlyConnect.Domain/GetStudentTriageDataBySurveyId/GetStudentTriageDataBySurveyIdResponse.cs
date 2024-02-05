@@ -13,6 +13,7 @@
         public string Postcode { get; set; }
         public string DataSource { get; set; }
         public string Industry { get; set; }
+        public string SchoolName { get; set; }
         public DateTime? DateInterest { get; set; }
         public ICollection<SurveyQuestionsDto> SurveyQuestions { get; set; }
         public StudentSurveyDto StudentSurvey { get; set; }
@@ -54,7 +55,7 @@
     }
     public class ResponseAnswersDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public Guid StudentSurveyId { get; set; }
         public int QuestionId { get; set; }
         public int? AnswerId { get; set; }

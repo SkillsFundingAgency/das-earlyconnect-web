@@ -15,6 +15,7 @@ using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Configuration;
 using SFA.DAS.EarlyConnect.Web.Controllers;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
+using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
@@ -148,6 +149,122 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             Assert.That(result, Is.Not.Null);
             Assert.That(RouteNames.CheckYourAnswers_Get, Is.EqualTo(result.RouteName));
+        }
+
+        [Test]
+        public void Authentication_NamePost_RedirectsToCheckYourAnswersRoute()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+
+            var surveyResponse = new GetStudentTriageDataBySurveyIdResult();
+
+            var createCommandResult = _fixture.Build<CreateStudentTriageDataCommandResult>()
+                .With(x => x.Message, "Success")
+                .Create();
+
+            mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(surveyResponse);
+
+            mediatorMock.Setup(m => m.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(createCommandResult);
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+
+            var model = new NameViewModel
+            {
+                FirstName = "Mr",
+                LastName = "Greene",
+                IsCheck = true,
+                StudentSurveyId = new Guid()
+            };
+
+            var result = controller.Name(model).GetAwaiter().GetResult() as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(RouteNames.CheckYourAnswers_Get, Is.EqualTo(result.RouteName));
+        }
+
+
+
+        [Test]
+        public async Task Move_Get_ReturnsCorrectViewModel()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<TriageDataController>>();
+
+            var controller = new TriageDataController(mediatorMock.Object, loggerMock.Object);
+
+            var surveyId = new Guid();
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto() };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
+
+            var result = await controller.Move(new TriageRouteModel { StudentSurveyId = surveyId }) as ViewResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Model, Is.InstanceOf<MoveEditViewModel>());
+            var viewModel = (MoveEditViewModel)result.Model;
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
+
+        }
+
+        [Test]
+        public async Task Move_Post_RedirectsToAreasOfSupport()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<TriageDataController>>();
+
+            var controller = new TriageDataController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new MoveEditViewModel
+            {
+                StudentSurveyId = new Guid(),
+                IsCheck = false,
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+                {
+                    StudentSurvey = Survey
+                });
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = await controller.Move(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(RouteNames.AreasOfSupport_Get, Is.EqualTo(result.RouteName));
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
+        }
+
+
+        [Test]
+        public async Task Move_Post_RedirectsToCheckYourAnswers()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<TriageDataController>>();
+
+            var controller = new TriageDataController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new MoveEditViewModel
+            {
+                StudentSurveyId = new Guid(),
+                IsCheck = true,
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+                {
+                    StudentSurvey = Survey
+                });
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = await controller.Move(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(RouteNames.CheckYourAnswers_Get, Is.EqualTo(result.RouteName));
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
         }
     }
 

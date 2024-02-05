@@ -1,0 +1,50 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@using SFA.DAS.EarlyConnect.Web.ViewModels
+@using SFA.DAS.EarlyConnect.Web.Views
+@model SFA.DAS.EarlyConnect.Web.ViewModels.MoveEditViewModel
+@{
+    ViewBag.Title = "Would you move to another area?";
+}
+
+@section BackLink {
+    <a asp-show="!@Model.IsCheck" asp-route="@RouteNames.Postcode_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+    <a asp-show="@Model.IsCheck" asp-route="@RouteNames.CheckYourAnswers_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <form asp-route="@RouteNames.Move_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
+                @Html.HiddenFor(model => model.IsCheck)
+                @Html.HiddenFor(model => model.QuestionId)
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-heading-l">
+                                @Model.QuestionText
+                            </h1>
+                        </legend>
+                        <div class="govuk-radios" data-module="govuk-radios">
+                            @foreach(var answer in @Model.Answers)
+                            {
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="relocate-@answer.Id" name="relocate" type="radio"
+                                           value="@answer.Id" @(Model.SelectedAnswerId.Contains(answer.Id) ? "checked" : "")>
+                                    <label class="govuk-label govuk-radios__label" for="relocate-@answer.Id">
+                                        @answer.AnswerText
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </fieldset>
+                </div>
+
+                <button class="govuk-button" data-module="govuk-button">Continue</button>
+            </form>
+        </div>
+    </div>
+
+
+</main>
