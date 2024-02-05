@@ -166,8 +166,6 @@ public class SurveyController : Controller
     [Route("relocate", Name = RouteNames.Relocate_Get, Order = 0)]
     public async Task<IActionResult> Relocate(TriageRouteModel m)
     {
-        ModelState.Clear();
-
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
             SurveyGuid = m.StudentSurveyId
