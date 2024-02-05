@@ -10,8 +10,8 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
         public string? BacklinkRoute =>
             IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :
             IsCheck && !IsOther ? RouteNames.CheckYourAnswersDummy_Get :
-            IsOther ? RouteNames.School_Get :
-            RouteNames.School_Get;
+            IsOther ? RouteNames.SchoolName_Get :
+            RouteNames.SchoolName_Get;
 
         public static implicit operator ApprenticeshipLevelEditViewModel(GetStudentTriageDataBySurveyIdResult request)
         {

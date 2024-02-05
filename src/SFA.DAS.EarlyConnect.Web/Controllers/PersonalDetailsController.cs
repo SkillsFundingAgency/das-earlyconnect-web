@@ -7,6 +7,7 @@ using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
 using SFA.DAS.EarlyConnect.Web.Mappers;
 using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
@@ -125,6 +126,8 @@ public class PersonalDetailsController : Controller
                 SurveyGuid = model.StudentSurveyId
             });
 
+            studentSurveyResponse.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
+
             var response = await _mediator.Send(new CreateStudentTriageDataCommand
             {
                 StudentData = new StudentTriageData
@@ -133,7 +136,7 @@ public class PersonalDetailsController : Controller
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     SchoolName = studentSurveyResponse.SchoolName,
-                    DateOfBirth = studentSurveyResponse.DateOfBirth.GetValueOrDefault(),
+                    DateOfBirth = studentSurveyResponse.DateOfBirth,
                     Email = studentSurveyResponse.Email,
                     Postcode = studentSurveyResponse.Postcode,
                     Telephone = studentSurveyResponse.Telephone,
