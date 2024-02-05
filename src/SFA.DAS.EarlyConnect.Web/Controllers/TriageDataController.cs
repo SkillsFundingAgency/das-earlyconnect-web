@@ -67,7 +67,7 @@ public class TriageDataController : Controller
                 Id = studentSurveyResponse.Id,
                 FirstName = studentSurveyResponse.FirstName,
                 LastName = studentSurveyResponse.LastName,
-                DateOfBirth = studentSurveyResponse.DateOfBirth.GetValueOrDefault(),
+                DateOfBirth = studentSurveyResponse.DateOfBirth,
                 Email = studentSurveyResponse.Email,
                 Postcode = studentSurveyResponse.Postcode,
                 Telephone = studentSurveyResponse.Telephone,
