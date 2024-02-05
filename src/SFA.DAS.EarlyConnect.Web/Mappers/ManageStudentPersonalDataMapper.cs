@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
+using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 using System.Globalization;
 
@@ -64,7 +65,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;
             manageStudentPersonalData.FirstName = studentTriageDataBySurveyIdResult.FirstName;
             manageStudentPersonalData.LastName = studentTriageDataBySurveyIdResult.LastName;
-            manageStudentPersonalData.DateOfBirth = DateTime.Parse(request.DateOfBirth);
+            manageStudentPersonalData.DateOfBirth = request.DateOfBirth.AsDateTimeUk();
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;

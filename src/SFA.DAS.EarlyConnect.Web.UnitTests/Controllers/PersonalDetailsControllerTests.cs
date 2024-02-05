@@ -8,9 +8,11 @@ using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Controllers;
+using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
+using System.Globalization;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 {
@@ -274,7 +276,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-            var dateOfBirth = new DateTime(1990,12,5);
+            var dateOfBirth = "05/12/1999".AsDateTimeUk();
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { DateOfBirth = dateOfBirth };
