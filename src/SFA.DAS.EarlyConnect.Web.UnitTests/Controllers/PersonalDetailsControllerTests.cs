@@ -301,6 +301,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = false,
+                Day = "5",
+                Month = "7",
+                Year = "2004"
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
@@ -330,6 +333,10 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = true,
+                Day = "5",
+                Month = "7",
+                Year = "2004"
+
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
@@ -337,7 +344,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
                 {
                     StudentSurvey = Survey
-                });
+                }); ;
 
 
             mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
