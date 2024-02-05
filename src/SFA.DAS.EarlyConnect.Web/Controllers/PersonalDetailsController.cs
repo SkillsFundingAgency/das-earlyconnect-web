@@ -26,6 +26,43 @@ public class PersonalDetailsController : Controller
     }
 
     [HttpGet]
+    [Route("schoolname", Name = RouteNames.SchoolName_Get, Order = 0)]
+    public async Task<IActionResult> SchoolName(SchoolNameViewModel m)
+    {
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
+
+        return View(new SchoolNameEditViewModel
+        {
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
+            SchoolName = result.SchoolName,
+            IsOther = result.DataSource == Datasource.Others
+        });
+    }
+
+    [HttpPost]
+    [Route("schoolname", Name = RouteNames.SchoolName_Post, Order = 0)]
+    public async Task<IActionResult> SchoolName(SchoolNameEditViewModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = m.MapFromSchoolNameRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        string routeName = m.IsOther
+            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get)
+            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.ApprenticeshipLevel_Get);
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
+    }
+
+    [HttpGet]
     [Route("postcode", Name = RouteNames.Postcode_Get, Order = 0)]
     public async Task<IActionResult> Postcode(PostcodeViewModel m)
     {
@@ -129,7 +166,7 @@ public class PersonalDetailsController : Controller
             SurveyGuid = m.StudentSurveyId
         });
 
-        if (m.Telephone != null) 
+        if (m.Telephone != null)
         {
             var response = await _mediator.Send(new CreateStudentTriageDataCommand
             {

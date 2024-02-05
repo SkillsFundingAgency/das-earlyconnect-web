@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text.Encodings.Web;
 
-namespace SFA.DAS.EarlyConnect.Application.TagHelpers
+namespace SFA.DAS.EarlyConnect.Web.TagHelpers
 {
     [HtmlTargetElement("div", Attributes = HighlightErrorForAttributeName + "," + ErrorCssClass)]
     [HtmlTargetElement("textarea", Attributes = HighlightErrorForAttributeName + "," + ErrorCssClass)]

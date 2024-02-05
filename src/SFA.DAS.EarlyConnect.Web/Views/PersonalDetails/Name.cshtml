@@ -16,26 +16,25 @@
             <form asp-route="@RouteNames.Name_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
                 @Html.HiddenFor(model => model.IsCheck)
 
-                <h1 class="govuk-heading-xl">What's your name?</h1>
-
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--l" for="telephone">
+                        What's your name? (optional)
+                    </label>
+                </h1>
                 <div esfa-validation-marker-for="FirstName" class="govuk-form-group">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" for="confirmation-code">
-                            First name
-                        </label>
-                        <span esfa-validation-message-for="FirstName" class="govuk-error-message"></span>
-                        <input asp-for="FirstName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="given-name"> 
-                    </div>
+                    <label class="govuk-label" for="confirmation-code">
+                        First name
+                    </label>
+                    <span style=" margin:0" esfa-validation-message-for="FirstName" class="govuk-error-message"></span>
+                    <input asp-for="FirstName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="given-name"> 
                 </div>
 
                 <div esfa-validation-marker-for="LastName" class="govuk-form-group">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" for="confirmation-code">
-                            Last name
-                        </label>
-                        <span esfa-validation-message-for="LastName" class="govuk-error-message"></span>
-                        <input asp-for="LastName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="family-name">
-                    </div>
+                    <label class="govuk-label" for="confirmation-code">
+                        Last name
+                    </label>
+                    <span style=" margin:0" esfa-validation-message-for="LastName" class="govuk-error-message"></span>
+                    <input asp-for="LastName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="family-name">
                 </div>
 
                 <button type="submit" class="govuk-button" esfa-automation="continue-button">
