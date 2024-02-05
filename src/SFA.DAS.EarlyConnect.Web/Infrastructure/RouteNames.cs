@@ -26,12 +26,9 @@ public static class RouteNames
     public const string Name_Post = "Name_Post";
     public const string Telephone_Get = "Telephone_Get";
     public const string Telephone_Post = "Telephone_Post";
+    public const string CheckYourAnswersDummy_Get = "CheckYourAnswersDummy_Get";
     public const string Move_Get = "Move_Get";
     public const string Move_Post = "Move_Post";
-    public const string AreasOfSupport_Get = "AreasOfSupport_Get";
-    public const string AreasOfSupport_Post = "AreasOfSupport_Post";
-    public const string ApprenticeshipLevel_Get = "ApprenticeshipLevel_Get";
-    public const string ApprenticeshipLevel_Post = "ApprenticeshipLevel_Post";
     public const string CheckYourAnswers_Get = "Check_Get";
     public const string AppliedFor_Get = "AppliedFor_Get";
     public const string AppliedFor_Post = "AppliedFor_Post";

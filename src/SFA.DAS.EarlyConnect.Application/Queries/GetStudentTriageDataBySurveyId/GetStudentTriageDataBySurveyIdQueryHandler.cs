@@ -35,7 +35,6 @@ namespace SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyI
                 DataSource = result.Body.DataSource,
                 Industry = result.Body.Industry,
                 DateInterest = result.Body.DateInterest,
-                SchoolName  = result.Body.SchoolName,
                 StudentSurvey = result.Body.StudentSurvey,
                 SurveyQuestions = result.Body.SurveyQuestions
             };

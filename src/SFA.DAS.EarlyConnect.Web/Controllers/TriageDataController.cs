@@ -127,7 +127,7 @@ public class TriageDataController : Controller
             SurveyGuid = m.StudentSurveyId
         });
 
-        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.AreasOfSupport_Get;
+        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Support_Get;
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }

@@ -17,7 +17,6 @@ namespace SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyI
         public string Postcode { get; set; }
         public string DataSource { get; set; }
         public string Industry { get; set; }
-        public string SchoolName { get; set; }
         public DateTime? DateInterest { get; set; }
         public ICollection<SurveyQuestionsDto> SurveyQuestions { get; set; }
         public StudentSurveyDto StudentSurvey { get; set; }
