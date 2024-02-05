@@ -71,6 +71,7 @@ public class TriageDataController : Controller
                 Email = studentSurveyResponse.Email,
                 Postcode = studentSurveyResponse.Postcode,
                 Telephone = studentSurveyResponse.Telephone,
+                SchoolName = studentSurveyResponse.SchoolName,
                 DataSource = studentSurveyResponse.DataSource,
                 Industry = string.Join("|", sector),
                 StudentSurvey = studentSurveyResponse.StudentSurvey
@@ -84,9 +85,8 @@ public class TriageDataController : Controller
         }
         else
         {
-            return RedirectToRoute(RouteNames.School_Get, new { studentSurveyId = model.StudentSurveyId });
+            return RedirectToRoute(RouteNames.SchoolName_Get, new { studentSurveyId = model.StudentSurveyId });
         }
     }
-
 }
 

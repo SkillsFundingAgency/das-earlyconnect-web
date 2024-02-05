@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
+using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 using System.Globalization;
@@ -22,6 +23,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
+            manageStudentPersonalData.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
             return manageStudentPersonalData;
         }
        public static StudentTriageData MapFromTelephoneRequest(this TelephoneEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
