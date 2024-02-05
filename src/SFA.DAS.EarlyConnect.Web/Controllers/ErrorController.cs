@@ -2,7 +2,7 @@
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using System.Net;
 
-namespace Esfa.Recruit.Employer.Web.Controllers
+namespace SFA.DAS.EarlyConnect.Web.Controllers
 {
     public class ErrorController : Controller
     {
