@@ -27,8 +27,8 @@ public static class RouteNames
     public const string Telephone_Get = "Telephone_Get";
     public const string Telephone_Post = "Telephone_Post";
     public const string CheckYourAnswersDummy_Get = "CheckYourAnswersDummy_Get";
-    public const string Move_Get = "Move_Get";
-    public const string Move_Post = "Move_Post";
+    public const string Relocate_Get = "Relocate_Get";
+    public const string Relocate_Post = "Relocate_Post";
     public const string CheckYourAnswers_Get = "Check_Get";
     public const string AppliedFor_Get = "AppliedFor_Get";
     public const string AppliedFor_Post = "AppliedFor_Post";

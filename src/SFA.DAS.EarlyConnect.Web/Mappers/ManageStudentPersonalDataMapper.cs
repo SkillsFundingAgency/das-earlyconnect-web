@@ -75,7 +75,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             return manageStudentPersonalData;
         }
 
-        public static StudentTriageData MapFromMoveRequest(this MoveEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        public static StudentTriageData MapFromIndustryRequest(this IndustryViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
         {
             StudentTriageData manageStudentPersonalData = new StudentTriageData();
             manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;
@@ -86,32 +86,12 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
-            manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
+            manageStudentPersonalData.Industry = string.Join("|", request.Sector);
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
-
-
-            var previousAnswers = studentTriageDataBySurveyIdResult.StudentSurvey.ResponseAnswers.Where(a => a.QuestionId == request.QuestionId).ToList();
-            foreach (var answer in previousAnswers)
-            {
-                studentTriageDataBySurveyIdResult.StudentSurvey.ResponseAnswers.Remove(answer);
-            }
-
-            foreach (var selectedAnswer in request.Relocate)
-            {
-                studentTriageDataBySurveyIdResult.StudentSurvey.ResponseAnswers.Add(
-                    new Domain.GetStudentTriageDataBySurveyId.ResponseAnswersDto 
-                    { 
-                        AnswerId = int.Parse(selectedAnswer),
-                        DateAdded = DateTime.Now,
-                        QuestionId = request.QuestionId.Value,
-                        StudentSurveyId = request.StudentSurveyId,
-                        Response = string.Empty
-                    });
-            }
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
             manageStudentPersonalData.StudentSurvey.LastUpdated = DateTime.Now;
-
             return manageStudentPersonalData;
         }
+
     }
 }

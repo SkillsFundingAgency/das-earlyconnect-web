@@ -6,6 +6,7 @@ using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Mappers;
 using SFA.DAS.EarlyConnect.Web.Mappers.SFA.DAS.EarlyConnect.Web.ViewModels;
+using SFA.DAS.EarlyConnect.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -157,6 +158,53 @@ public class SurveyController : Controller
         string routeName = m.IsOther
             ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.CheckYourAnswers_Get)
             : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.CheckYourAnswersDummy_Get);
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
+    }
+
+    [HttpGet]
+    [Route("relocate", Name = RouteNames.Relocate_Get, Order = 0)]
+    public async Task<IActionResult> Relocate(TriageRouteModel m)
+    {
+        ModelState.Clear();
+
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var relocateEditViewModel = (RelocateEditViewModel)studentSurveyResponse;
+        relocateEditViewModel.StudentSurveyId = m.StudentSurveyId;
+        relocateEditViewModel.IsCheck = m.IsCheck;
+
+        return View(relocateEditViewModel);
+    }
+
+    [HttpPost]
+    [Route("relocate", Name = RouteNames.Relocate_Post, Order = 0)]
+    public async Task<IActionResult> Relocate(RelocateEditViewModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        foreach (var answer in m.Question.Answers.Where(a => a.Id == m.SelectedAnswerId))
+        {
+            answer.IsSelected = true;
+        }
+
+        m = MapViewModel(m, studentSurveyResponse, SurveyPage.Page.Relocate);
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = m.MapFromRelocateRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        string routeName = m.IsOther
+            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.CheckYourAnswers_Get)
+            : (m.IsCheck ? RouteNames.Support_Get : RouteNames.CheckYourAnswersDummy_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }

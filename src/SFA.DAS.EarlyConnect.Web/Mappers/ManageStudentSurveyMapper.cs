@@ -5,6 +5,7 @@ using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.Mappers.SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
+using System.Reflection;
 
 namespace SFA.DAS.EarlyConnect.Web.Mappers
 {
@@ -62,6 +63,12 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
         {
             return MapFromRequest(request, studentTriageDataBySurveyIdResult, SurveyPage.Page.Support);
         }
+
+        public static StudentTriageData MapFromRelocateRequest(this RelocateEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        {
+            return MapFromRequest(request, studentTriageDataBySurveyIdResult, SurveyPage.Page.Relocate);
+        }
+
     }
     namespace SFA.DAS.EarlyConnect.Web.ViewModels
     {

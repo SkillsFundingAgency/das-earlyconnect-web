@@ -131,7 +131,7 @@ public class PersonalDetailsController : Controller
                 SurveyGuid = model.StudentSurveyId
             });
 
-            var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Move_Get;
+            var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Relocate_Get;
 
             return RedirectToRoute(routeName, new { model.StudentSurveyId });
 
@@ -179,5 +179,47 @@ public class PersonalDetailsController : Controller
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
+
+    [HttpGet]
+    [Route("industry", Name = RouteNames.Industry_Get, Order = 0)]
+    public async Task<IActionResult> Industry(Guid studentSurveyId, bool? isSummaryReview)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = studentSurveyId
+        });
+
+        IndustryViewModel viewModel = new IndustryViewModel
+        {
+            StudentSurveyId = studentSurveyId,
+            Areas = studentSurveyResponse.Industry.Split("|").ToList(),
+            IsCheck = isSummaryReview.GetValueOrDefault()
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [Route("industry", Name = RouteNames.Industry_Post, Order = 0)]
+    public async Task<IActionResult> Industry(IndustryViewModel model)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = model.StudentSurveyId
+        });
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = model.MapFromIndustryRequest(studentSurveyResponse),
+            SurveyGuid = model.StudentSurveyId
+        });
+
+
+        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.School_Get;
+
+        return RedirectToRoute(routeName, new { model.StudentSurveyId });
+
+    }
+
 }
 

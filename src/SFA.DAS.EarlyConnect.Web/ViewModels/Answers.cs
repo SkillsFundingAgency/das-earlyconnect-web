@@ -27,7 +27,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                 ShortDescription = source.ShortDescription,
                 GroupNumber = source.GroupNumber,
                 GroupLabel = source.GroupLabel,
-                SortOrder = source.SortOrder,
+                SortOrder = source.SortOrder
             };
         }
     }
