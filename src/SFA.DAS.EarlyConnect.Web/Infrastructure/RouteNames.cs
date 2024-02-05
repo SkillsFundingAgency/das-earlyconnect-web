@@ -25,5 +25,7 @@ public static class RouteNames
     public const string Move_Post = "Move_Post";
     public const string AreasOfSupport_Get = "AreasOfSupport_Get";
     public const string AreasOfSupport_Post = "AreasOfSupport_Post";
+    public const string ApprenticeshipLevel_Get = "ApprenticeshipLevel_Get";
+    public const string ApprenticeshipLevel_Post = "ApprenticeshipLevel_Post";
     public const string CheckYourAnswers_Get = "Check_Get";
 }

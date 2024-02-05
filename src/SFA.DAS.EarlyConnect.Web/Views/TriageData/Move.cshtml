@@ -7,7 +7,7 @@
 }
 
 @section BackLink {
-    <a asp-show="!@Model.IsCheck" asp-route="@RouteNames.Postcode_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+    <a asp-show="!@Model.IsCheck" asp-route="@RouteNames.Name_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
     <a asp-show="@Model.IsCheck" asp-route="@RouteNames.CheckYourAnswers_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
 }
 
@@ -15,6 +15,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState }' />
 
             <form asp-route="@RouteNames.Move_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
                 @Html.HiddenFor(model => model.IsCheck)
@@ -27,16 +28,19 @@
                             </h1>
                         </legend>
                         <div class="govuk-radios" data-module="govuk-radios">
-                            @foreach(var answer in @Model.Answers)
-                            {
-                                <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input" id="relocate-@answer.Id" name="relocate" type="radio"
-                                           value="@answer.Id" @(Model.SelectedAnswerId.Contains(answer.Id) ? "checked" : "")>
-                                    <label class="govuk-label govuk-radios__label" for="relocate-@answer.Id">
-                                        @answer.AnswerText
-                                    </label>
-                                </div>
-                            }
+                            <div esfa-validation-marker-for="Relocate" class="govuk-form-group">
+                                <span esfa-validation-message-for="Relocate" class="govuk-error-message"></span>
+                                @foreach(var answer in @Model.Answers)
+                                {
+                                    <div class="govuk-radios__item">
+                                        <input class="govuk-radios__input" id="relocate-@answer.Id" name="relocate" type="radio"
+                                               value="@answer.Id" @(Model.SelectedAnswerId.Contains(answer.Id) ? "checked" : "")>
+                                        <label class="govuk-label govuk-radios__label" for="relocate-@answer.Id">
+                                            @answer.AnswerText
+                                        </label>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </fieldset>
                 </div>
