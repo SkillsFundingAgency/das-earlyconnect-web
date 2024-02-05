@@ -4,6 +4,7 @@
     {
         public Guid StudentSurveyId { get; set; }
         public bool IsCheck { get; set; }
+        public bool IsOther { get; set; }
         public Dictionary<string, string> RouteDictionary
         {
             get

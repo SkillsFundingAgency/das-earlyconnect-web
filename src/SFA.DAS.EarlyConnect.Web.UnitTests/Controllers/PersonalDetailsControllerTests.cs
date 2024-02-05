@@ -8,9 +8,11 @@ using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Controllers;
+using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
+using System.Globalization;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 {
@@ -23,6 +25,54 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         public void SetUp()
         {
             _fixture = new Fixture();
+        }
+        [Test]
+        public async Task SchoolName_Get_ReturnsCorrectViewModel()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+
+            var surveyId = new Guid();
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { Postcode = "12345" };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
+
+            var result = await controller.SchoolName(new SchoolNameViewModel { StudentSurveyId = surveyId }) as ViewResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Model, Is.InstanceOf<SchoolNameEditViewModel>());
+            var viewModel = (SchoolNameEditViewModel)result.Model;
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
+            Assert.That(viewModel.SchoolName, Is.EqualTo(queryResult.SchoolName));
+        }
+
+        [Test]
+        public async Task SchoolName_Post_RedirectsToCorrectRoute()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new SchoolNameEditViewModel
+            {
+                StudentSurveyId = new Guid(),
+                IsCheck = false,
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+            {
+                StudentSurvey = Survey
+            });
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = await controller.SchoolName(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(RouteNames.Levelofapprenticeship_Get, Is.EqualTo(result.RouteName));
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
         }
 
         [Test]
@@ -274,7 +324,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-            var dateOfBirth = new DateTime(1990,12,5);
+            var dateOfBirth = "05/12/1999".AsDateTimeUk();
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { DateOfBirth = dateOfBirth };
@@ -286,7 +336,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(result.Model, Is.InstanceOf<DateOfBirthEditViewModel>());
             var viewModel = (DateOfBirthEditViewModel)result.Model;
             Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
-            Assert.That(DateTime.Parse(viewModel.DateOfBirth), Is.EqualTo(queryResult.DateOfBirth));
+            Assert.That(viewModel.DateOfBirth.AsDateTimeUk(), Is.EqualTo(queryResult.DateOfBirth));
         }
 
         [Test]
@@ -301,6 +351,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = false,
+                Day = "5",
+                Month = "7",
+                Year = "2004"
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
@@ -330,6 +383,10 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = true,
+                Day = "5",
+                Month = "7",
+                Year = "2004"
+
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
@@ -337,7 +394,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
                 {
                     StudentSurvey = Survey
-                });
+                }); ;
 
 
             mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
