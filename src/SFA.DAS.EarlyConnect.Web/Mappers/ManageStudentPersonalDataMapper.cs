@@ -69,6 +69,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
+            manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
             manageStudentPersonalData.StudentSurvey.LastUpdated = DateTime.Now;
             return manageStudentPersonalData;
@@ -86,6 +87,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
+            manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
             manageStudentPersonalData.StudentSurvey.LastUpdated = DateTime.Now;
             return manageStudentPersonalData;
