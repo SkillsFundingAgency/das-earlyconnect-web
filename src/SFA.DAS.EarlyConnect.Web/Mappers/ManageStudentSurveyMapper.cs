@@ -17,7 +17,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
                 Id = studentTriageDataBySurveyIdResult.Id,
                 FirstName = studentTriageDataBySurveyIdResult.FirstName,
                 LastName = studentTriageDataBySurveyIdResult.LastName,
-                SchoolName = "ABC",
+                SchoolName = studentTriageDataBySurveyIdResult.SchoolName,
                 DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth,
                 Email = studentTriageDataBySurveyIdResult.Email,
                 Postcode = studentTriageDataBySurveyIdResult.Postcode,
@@ -27,11 +27,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
                 StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey
             };
 
-            manageStudentPersonalData.StudentSurvey.ResponseAnswers ??= new List<ResponseAnswersDto>();
-
-            var responseAnswersList = manageStudentPersonalData.StudentSurvey.ResponseAnswers.ToList();
-            responseAnswersList.RemoveAll(answer => answer.QuestionId == (int)page);
-            manageStudentPersonalData.StudentSurvey.ResponseAnswers = responseAnswersList;
+            manageStudentPersonalData.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
 
             if (request.Question != null)
             {
