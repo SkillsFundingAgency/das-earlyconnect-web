@@ -336,7 +336,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(result.Model, Is.InstanceOf<DateOfBirthEditViewModel>());
             var viewModel = (DateOfBirthEditViewModel)result.Model;
             Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
-            Assert.That(DateTime.Parse(viewModel.DateOfBirth), Is.EqualTo(queryResult.DateOfBirth));
+            Assert.That(viewModel.DateOfBirth.AsDateTimeUk(), Is.EqualTo(queryResult.DateOfBirth));
         }
 
         [Test]
