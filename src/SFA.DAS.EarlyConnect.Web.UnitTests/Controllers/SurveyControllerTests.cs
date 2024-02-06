@@ -411,8 +411,38 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller = new SurveyController(mediatorMock.Object, loggerMock.Object);
 
             var surveyId = new Guid();
-            var queryResult = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto() };
-            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
+            var createCommandResult = new GetStudentTriageDataBySurveyIdResult
+            {
+                Id = 5,
+                FirstName = "John",
+                LastName = "Doe",
+                DateOfBirth = new DateTime(1990, 1, 1),
+                Telephone = "123-456-7890",
+                Email = "john.doe@example.com",
+                Postcode = "12345",
+                DataSource = "DummySource",
+                Industry = "DummyIndustry",
+                DateInterest = new DateTime(2022, 2, 1),
+                SurveyQuestions = new List<SurveyQuestionsDto>
+                {
+                    new SurveyQuestionsDto
+                    {
+                        Id = (int)SurveyPage.Page.Relocate,
+                        SurveyId = 1001,
+                        QuestionText = "Dummy Question Relocate",
+                        Answers = new List<AnswersDto>
+                        {
+                            new AnswersDto { Id = 1, QuestionId=2 },
+                         }
+                    },
+                },
+                StudentSurvey = new StudentSurveyDto
+                {
+                    SurveyId = 100,
+                }
+            };
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(createCommandResult);
 
             var result = await controller.Relocate(new TriageRouteModel { StudentSurveyId = surveyId }) as ViewResult;
 
@@ -435,15 +465,53 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = false,
+                SelectedAnswerId = 2,
+                Question = new Questions
+                {
+                    Id = 1,
+                    SurveyId = 1,
+
+                    ValidationMessage = "Message",
+                    Answers = new List<Answers>
+                        {
+                            new Answers { Id = 1, QuestionId=(int)SurveyPage.Page.Relocate ,IsSelected=true},
+                            new Answers { Id = 2, QuestionId=(int)SurveyPage.Page.Relocate ,IsSelected=false},
+                         }
+                },
             };
 
-            StudentSurveyDto Survey = new StudentSurveyDto();
-            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+            var createCommandResult = new GetStudentTriageDataBySurveyIdResult
+            {
+                Id = 5,
+                FirstName = "John",
+                LastName = "Doe",
+                DateOfBirth = new DateTime(1990, 1, 1),
+                Telephone = "123-456-7890",
+                Email = "john.doe@example.com",
+                Postcode = "12345",
+                DataSource = "DummySource",
+                Industry = "DummyIndustry",
+                DateInterest = new DateTime(2022, 2, 1),
+                SurveyQuestions = new List<SurveyQuestionsDto>
                 {
-                    StudentSurvey = Survey
-                });
-            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
+                    new SurveyQuestionsDto
+                    {
+                        Id = (int)SurveyPage.Page.Relocate,
+                        SurveyId = 1001,
+                        QuestionText = "Dummy Question Relocate",
+                        Answers = new List<AnswersDto>
+                        {
+                            new AnswersDto { Id = 1, QuestionId=(int)SurveyPage.Page.Relocate},
+                         }
+                    },
+                },
+                StudentSurvey = new StudentSurveyDto
+                {
+                    SurveyId = 100,
+                }
+            };
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(createCommandResult);
 
             var result = await controller.Relocate(viewModel) as RedirectToRouteResult;
 
@@ -461,18 +529,58 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             var controller = new SurveyController(mediatorMock.Object, loggerMock.Object);
 
+            var createCommandResult = new GetStudentTriageDataBySurveyIdResult
+            {
+                Id = 5,
+                FirstName = "John",
+                LastName = "Doe",
+                DateOfBirth = new DateTime(1990, 1, 1),
+                Telephone = "123-456-7890",
+                Email = "john.doe@example.com",
+                Postcode = "12345",
+                DataSource = "DummySource",
+                Industry = "DummyIndustry",
+                DateInterest = new DateTime(2022, 2, 1),
+                SurveyQuestions = new List<SurveyQuestionsDto>
+                {
+                    new SurveyQuestionsDto
+                    {
+                        Id = (int)SurveyPage.Page.Relocate,
+                        SurveyId = 1001,
+                        QuestionText = "Dummy Question Relocate",
+                        Answers = new List<AnswersDto>
+                        {
+                            new AnswersDto { Id = 1, QuestionId=2 },
+                         }
+                    },
+                },
+                StudentSurvey = new StudentSurveyDto
+                {
+                    SurveyId = 100,
+                }
+            };
+
             var viewModel = new RelocateEditViewModel
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = true,
+                SelectedAnswerId = 2,
+                Question = new Questions
+                {
+                    Id = 1,
+                    SurveyId = 1,
+                    ValidationMessage = "Message",
+                    Answers = new List<Answers>
+                        {
+                            new Answers { Id = 1, QuestionId=3 ,IsSelected=false},
+                            new Answers { Id = 2, QuestionId=3 ,IsSelected=false},
+                         }
+                },
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
-                {
-                    StudentSurvey = Survey
-                });
+                .ReturnsAsync(createCommandResult);
             mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
 
             var result = await controller.Relocate(viewModel) as RedirectToRouteResult;

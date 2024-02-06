@@ -200,9 +200,7 @@ public class SurveyController : Controller
             SurveyGuid = m.StudentSurveyId
         });
 
-        string routeName = m.IsOther
-            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.CheckYourAnswers_Get)
-            : (m.IsCheck ? RouteNames.Support_Get : RouteNames.CheckYourAnswersDummy_Get);
+        string routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Support_Get;
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }

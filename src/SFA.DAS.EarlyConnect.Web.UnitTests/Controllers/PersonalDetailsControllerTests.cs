@@ -224,7 +224,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var result = controller.Name(model).GetAwaiter().GetResult() as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.Postcode_Get, Is.EqualTo(result.RouteName));
+            Assert.That(RouteNames.Relocate_Get, Is.EqualTo(result.RouteName));
         }
 
         [Test]
@@ -233,7 +233,10 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
-            var surveyResponse = new GetStudentTriageDataBySurveyIdResult();
+            var surveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                StudentSurvey = new StudentSurveyDto()
+            };
 
             var createCommandResult = _fixture.Build<CreateStudentTriageDataCommandResult>()
                 .With(x => x.Message, "Success")
@@ -440,7 +443,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
-            var surveyResponse = new GetStudentTriageDataBySurveyIdResult();
+            var surveyResponse = new GetStudentTriageDataBySurveyIdResult {StudentSurvey = new StudentSurveyDto() };
 
             var createCommandResult = _fixture.Build<CreateStudentTriageDataCommandResult>()
                 .With(x => x.Message, "Success")
