@@ -1,7 +1,9 @@
 ﻿using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
+using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
+using System.Globalization;
 
 namespace SFA.DAS.EarlyConnect.Web.Mappers
 {
@@ -16,7 +18,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth;
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
-            manageStudentPersonalData.Postcode = request.Postcode; 
+            manageStudentPersonalData.Postcode = request.Postcode;
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
@@ -24,7 +26,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
             return manageStudentPersonalData;
         }
-       public static StudentTriageData MapFromTelephoneRequest(this TelephoneEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        public static StudentTriageData MapFromTelephoneRequest(this TelephoneEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
         {
             StudentTriageData manageStudentPersonalData = new StudentTriageData();
             manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;
@@ -54,6 +56,42 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Postcode;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
+            manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
+            manageStudentPersonalData.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
+            return manageStudentPersonalData;
+        }
+
+        public static StudentTriageData MapFromNameRequest(this NameViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        {
+            StudentTriageData manageStudentPersonalData = new StudentTriageData();
+            manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;
+            manageStudentPersonalData.FirstName = request.FirstName;
+            manageStudentPersonalData.LastName = request.LastName;
+            manageStudentPersonalData.DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth;
+            manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
+            manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
+            manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
+            manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
+            manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
+            manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
+            manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
+            manageStudentPersonalData.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
+            return manageStudentPersonalData;
+        }
+
+        public static StudentTriageData MapFromDateOfBirthRequest(this DateOfBirthEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        {
+            StudentTriageData manageStudentPersonalData = new StudentTriageData();
+            manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;
+            manageStudentPersonalData.FirstName = studentTriageDataBySurveyIdResult.FirstName;
+            manageStudentPersonalData.LastName = studentTriageDataBySurveyIdResult.LastName;
+            manageStudentPersonalData.DateOfBirth = request.DateOfBirth.AsDateTimeUk();
+            manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
+            manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
+            manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
+            manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
+            manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
+            manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
             manageStudentPersonalData.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
             return manageStudentPersonalData;

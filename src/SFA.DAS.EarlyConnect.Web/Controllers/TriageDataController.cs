@@ -90,6 +90,5 @@ public class TriageDataController : Controller
             return RedirectToRoute(RouteNames.SchoolName_Get, new { studentSurveyId = model.StudentSurveyId });
         }
     }
-
 }
 
