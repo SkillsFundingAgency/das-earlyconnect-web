@@ -104,7 +104,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var result = controller.Industry(model, new List<string> { "Area 1", "Area 5", "Area 10"}).GetAwaiter().GetResult() as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.School_Get, Is.EqualTo(result.RouteName));
+            Assert.That(RouteNames.SchoolName_Get, Is.EqualTo(result.RouteName));
         }
 
         [Test]

@@ -14,7 +14,6 @@ public static class RouteNames
     public const string Dummy = "Dummy";
     public const string Postcode_Get = "Postcode_Get";
     public const string Postcode_Post = "Postcode_Post";
-    public const string School_Get = "School_Get";
     public const string SchoolName_Get = "SchoolName_Get";
     public const string SchoolName_Post = "SchoolName_Post";
     public const string Industry_Get = "Industry_Get";
@@ -23,6 +22,8 @@ public static class RouteNames
     public const string Name_Post = "Name_Post";
     public const string Telephone_Get = "Telephone_Get";
     public const string Telephone_Post = "Telephone_Post";
+    public const string DateOfBirth_Get = "DateOfBirth_Get";
+    public const string DateOfBirth_Post = "DateOfBirth_Post";
     public const string CheckYourAnswers_Get = "Check_Get";
     public const string CheckYourAnswersDummy_Get = "CheckYourAnswersDummy_Get";
     public const string Levelofapprenticeship_Get = "Levelofapprenticeship_Get";
