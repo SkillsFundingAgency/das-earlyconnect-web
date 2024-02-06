@@ -205,6 +205,13 @@ public class SurveyController : Controller
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
 
+    [HttpGet]
+    [Route("confirmation", Name = RouteNames.Confirmation_Get, Order = 0)]
+    public async Task<IActionResult> Confirmation()
+    {
+        return View();
+    }
+
     private bool ValidateAnswers<T>(T m, Func<T, List<Answers>> answersSelector, string validationMessage, int? minSelectedCount = null)
     {
         var answers = answersSelector(m);
