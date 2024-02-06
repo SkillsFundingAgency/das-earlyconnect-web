@@ -7,6 +7,7 @@ using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
 using SFA.DAS.EarlyConnect.Web.Mappers;
 using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
@@ -56,8 +57,8 @@ public class PersonalDetailsController : Controller
         });
 
         string routeName = m.IsOther
-            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Levelofapprenticeship_Get)
-            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.Levelofapprenticeship_Get);
+            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get)
+            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.ApprenticeshipLevel_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
@@ -125,6 +126,8 @@ public class PersonalDetailsController : Controller
                 SurveyGuid = model.StudentSurveyId
             });
 
+            studentSurveyResponse.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
+
             var response = await _mediator.Send(new CreateStudentTriageDataCommand
             {
                 StudentData = model.MapFromNameRequest(studentSurveyResponse),
@@ -165,7 +168,7 @@ public class PersonalDetailsController : Controller
             SurveyGuid = m.StudentSurveyId
         });
 
-        if (m.Telephone != null) 
+        if (m.Telephone != null)
         {
             var response = await _mediator.Send(new CreateStudentTriageDataCommand
             {

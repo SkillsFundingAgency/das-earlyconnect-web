@@ -18,14 +18,20 @@ public static class RouteNames
     public const string SchoolName_Post = "SchoolName_Post";
     public const string Industry_Get = "Industry_Get";
     public const string Industry_Post = "Industry_Post";
+    public const string ApprenticeshipLevel_Get = "ApprenticeshipLevel_Get";
+    public const string ApprenticeshipLevel_Post = "ApprenticeshipLevel_Post";
     public const string Name_Get = "Name_Get";
     public const string Name_Post = "Name_Post";
     public const string Telephone_Get = "Telephone_Get";
     public const string Telephone_Post = "Telephone_Post";
     public const string DateOfBirth_Get = "DateOfBirth_Get";
     public const string DateOfBirth_Post = "DateOfBirth_Post";
-    public const string CheckYourAnswers_Get = "Check_Get";
     public const string CheckYourAnswersDummy_Get = "CheckYourAnswersDummy_Get";
-    public const string Levelofapprenticeship_Get = "Levelofapprenticeship_Get";
-    public const string Levelofapprenticeship_Post = "Levelofapprenticeship_Post";
+    public const string CheckYourAnswers_Get = "Check_Get";
+    public const string AppliedFor_Get = "AppliedFor_Get";
+    public const string AppliedFor_Post = "AppliedFor_Post";
+    public const string Location_Get = "Location_Get";
+    public const string Location_Post = "Location_Post";
+    public const string Support_Get = "Support_Get";
+    public const string Support_Post = "Support_Post";
 }

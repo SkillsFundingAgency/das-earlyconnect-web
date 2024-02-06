@@ -71,7 +71,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var result = await controller.SchoolName(viewModel) as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.Levelofapprenticeship_Get, Is.EqualTo(result.RouteName));
+            Assert.That(RouteNames.ApprenticeshipLevel_Get, Is.EqualTo(result.RouteName));
             Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
         }
 
@@ -237,7 +237,33 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
-                StudentSurvey = new StudentSurveyDto()
+                Id = 2,
+                FirstName = "John",
+                LastName = "Doe",
+                DateOfBirth = new DateTime(1990, 1, 1),
+                Telephone = "123-456-7890",
+                Email = "john.doe@example.com",
+                Postcode = "12345",
+                DataSource = "DummySource",
+                Industry = "DummyIndustry",
+                DateInterest = new DateTime(2022, 2, 1),
+                SurveyQuestions = new List<SurveyQuestionsDto>
+                {
+                    new SurveyQuestionsDto
+                    {
+                        Id = 2,
+                        SurveyId = 1001,
+                        QuestionText = "Dummy Question 1",
+                        Answers = new List<AnswersDto>
+                        {
+                            new AnswersDto { Id = 1, QuestionId=2 },
+                        }
+                    },
+                },
+                StudentSurvey = new StudentSurveyDto
+                {
+                    SurveyId = 100,
+                }
             };
 
             var createCommandResult = _fixture.Build<CreateStudentTriageDataCommandResult>()
