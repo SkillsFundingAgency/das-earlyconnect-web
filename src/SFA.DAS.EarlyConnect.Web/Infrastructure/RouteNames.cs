@@ -28,6 +28,7 @@ public static class RouteNames
     public const string Telephone_Post = "Telephone_Post";
     public const string CheckYourAnswersDummy_Get = "CheckYourAnswersDummy_Get";
     public const string CheckYourAnswers_Get = "Check_Get";
+    public const string CheckYourAnswers_Post = "Check_Post";
     public const string AppliedFor_Get = "AppliedFor_Get";
     public const string AppliedFor_Post = "AppliedFor_Post";
     public const string Location_Get = "Location_Get";
