@@ -6,11 +6,12 @@ using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Mappers;
 using SFA.DAS.EarlyConnect.Web.Mappers.SFA.DAS.EarlyConnect.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
-
+[Authorize]
 public class SurveyController : Controller
 {
     private readonly IMediator _mediator;
