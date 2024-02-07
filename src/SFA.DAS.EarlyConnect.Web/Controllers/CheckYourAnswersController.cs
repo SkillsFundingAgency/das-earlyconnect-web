@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
@@ -8,6 +9,7 @@ using SFA.DAS.EarlyConnect.Web.ViewModels;
 
 namespace das_earlyconnect_web.Controllers
 {
+    [Authorize]
     public class CheckYourAnswersController : Controller
     {
 
