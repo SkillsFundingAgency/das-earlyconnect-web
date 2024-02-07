@@ -14,6 +14,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
         public string? ValidationMessage { get; set; }
         public int? DefaultToggleAnswerId { get; set; }
         public int SortOrder { get; set; }
+        public SurveyQuestionType.Type? QuestionType { get; set; }
         public string? RouteName { get; set; }
         public List<Answers> Answers { get; set; } = new List<Answers>();
 
@@ -30,6 +31,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                 ValidationMessage = source.ValidationMessage,
                 DefaultToggleAnswerId = source.DefaultToggleAnswerId,
                 RouteName = GetRouteName(source.Id),
+                QuestionType = GetQuestionType(source.QuestionTypeId),
                 Answers = source.Answers.Select(c => (Answers)c).ToList()
             };
         }
@@ -39,10 +41,20 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
             {
                 (int)SurveyPage.Page.Apprenticeshiplevel => RouteNames.ApprenticeshipLevel_Get,
                 (int)SurveyPage.Page.AppliedFor => RouteNames.AppliedFor_Get,
-                (int)SurveyPage.Page.MoveToAnotherArea => RouteNames.AppliedFor_Get,
+                (int)SurveyPage.Page.Relocate => RouteNames.Relocate_Get,
                 (int)SurveyPage.Page.Support => RouteNames.Support_Get,
                 _ => string.Empty
             };
         }
+        private static SurveyQuestionType.Type GetQuestionType(int questionTypeId)
+        {
+            return questionTypeId switch
+            {
+                (int)SurveyQuestionType.Type.Checkbox => SurveyQuestionType.Type.Checkbox,
+                (int)SurveyQuestionType.Type.Radio => SurveyQuestionType.Type.Radio,
+                _ => SurveyQuestionType.Type.Default
+            };
+        }
+
     }
 }

@@ -32,13 +32,14 @@ namespace das_earlyconnect_web.Controllers
             });
             var checkYourAnswersViewModel = (CheckYourAnswersViewModel)studentSurveyResponse;
             checkYourAnswersViewModel.StudentSurveyId = studentSurveyId;
-            //checkYourAnswersViewModel.IsCheck = m.IsCheck;
+            checkYourAnswersViewModel.IsCheck = true;
+            checkYourAnswersViewModel.IsOther = studentSurveyResponse.DataSource == Datasource.Others;
 
             return View(checkYourAnswersViewModel);
         }
         [HttpPost]
         [Route("check", Name = RouteNames.CheckYourAnswers_Post, Order = 0)]
-        public async Task<IActionResult> ApprenticeshipLevel(CheckYourAnswersViewModel m)
+        public async Task<IActionResult> Check(CheckYourAnswersViewModel m)
         {
             var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
             {
@@ -51,11 +52,7 @@ namespace das_earlyconnect_web.Controllers
                 SurveyGuid = m.StudentSurveyId
             });
 
-            string routeName = m.IsOther
-                ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.AppliedFor_Get)
-                : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.AppliedFor_Post);
-
-            return RedirectToRoute(routeName, new { m.StudentSurveyId });
+            return RedirectToRoute(RouteNames.Confirmation_Get, new { m.StudentSurveyId });
         }
     }
 }

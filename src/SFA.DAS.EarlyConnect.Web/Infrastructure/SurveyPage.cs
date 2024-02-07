@@ -7,7 +7,7 @@ public static class SurveyPage
         Page1,
         Apprenticeshiplevel,
         AppliedFor,
-        MoveToAnotherArea,
+        Relocate,
         Support,
     }
 

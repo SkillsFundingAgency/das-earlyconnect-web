@@ -23,11 +23,8 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
 
         public List<Questions> Questions { get; set; } = new List<Questions>();
 
-        public string? BacklinkRoute =>
-            IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :
-            IsCheck && !IsOther ? RouteNames.CheckYourAnswersDummy_Get :
-            IsOther ? RouteNames.Support_Get :
-            RouteNames.Support_Get;
+        public string? BacklinkRoute => IsOther ? RouteNames.Support_Get : RouteNames.Support_Get ?? RouteNames.Support_Get;
+
 
 
         public static implicit operator CheckYourAnswersViewModel(GetStudentTriageDataBySurveyIdResult request)
