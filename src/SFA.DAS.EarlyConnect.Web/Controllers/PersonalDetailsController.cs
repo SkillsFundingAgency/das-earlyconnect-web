@@ -253,7 +253,7 @@ public class PersonalDetailsController : Controller
         });
 
 
-        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.School_Get;
+        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get;
 
         return RedirectToRoute(routeName, new { model.StudentSurveyId });
 

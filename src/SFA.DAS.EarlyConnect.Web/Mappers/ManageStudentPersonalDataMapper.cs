@@ -99,24 +99,6 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             return manageStudentPersonalData;
         }
 
-        public static StudentTriageData MapFromNameRequest(this NameViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
-        {
-            StudentTriageData manageStudentPersonalData = new StudentTriageData();
-            manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;
-            manageStudentPersonalData.FirstName = request.FirstName;
-            manageStudentPersonalData.LastName = request.LastName;
-            manageStudentPersonalData.DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth;
-            manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
-            manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
-            manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
-            manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
-            manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
-            manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
-            manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
-            manageStudentPersonalData.StudentSurvey.LastUpdated = DateTime.Now;
-            return manageStudentPersonalData;
-        }
-
         public static StudentTriageData MapFromIndustryRequest(this IndustryViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
         {
             StudentTriageData manageStudentPersonalData = new StudentTriageData();
