@@ -14,6 +14,7 @@ using SFA.DAS.EarlyConnect.Web.Configuration;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using System.Reflection;
 using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
+using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -25,7 +26,7 @@ public class TriageDataController : Controller
 
     public TriageDataController(IMediator mediator,
         ILogger<TriageDataController> logger
-        
+
         )
     {
         _mediator = mediator;
@@ -47,7 +48,7 @@ public class TriageDataController : Controller
             Areas = studentSurveyResponse.Industry.Split("|").ToList(),
             IsCheck = isSummaryReview.GetValueOrDefault()
         };
-        
+
         return View(viewModel);
     }
 
@@ -60,6 +61,7 @@ public class TriageDataController : Controller
             SurveyGuid = model.StudentSurveyId
         });
 
+        studentSurveyResponse.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
         var response = await _mediator.Send(new CreateStudentTriageDataCommand
         {
             StudentData = new StudentTriageData
@@ -67,7 +69,8 @@ public class TriageDataController : Controller
                 Id = studentSurveyResponse.Id,
                 FirstName = studentSurveyResponse.FirstName,
                 LastName = studentSurveyResponse.LastName,
-                DateOfBirth = studentSurveyResponse.DateOfBirth.GetValueOrDefault(),
+                DateOfBirth = studentSurveyResponse.DateOfBirth,
+                SchoolName = studentSurveyResponse.SchoolName,
                 Email = studentSurveyResponse.Email,
                 Postcode = studentSurveyResponse.Postcode,
                 Telephone = studentSurveyResponse.Telephone,
@@ -84,9 +87,8 @@ public class TriageDataController : Controller
         }
         else
         {
-            return RedirectToRoute(RouteNames.School_Get, new { studentSurveyId = model.StudentSurveyId });
+            return RedirectToRoute(RouteNames.SchoolName_Get, new { studentSurveyId = model.StudentSurveyId });
         }
     }
-
 }
 
