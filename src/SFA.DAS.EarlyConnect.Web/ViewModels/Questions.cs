@@ -11,6 +11,8 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
         public string? QuestionText { get; set; }
         public string? ShortDescription { get; set; }
         public string? SummaryLabel { get; set; }
+        public string? GroupLabel { get; set; }
+        public int GroupNumber { get; set; }
         public string? ValidationMessage { get; set; }
         public int? DefaultToggleAnswerId { get; set; }
         public int SortOrder { get; set; }
@@ -28,6 +30,8 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                 QuestionText = source.QuestionText,
                 ShortDescription = source.ShortDescription,
                 SummaryLabel = source.SummaryLabel,
+                GroupLabel = source.GroupLabel,
+                GroupNumber = source.GroupNumber,
                 ValidationMessage = source.ValidationMessage,
                 DefaultToggleAnswerId = source.DefaultToggleAnswerId,
                 RouteName = GetRouteName(source.Id),

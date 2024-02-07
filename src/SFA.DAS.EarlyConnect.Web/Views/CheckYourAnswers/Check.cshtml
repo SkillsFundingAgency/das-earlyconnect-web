@@ -88,134 +88,99 @@
                             </a>
                         </dd>
                     </div>
-
-
                 </dl>
-                <h2 class="govuk-heading-m">Education and preferences</h2>
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            School or college
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            @Model.SchoolName
-                        </dd>
-                        <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
-                                Change<span class="govuk-visually-hidden"> school or college</span>
-                            </a>
-                        </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Areas of interest
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            <ul class="govuk-list govuk-list--bullet">
-                                @foreach (var item in Model.Industry.Split('|'))
+                @{
+                    int serialCounter = 1;
+                }
+                @foreach (var group in Model.Questions.GroupBy(q => q.GroupNumber).OrderBy(g => g.Key))
+                {
+                    <h2 class="govuk-heading-m">@group.First().GroupLabel</h2>
+
+                    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                        @if (serialCounter == 1)
+                        {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    School or college
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    @Model.SchoolName
+                                </dd>
+                                <dd class="govuk-summary-list__actions">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                        Change<span class="govuk-visually-hidden"> school or college</span>
+                                    </a>
+                                </dd>
+                            </div>
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Areas of interest
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        @foreach (var item in Model.Industry.Split('|'))
+                                        {
+                                            <li>@item.Trim()</li>
+                                        }
+                                    </ul>
+                                </dd>
+
+                                <dd class="govuk-summary-list__actions">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                        Change
+                                        <span class="govuk-visually-hidden">
+                                            areas of
+                                            interest
+                                        </span>
+                                    </a>
+                                </dd>
+                            </div>
+                        }
+                        @foreach (var question in group.OrderBy(q => q.SortOrder))
+                        {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    @question.SummaryLabel
+                                </dt>
+
+                                @if (question.QuestionType == SurveyQuestionType.Type.Checkbox)
                                 {
-                                    <li>@item.Trim()</li>
+                                    <dd class="govuk-summary-list__value">
+                                        <ul class="govuk-list govuk-list--bullet">
+
+                                            @foreach (var answer in question.Answers.OrderBy(q => q.SortOrder))
+                                            {
+                                                <li>@answer.AnswerText</li>
+                                            }
+
+                                        </ul>
+                                    </dd>
                                 }
-                            </ul>
-                        </dd>
-
-                        <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
-                                Change
-                                <span class="govuk-visually-hidden">
-                                    areas of
-                                    interest
-                                </span>
-                            </a>
-                        </dd>
-                    </div>
-                    @foreach (var question in Model.Questions.Where(q => q.Id == (int)SurveyPage.Page.AppliedFor || q.Id == (int)SurveyPage.Page.Relocate).OrderBy(q => q.SortOrder))
-                    {
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">
-                                @question.SummaryLabel
-                            </dt>
-
-                            @if (question.QuestionType == SurveyQuestionType.Type.Checkbox)
-                            {
-                                <dd class="govuk-summary-list__value">
-                                    <ul class="govuk-list govuk-list--bullet">
+                                else
+                                {
+                                    <dd class="govuk-summary-list__value">
 
                                         @foreach (var answer in question.Answers.OrderBy(q => q.SortOrder))
                                         {
-                                            <li>@answer.AnswerText</li>
+                                            @answer.AnswerText
                                         }
 
-                                    </ul>
+                                    </dd>
+                                }
+                                <dd class="govuk-summary-list__actions">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(question.RouteName, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                        Change
+                                        <span class="govuk-visually-hidden">
+                                            @question.SummaryLabel
+                                        </span>
+                                    </a>
                                 </dd>
-                            }
-                            else
-                            {
-                                <dd class="govuk-summary-list__value">
 
-                                    @foreach (var answer in question.Answers.OrderBy(q => q.SortOrder))
-                                    {
-                                        @answer.AnswerText
-                                    }
-
-                                </dd>
-                            }
-                            <dd class="govuk-summary-list__actions">
-                                <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(question.RouteName, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
-                                    Change
-                                    <span class="govuk-visually-hidden">
-                                        @question.SummaryLabel
-                                    </span>
-                                </a>
-                            </dd>
-
-                        </div>
-                    }
-                </dl>
-                <h2 class="govuk-heading-m">Support details</h2>
-                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-                    @foreach (var question in Model.Questions.Where(q => q.Id != (int)SurveyPage.Page.AppliedFor && q.Id != (int)SurveyPage.Page.Relocate && q.Id != (int)SurveyPage.Page.Page1).OrderBy(q => q.SortOrder))
-                    {
-                        <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">
-                                @question.SummaryLabel
-                            </dt>
-                            @if (question.QuestionType == SurveyQuestionType.Type.Checkbox)
-                            {
-                                <dd class="govuk-summary-list__value">
-                                    <ul class="govuk-list govuk-list--bullet">
-
-                                        @foreach (var answer in question.Answers.OrderBy(q => q.SortOrder))
-                                        {
-                                            <li>@answer.AnswerText</li>
-                                        }
-
-                                    </ul>
-                                </dd>
-                            }
-                            else
-                            {
-                                <dd class="govuk-summary-list__value">
-
-                                    @foreach (var answer in question.Answers.OrderBy(q => q.SortOrder))
-                                    {
-                                        @answer.AnswerText
-                                    }
-
-                                </dd>
-                            }
-
-                            <dd class="govuk-summary-list__actions">
-                                <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(question.RouteName, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
-                                    Change
-                                    <span class="govuk-visually-hidden">
-                                        @question.SummaryLabel
-                                    </span>
-                                </a>
-                            </dd>
-                        </div>
-                    }
-                </dl>
+                            </div>
+                        }
+                    </dl>
+                    serialCounter++;
+                }
                 <h2 class="govuk-heading-m">Now send your application</h2>
                 <p class="govuk-body">
                     By submitting this request you are confirming that, to the best of your knowledge, the
