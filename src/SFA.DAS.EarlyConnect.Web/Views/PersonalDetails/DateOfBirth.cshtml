@@ -1,0 +1,74 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SFA.DAS.EarlyConnect.Application.TagHelpers
+@using SFA.DAS.EarlyConnect.Web.ViewModels
+@using SFA.DAS.EarlyConnect.Web.Views
+@model SFA.DAS.EarlyConnect.Web.ViewModels.DateOfBirthEditViewModel
+@{
+    ViewBag.Title = "What is your date of birth?";
+}
+
+@section BackLink
+{
+    <a asp-show="!@Model.IsCheck" asp-route="@RouteNames.Name_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+    <a asp-show="@Model.IsCheck" asp-route="@RouteNames.CheckYourAnswers_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+}
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState }' />
+            <form asp-route="@RouteNames.DateOfBirth_Post" asp-route-studentSurveyId="@Model.StudentSurveyId"  method="post" novalidate>
+                @Html.HiddenFor(model => model.IsCheck)
+                <div class="govuk-form-group">
+                    <div esfa-validation-marker-for="DateOfBirth" class="govuk-form-group">
+                        <div esfa-validation-marker-for="Day" class="govuk-form-group">
+                            <div esfa-validation-marker-for="Month" class="govuk-form-group">
+                                <div esfa-validation-marker-for="Year" class="govuk-form-group">
+                                    <fieldset class="govuk-fieldset" role="group" aria-describedby="dob-hint">
+                                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                        <h1 class="govuk-fieldset__heading">
+                                            What is your date of birth?
+                                        </h1>
+                                    </legend>
+                                    <div id="dob-hint" class="govuk-hint">
+                                        For example, 31 3 2007
+                                    </div>
+                                    <div class="govuk-date-input" id="dob">
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="day">
+                                                    Day
+                                                </label>
+                                                <input asp-for="Day" class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" min="1" max="31" das-highlight-error-for="Day" error-class="govuk-input--error">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="month">
+                                                    Month
+                                                </label>
+                                                    <input asp-for="Month" class="govuk-input govuk-date-input__input govuk-input--width-2" type="number" min="1" max="12" das-highlight-error-for="Month" error-class="govuk-input--error">
+                                            </div>
+                                        </div>
+                                        <div class="govuk-date-input__item">
+                                            <div class="govuk-form-group">
+                                                <label class="govuk-label govuk-date-input__label" for="year">
+                                                    Year
+                                                </label>
+                                                    <input asp-for="Year" class="govuk-input govuk-date-input__input govuk-input--width-4" type="number" das-highlight-error-for="Year" error-class="govuk-input--error">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="govuk-button" esfa-automation="continue-button">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</main>

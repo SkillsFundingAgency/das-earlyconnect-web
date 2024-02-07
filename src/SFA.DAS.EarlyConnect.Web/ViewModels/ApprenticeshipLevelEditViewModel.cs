@@ -10,21 +10,30 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
         public string? BacklinkRoute =>
             IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :
             IsCheck && !IsOther ? RouteNames.CheckYourAnswersDummy_Get :
-            IsOther ? RouteNames.School_Get :
-            RouteNames.School_Get;
+            IsOther ? RouteNames.SchoolName_Get :
+            RouteNames.SchoolName_Get;
 
         public static implicit operator ApprenticeshipLevelEditViewModel(GetStudentTriageDataBySurveyIdResult request)
         {
-            var apprenticeshiplevelEditViewModel = new ApprenticeshipLevelEditViewModel
-            {
-                Question = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.Apprenticeshiplevel)
-            };
+            var apprenticeshipLevelEditViewModel = new ApprenticeshipLevelEditViewModel();
 
             var surveyQuestion = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.Apprenticeshiplevel);
 
             if (surveyQuestion != null)
             {
-                var existingAnswers = apprenticeshiplevelEditViewModel.Question.Answers
+                apprenticeshipLevelEditViewModel.Question = new Questions();
+                apprenticeshipLevelEditViewModel.Question.Id = surveyQuestion.Id;
+                apprenticeshipLevelEditViewModel.Question.SurveyId = surveyQuestion.SurveyId;
+                apprenticeshipLevelEditViewModel.Question.QuestionTypeId = surveyQuestion.QuestionTypeId;
+                apprenticeshipLevelEditViewModel.Question.QuestionText = surveyQuestion.QuestionText;
+                apprenticeshipLevelEditViewModel.Question.ShortDescription = surveyQuestion.ShortDescription;
+                apprenticeshipLevelEditViewModel.Question.SummaryLabel = surveyQuestion.SummaryLabel;
+                apprenticeshipLevelEditViewModel.Question.ValidationMessage = surveyQuestion.ValidationMessage;
+                apprenticeshipLevelEditViewModel.Question.DefaultToggleAnswerId = surveyQuestion.DefaultToggleAnswerId;
+                apprenticeshipLevelEditViewModel.Question.SortOrder = surveyQuestion.SortOrder;
+                apprenticeshipLevelEditViewModel.Question.Answers = new List<Answers>();
+
+                var existingAnswers = surveyQuestion.Answers
                     .Where(answer => answer.QuestionId == surveyQuestion.Id)
                     .ToList();
 
@@ -43,26 +52,33 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                 {
                     var matchingAnswer = matchingResponseAnswers.FirstOrDefault(answer => answer.AnswerId == existingAnswer.Id);
 
+                    var studentAnswer = new Answers();
+
                     if (matchingAnswer != null)
                     {
-                        existingAnswer.IsSelected = true;
-                        existingAnswer.StudentAnswerId = matchingAnswer.Id;
+                        studentAnswer.IsSelected = true;
+                        studentAnswer.StudentAnswerId = matchingAnswer.Id;
                     }
 
+                    studentAnswer.Id = existingAnswer.Id;
+                    studentAnswer.QuestionId = existingAnswer.QuestionId;
+                    studentAnswer.AnswerText = existingAnswer.AnswerText;
+                    studentAnswer.ShortDescription = existingAnswer.ShortDescription;
+                    studentAnswer.GroupNumber = existingAnswer.GroupNumber;
+                    studentAnswer.GroupLabel = existingAnswer.GroupLabel;
+                    studentAnswer.SortOrder = existingAnswer.SortOrder;
 
-                    existingAnswer.Serial = serialCounter;
+                    studentAnswer.Serial = serialCounter;
                     serialCounter++;
 
-
-                    existingAnswer.ToggleAnswer = existingAnswer.Id == surveyQuestion.DefaultToggleAnswerId
+                    studentAnswer.ToggleAnswer = existingAnswer.Id == surveyQuestion.DefaultToggleAnswerId
                         ? AnswerGroup.Group.Toggled
                         : AnswerGroup.Group.Default;
+                    apprenticeshipLevelEditViewModel.Question.Answers.Add(studentAnswer);
                 }
-
-                apprenticeshiplevelEditViewModel.Question.Answers = existingAnswers;
             }
 
-            return apprenticeshiplevelEditViewModel;
+            return apprenticeshipLevelEditViewModel;
         }
     }
 }
