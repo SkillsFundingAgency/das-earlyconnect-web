@@ -47,7 +47,6 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             }
             return manageStudentPersonalData;
         }
-
         public static StudentTriageData MapFromApprenticeshiplevelRequest(this ApprenticeshipLevelEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
         {
             return MapFromRequest(request, studentTriageDataBySurveyIdResult, SurveyPage.Page.Apprenticeshiplevel);
@@ -61,6 +60,27 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
         public static StudentTriageData MapFromSupportRequest(this SupportEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
         {
             return MapFromRequest(request, studentTriageDataBySurveyIdResult, SurveyPage.Page.Support);
+        }
+        public static StudentTriageData MapFromCheckYourAnswersRequest(this CheckYourAnswersViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        {
+            var manageStudentPersonalData = new StudentTriageData
+            {
+                Id = studentTriageDataBySurveyIdResult.Id,
+                FirstName = studentTriageDataBySurveyIdResult.FirstName,
+                LastName = studentTriageDataBySurveyIdResult.LastName,
+                SchoolName = studentTriageDataBySurveyIdResult.SchoolName,
+                DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth,
+                Email = studentTriageDataBySurveyIdResult.Email,
+                Postcode = studentTriageDataBySurveyIdResult.Postcode,
+                Telephone = studentTriageDataBySurveyIdResult.Telephone,
+                DataSource = studentTriageDataBySurveyIdResult.DataSource,
+                Industry = studentTriageDataBySurveyIdResult.Industry,
+                StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey
+            };
+
+            manageStudentPersonalData.StudentSurvey.DateCompleted = DateTime.Now;
+
+            return manageStudentPersonalData;
         }
     }
     namespace SFA.DAS.EarlyConnect.Web.ViewModels
