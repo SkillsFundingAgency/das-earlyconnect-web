@@ -1,28 +1,196 @@
 ﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
-@using SFA.DAS.EarlyConnect.Web.ViewModels
-@using SFA.DAS.EarlyConnect.Web.Views
 @model SFA.DAS.EarlyConnect.Web.ViewModels.CheckYourAnswersViewModel
 @{
     ViewBag.Title = "Check your answers before sending your request";
 }
 
-<main class="govuk-main-wrapper " id="main-content" role="main">
+@section BackLink
+{
+    <a asp-route="@Model.BacklinkRoute" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+}
 
+<main class="govuk-main-wrapper " id="main-content" role="main">
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            
-            <p class="govuk-body">
-                <a href="@Url.RouteUrl(RouteNames.Name_Get, new {studentSurveyId = Model.StudentSurveyId, isSummaryReview = true})" class="govuk-link govuk-link--no-visited-state">Change Name</a>
-            </p>
+            <form asp-route="@RouteNames.CheckYourAnswers_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
+                @Html.HiddenFor(model => model.IsCheck)
+                @Html.HiddenFor(model => model.IsOther)
+                <h1 class="govuk-heading-l">Check your answers before sending your request</h1>
+                <h2 class="govuk-heading-m">Personal details</h2>
+                <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Name
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            @string.Concat(Model.FirstName, " ", Model.LastName)
+                        </dd>
+                        <dd class="govuk-summary-list__actions">
+                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Name_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                Change
+                                <span class="govuk-visually-hidden">
+                                    name
+                                </span>
+                            </a>
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Date of birth
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            @(Model.DateOfBirth?.ToString("dd MMMM yyyy") ?? "N/A")
+                        </dd>
+                        <dd class="govuk-summary-list__actions">
+                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.DateOfBirth_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                Change
+                                <span class="govuk-visually-hidden">
+                                    date of birth
+                                </span>
+                            </a>
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Email
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            <p class="govuk-body">@Model.Email</p>
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Telephone
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            <p class="govuk-body">@Model.Telephone</p>
+                        </dd>
+                        <dd class="govuk-summary-list__actions">
+                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Telephone_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                Change
+                                <span class="govuk-visually-hidden">
+                                    Telephone
+                                </span>
+                            </a>
+                        </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                            Postcode
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                            @Model.Postcode
+                        </dd>
+                        <dd class="govuk-summary-list__actions">
+                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Postcode_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                Change<span class="govuk-visually-hidden"> postcode</span>
+                            </a>
+                        </dd>
+                    </div>
+                </dl>
+                @{
+                    int serialCounter = 1;
+                }
+                @foreach (var group in Model.Questions.GroupBy(q => q.GroupNumber).OrderBy(g => g.Key))
+                {
+                    <h2 class="govuk-heading-m">@group.First().GroupLabel</h2>
 
-            <p class="govuk-body">
-                <a href="@Url.RouteUrl(RouteNames.Industry_Get, new {studentSurveyId = Model.StudentSurveyId, isSummaryReview = true})" class="govuk-link govuk-link--no-visited-state">Change Industry</a>
-            </p>
-           
+                    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                        @if (serialCounter == 1)
+                        {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    School or college
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    @Model.SchoolName
+                                </dd>
+                                <dd class="govuk-summary-list__actions">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                        Change<span class="govuk-visually-hidden"> school or college</span>
+                                    </a>
+                                </dd>
+                            </div>
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    Areas of interest
+                                </dt>
+                                <dd class="govuk-summary-list__value">
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        @foreach (var item in Model.Industry.Split('|'))
+                                        {
+                                            <li>@item.Trim()</li>
+                                        }
+                                    </ul>
+                                </dd>
 
+                                <dd class="govuk-summary-list__actions">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                        Change
+                                        <span class="govuk-visually-hidden">
+                                            areas of
+                                            interest
+                                        </span>
+                                    </a>
+                                </dd>
+                            </div>
+                        }
+                        @foreach (var question in group.OrderBy(q => q.SortOrder))
+                        {
+                            <div class="govuk-summary-list__row">
+                                <dt class="govuk-summary-list__key">
+                                    @question.SummaryLabel
+                                </dt>
+
+                                @if (question.QuestionType == SurveyQuestionType.Type.Checkbox)
+                                {
+                                    <dd class="govuk-summary-list__value">
+                                        <ul class="govuk-list govuk-list--bullet">
+
+                                            @foreach (var answer in question.Answers.OrderBy(q => q.SortOrder))
+                                            {
+                                                <li>@answer.AnswerText</li>
+                                            }
+
+                                        </ul>
+                                    </dd>
+                                }
+                                else
+                                {
+                                    <dd class="govuk-summary-list__value">
+
+                                        @foreach (var answer in question.Answers.OrderBy(q => q.SortOrder))
+                                        {
+                                            @answer.AnswerText
+                                        }
+
+                                    </dd>
+                                }
+                                <dd class="govuk-summary-list__actions">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(question.RouteName, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                        Change
+                                        <span class="govuk-visually-hidden">
+                                            @question.SummaryLabel
+                                        </span>
+                                    </a>
+                                </dd>
+
+                            </div>
+                        }
+                    </dl>
+                    serialCounter++;
+                }
+                <h2 class="govuk-heading-m">Now send your application</h2>
+                <p class="govuk-body">
+                    By submitting this request you are confirming that, to the best of your knowledge, the
+                    details you are providing are
+                    correct.
+                </p>
+                <button type="submit" class="govuk-button" data-module="govuk-button" esfa-automation="continue-button">
+                    Accept and send
+                </button>
+            </form>
         </div>
     </div>
-
-
 </main>
