@@ -15,25 +15,16 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
 
         public static implicit operator SupportEditViewModel(GetStudentTriageDataBySurveyIdResult request)
         {
-            var supportEditViewModel = new SupportEditViewModel();
+            var supportEditViewModel = new SupportEditViewModel
+            {
+                Question = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.Support)
+            };
 
             var surveyQuestion = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.Support);
 
             if (surveyQuestion != null)
             {
-                supportEditViewModel.Question = new Questions();
-                supportEditViewModel.Question.Id = surveyQuestion.Id;
-                supportEditViewModel.Question.SurveyId = surveyQuestion.SurveyId;
-                supportEditViewModel.Question.QuestionTypeId = surveyQuestion.QuestionTypeId;
-                supportEditViewModel.Question.QuestionText = surveyQuestion.QuestionText;
-                supportEditViewModel.Question.ShortDescription = surveyQuestion.ShortDescription;
-                supportEditViewModel.Question.SummaryLabel = surveyQuestion.SummaryLabel;
-                supportEditViewModel.Question.ValidationMessage = surveyQuestion.ValidationMessage;
-                supportEditViewModel.Question.DefaultToggleAnswerId = surveyQuestion.DefaultToggleAnswerId;
-                supportEditViewModel.Question.SortOrder = surveyQuestion.SortOrder;
-                supportEditViewModel.Question.Answers = new List<Answers>();
-
-                var existingAnswers = surveyQuestion.Answers
+                var existingAnswers = supportEditViewModel.Question.Answers
                     .Where(answer => answer.QuestionId == surveyQuestion.Id)
                     .ToList();
 
@@ -52,30 +43,21 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                 {
                     var matchingAnswer = matchingResponseAnswers.FirstOrDefault(answer => answer.AnswerId == existingAnswer.Id);
 
-                    var studentAnswer = new Answers();
-
                     if (matchingAnswer != null)
                     {
-                        studentAnswer.IsSelected = true;
-                        studentAnswer.StudentAnswerId = matchingAnswer.Id;
+                        existingAnswer.IsSelected = true;
+                        existingAnswer.StudentAnswerId = matchingAnswer.Id;
                     }
 
-                    studentAnswer.Id = existingAnswer.Id;
-                    studentAnswer.QuestionId = existingAnswer.QuestionId;
-                    studentAnswer.AnswerText = existingAnswer.AnswerText;
-                    studentAnswer.ShortDescription = existingAnswer.ShortDescription;
-                    studentAnswer.GroupNumber = existingAnswer.GroupNumber;
-                    studentAnswer.GroupLabel = existingAnswer.GroupLabel;
-                    studentAnswer.SortOrder = existingAnswer.SortOrder;
-
-                    studentAnswer.Serial = serialCounter;
+                    existingAnswer.Serial = serialCounter;
                     serialCounter++;
 
-                    studentAnswer.ToggleAnswer = existingAnswer.Id == surveyQuestion.DefaultToggleAnswerId
+                    existingAnswer.ToggleAnswer = existingAnswer.Id == surveyQuestion.DefaultToggleAnswerId
                         ? AnswerGroup.Group.Toggled
                         : AnswerGroup.Group.Default;
-                    supportEditViewModel.Question.Answers.Add(studentAnswer);
                 }
+
+                supportEditViewModel.Question.Answers = existingAnswers;
             }
 
             return supportEditViewModel;

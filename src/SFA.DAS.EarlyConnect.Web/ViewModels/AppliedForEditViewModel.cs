@@ -15,25 +15,16 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
 
         public static implicit operator AppliedForEditViewModel(GetStudentTriageDataBySurveyIdResult request)
         {
-            var appliedForEditViewModel = new AppliedForEditViewModel();
+            var appliedForEditViewModel = new AppliedForEditViewModel
+            {
+                Question = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.AppliedFor)
+            };
 
             var surveyQuestion = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.AppliedFor);
 
             if (surveyQuestion != null)
             {
-                appliedForEditViewModel.Question = new Questions();
-                appliedForEditViewModel.Question.Id = surveyQuestion.Id;
-                appliedForEditViewModel.Question.SurveyId = surveyQuestion.SurveyId;
-                appliedForEditViewModel.Question.QuestionTypeId = surveyQuestion.QuestionTypeId;
-                appliedForEditViewModel.Question.QuestionText = surveyQuestion.QuestionText;
-                appliedForEditViewModel.Question.ShortDescription = surveyQuestion.ShortDescription;
-                appliedForEditViewModel.Question.SummaryLabel = surveyQuestion.SummaryLabel;
-                appliedForEditViewModel.Question.ValidationMessage = surveyQuestion.ValidationMessage;
-                appliedForEditViewModel.Question.DefaultToggleAnswerId = surveyQuestion.DefaultToggleAnswerId;
-                appliedForEditViewModel.Question.SortOrder = surveyQuestion.SortOrder;
-                appliedForEditViewModel.Question.Answers = new List<Answers>();
-
-                var existingAnswers = surveyQuestion.Answers
+                var existingAnswers = appliedForEditViewModel.Question.Answers
                     .Where(answer => answer.QuestionId == surveyQuestion.Id)
                     .ToList();
 
@@ -52,30 +43,21 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                 {
                     var matchingAnswer = matchingResponseAnswers.FirstOrDefault(answer => answer.AnswerId == existingAnswer.Id);
 
-                    var studentAnswer = new Answers();
-
                     if (matchingAnswer != null)
                     {
-                        studentAnswer.IsSelected = true;
-                        studentAnswer.StudentAnswerId = matchingAnswer.Id;
+                        existingAnswer.IsSelected = true;
+                        existingAnswer.StudentAnswerId = matchingAnswer.Id;
                     }
 
-                    studentAnswer.Id = existingAnswer.Id;
-                    studentAnswer.QuestionId = existingAnswer.QuestionId;
-                    studentAnswer.AnswerText = existingAnswer.AnswerText;
-                    studentAnswer.ShortDescription = existingAnswer.ShortDescription;
-                    studentAnswer.GroupNumber = existingAnswer.GroupNumber;
-                    studentAnswer.GroupLabel = existingAnswer.GroupLabel;
-                    studentAnswer.SortOrder = existingAnswer.SortOrder;
-
-                    studentAnswer.Serial = serialCounter;
+                    existingAnswer.Serial = serialCounter;
                     serialCounter++;
 
-                    studentAnswer.ToggleAnswer = existingAnswer.Id == surveyQuestion.DefaultToggleAnswerId
+                    existingAnswer.ToggleAnswer = existingAnswer.Id == surveyQuestion.DefaultToggleAnswerId
                         ? AnswerGroup.Group.Toggled
                         : AnswerGroup.Group.Default;
-                    appliedForEditViewModel.Question.Answers.Add(studentAnswer);
                 }
+
+                appliedForEditViewModel.Question.Answers = existingAnswers;
             }
 
             return appliedForEditViewModel;

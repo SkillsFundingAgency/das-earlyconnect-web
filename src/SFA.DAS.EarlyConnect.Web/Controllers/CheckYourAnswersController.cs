@@ -1,13 +1,16 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using SFA.DAS.EarlyConnect.Web.Controllers;
+using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
+using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
+using SFA.DAS.EarlyConnect.Web.Mappers;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 
 namespace das_earlyconnect_web.Controllers
 {
-    public class CheckYourAnswersController:Controller
+    [Authorize]
+    public class CheckYourAnswersController : Controller
     {
 
         private readonly IMediator _mediator;
@@ -23,14 +26,35 @@ namespace das_earlyconnect_web.Controllers
 
         [HttpGet]
         [Route("check", Name = RouteNames.CheckYourAnswers_Get, Order = 0)]
-        public IActionResult Check(string? studentSurveyId)
+        public async Task<IActionResult> Check(Guid studentSurveyId)
         {
-            CheckYourAnswersViewModel model = new CheckYourAnswersViewModel
-            { 
-                StudentSurveyId = studentSurveyId
-            };
-            return View(model);
-        }
+            var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+            {
+                SurveyGuid = studentSurveyId
+            });
+            var checkYourAnswersViewModel = (CheckYourAnswersViewModel)studentSurveyResponse;
+            checkYourAnswersViewModel.StudentSurveyId = studentSurveyId;
+            checkYourAnswersViewModel.IsCheck = true;
+            checkYourAnswersViewModel.IsOther = studentSurveyResponse.DataSource == Datasource.Others;
 
+            return View(checkYourAnswersViewModel);
+        }
+        [HttpPost]
+        [Route("check", Name = RouteNames.CheckYourAnswers_Post, Order = 0)]
+        public async Task<IActionResult> Check(CheckYourAnswersViewModel m)
+        {
+            var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+            {
+                SurveyGuid = m.StudentSurveyId
+            });
+
+            var response = await _mediator.Send(new CreateStudentTriageDataCommand
+            {
+                StudentData = m.MapFromCheckYourAnswersRequest(studentSurveyResponse),
+                SurveyGuid = m.StudentSurveyId
+            });
+
+            return RedirectToRoute(RouteNames.Confirmation_Get, new { m.StudentSurveyId });
+        }
     }
 }

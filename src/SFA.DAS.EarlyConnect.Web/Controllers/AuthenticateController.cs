@@ -43,7 +43,7 @@ public class AuthenticateController : Controller
         {
             SetTempData(viewModel);
 
-            return View(new AuthCodeViewModel { LepsCode = viewModel.LepsCode, Email = viewModel.Email });
+            return View(new AuthCodeViewModel { LepsCode = viewModel.LepsCode, Email = viewModel.Email, ShowCodeResent = viewModel.ShowCodeResent });
         }
 
         return NotFound();
@@ -98,7 +98,8 @@ public class AuthenticateController : Controller
                 Email = viewModel.Email,
                 ExpiryDate = response.Expiry,
                 LepsCode = viewModel.LepsCode,
-                StudentSurveyId = viewModel.StudentSurveyId
+                StudentSurveyId = viewModel.StudentSurveyId,
+                ShowCodeResent = true
             };
 
             SetTempData(authenticateViewModel);
