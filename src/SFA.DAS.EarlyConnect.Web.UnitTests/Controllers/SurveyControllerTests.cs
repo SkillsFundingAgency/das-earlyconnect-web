@@ -143,7 +143,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 var result = await controller.ApprenticeshipLevel(viewModel) as RedirectToRouteResult;
 
                 Assert.That(result, Is.Not.Null);
-                Assert.That(RouteNames.AppliedFor_Post, Is.EqualTo(result.RouteName));
+                Assert.That(RouteNames.Relocate_Get, Is.EqualTo(result.RouteName));
                 Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
             }
         }

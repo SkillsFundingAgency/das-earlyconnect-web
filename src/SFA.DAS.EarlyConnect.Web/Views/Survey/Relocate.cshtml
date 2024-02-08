@@ -7,7 +7,8 @@
 }
 
 @section BackLink {
-    <a asp-show="!@Model.IsCheck" asp-route="@RouteNames.Name_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+
+    <a asp-show="!@Model.IsCheck" asp-route="@RouteNames.ApprenticeshipLevel_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
     <a asp-show="@Model.IsCheck" asp-route="@RouteNames.CheckYourAnswers_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
 }
 
@@ -19,6 +20,8 @@
 
             <form asp-route="@RouteNames.Relocate_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
                 @Html.HiddenFor(model => model.IsCheck)
+                @Html.HiddenFor(model => model.ValidationMessage)
+
                 <div class="govuk-form-group">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">

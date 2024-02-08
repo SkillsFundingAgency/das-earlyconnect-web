@@ -6,6 +6,7 @@ using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Mappers;
 using SFA.DAS.EarlyConnect.Web.Mappers.SFA.DAS.EarlyConnect.Web.ViewModels;
+using SFA.DAS.EarlyConnect.Web.RouteModel;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 
@@ -66,7 +67,7 @@ public class SurveyController : Controller
 
         string routeName = m.IsOther
             ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.AppliedFor_Get)
-            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.AppliedFor_Post);
+            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.Relocate_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
@@ -192,8 +193,6 @@ public class SurveyController : Controller
         {
             answer.IsSelected = true;
         }
-
-        m = MapViewModel(m, studentSurveyResponse, SurveyPage.Page.Relocate);
 
         var response = await _mediator.Send(new CreateStudentTriageDataCommand
         {

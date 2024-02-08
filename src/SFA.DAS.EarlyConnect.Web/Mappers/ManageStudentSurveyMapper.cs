@@ -62,6 +62,12 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
         {
             return MapFromRequest(request, studentTriageDataBySurveyIdResult, SurveyPage.Page.Support);
         }
+
+        public static StudentTriageData MapFromRelocateRequest(this RelocateEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        {
+            return MapFromRequest(request, studentTriageDataBySurveyIdResult, SurveyPage.Page.Relocate);
+        }
+
         public static StudentTriageData MapFromCheckYourAnswersRequest(this CheckYourAnswersViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
         {
             var manageStudentPersonalData = new StudentTriageData
