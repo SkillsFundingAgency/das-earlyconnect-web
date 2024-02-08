@@ -66,7 +66,7 @@ public class SurveyController : Controller
 
         string routeName = m.IsOther
             ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.AppliedFor_Get)
-            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.AppliedFor_Post);
+            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.Relocate_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }

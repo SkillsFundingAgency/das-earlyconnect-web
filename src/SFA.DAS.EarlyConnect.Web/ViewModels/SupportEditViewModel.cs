@@ -10,8 +10,8 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
         public string? BacklinkRoute =>
             IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :
             IsCheck && !IsOther ? RouteNames.CheckYourAnswersDummy_Get :
-            IsOther ? RouteNames.AppliedFor_Get :
-            RouteNames.AppliedFor_Get;
+            IsOther ? RouteNames.Relocate_Get :
+            RouteNames.Relocate_Get;
 
         public static implicit operator SupportEditViewModel(GetStudentTriageDataBySurveyIdResult request)
         {

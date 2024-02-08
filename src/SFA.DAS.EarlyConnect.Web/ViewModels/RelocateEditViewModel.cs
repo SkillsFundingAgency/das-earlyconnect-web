@@ -44,6 +44,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                     {
                         existingAnswer.IsSelected = true;
                         existingAnswer.StudentAnswerId = matchingAnswer.Id;
+                        relocateEditViewModel.SelectedAnswerId = matchingAnswer.AnswerId.GetValueOrDefault();
                     }
 
                     existingAnswer.Serial = serialCounter;
