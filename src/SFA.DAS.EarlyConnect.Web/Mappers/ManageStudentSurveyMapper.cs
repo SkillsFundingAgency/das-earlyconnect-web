@@ -90,11 +90,6 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             return manageStudentPersonalData;
         }
 
-        public static StudentTriageData MapFromRelocateRequest(this RelocateEditViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
-        {
-            return MapFromRequest(request, studentTriageDataBySurveyIdResult, SurveyPage.Page.Relocate);
-        }
-
     }
     namespace SFA.DAS.EarlyConnect.Web.ViewModels
     {
