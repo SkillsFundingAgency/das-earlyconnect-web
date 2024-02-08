@@ -7,8 +7,7 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
     {
         public RelocateModelValidator()
         {
-            RuleFor(x => x.SelectedAnswerId).NotEqual(0).WithMessage("Select if you would move to another area of England for an apprenticeship");
-
+            RuleFor(x => x.SelectedAnswerId).NotEqual(0).WithMessage(x => x.ValidationMessage);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
     public class RelocateEditViewModel : BaseSurveyViewModel
     {
         public int SelectedAnswerId { get; set; }
+        public string? ValidationMessage { get; set; }
 
         public static implicit operator RelocateEditViewModel(GetStudentTriageDataBySurveyIdResult request)
         {
@@ -56,6 +57,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                 }
 
                 relocateEditViewModel.Question.Answers = existingAnswers;
+                relocateEditViewModel.ValidationMessage = surveyQuestion.ValidationMessage;
             }
 
             return relocateEditViewModel;
