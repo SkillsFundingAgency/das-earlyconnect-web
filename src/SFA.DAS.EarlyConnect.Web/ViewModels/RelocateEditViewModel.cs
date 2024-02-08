@@ -2,29 +2,27 @@ using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.Mappers.SFA.DAS.EarlyConnect.Web.ViewModels;
+using SFA.DAS.EarlyConnect.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.ViewModels
 {
-    public class SupportEditViewModel : BaseSurveyViewModel
+    public class RelocateEditViewModel : BaseSurveyViewModel
     {
-        public string? BacklinkRoute =>
-            IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :
-            IsCheck && !IsOther ? RouteNames.CheckYourAnswersDummy_Get :
-            IsOther ? RouteNames.Relocate_Get :
-            RouteNames.Relocate_Get;
+        public int SelectedAnswerId { get; set; }
+        public string? ValidationMessage { get; set; }
 
-        public static implicit operator SupportEditViewModel(GetStudentTriageDataBySurveyIdResult request)
+        public static implicit operator RelocateEditViewModel(GetStudentTriageDataBySurveyIdResult request)
         {
-            var supportEditViewModel = new SupportEditViewModel
+            var relocateEditViewModel = new RelocateEditViewModel
             {
-                Question = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.Support)
+                Question = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.Relocate)
             };
 
-            var surveyQuestion = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.Support);
+            var surveyQuestion = request.SurveyQuestions.FirstOrDefault(q => q.Id == (int)SurveyPage.Page.Relocate);
 
             if (surveyQuestion != null)
             {
-                var existingAnswers = supportEditViewModel.Question.Answers
+                var existingAnswers = relocateEditViewModel.Question.Answers
                     .Where(answer => answer.QuestionId == surveyQuestion.Id)
                     .ToList();
 
@@ -47,6 +45,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                     {
                         existingAnswer.IsSelected = true;
                         existingAnswer.StudentAnswerId = matchingAnswer.Id;
+                        relocateEditViewModel.SelectedAnswerId = matchingAnswer.AnswerId.GetValueOrDefault();
                     }
 
                     existingAnswer.Serial = serialCounter;
@@ -57,10 +56,11 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                         : AnswerGroup.Group.Default;
                 }
 
-                supportEditViewModel.Question.Answers = existingAnswers;
+                relocateEditViewModel.Question.Answers = existingAnswers;
+                relocateEditViewModel.ValidationMessage = surveyQuestion.ValidationMessage;
             }
 
-            return supportEditViewModel;
+            return relocateEditViewModel;
         }
     }
 }

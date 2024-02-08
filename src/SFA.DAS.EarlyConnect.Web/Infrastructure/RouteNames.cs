@@ -27,6 +27,8 @@ public static class RouteNames
     public const string DateOfBirth_Get = "DateOfBirth_Get";
     public const string DateOfBirth_Post = "DateOfBirth_Post";
     public const string CheckYourAnswersDummy_Get = "CheckYourAnswersDummy_Get";
+    public const string Relocate_Get = "Relocate_Get";
+    public const string Relocate_Post = "Relocate_Post";
     public const string CheckYourAnswers_Get = "Check_Get";
     public const string CheckYourAnswers_Post = "Check_Post";
     public const string AppliedFor_Get = "AppliedFor_Get";
@@ -35,7 +37,5 @@ public static class RouteNames
     public const string Location_Post = "Location_Post";
     public const string Support_Get = "Support_Get";
     public const string Support_Post = "Support_Post";
-    public const string Relocate_Get = "Relocate_Get";
-    public const string Relocate_Post = "Relocate_Post";
     public const string Confirmation_Get = "Confirmation_Get";
 }

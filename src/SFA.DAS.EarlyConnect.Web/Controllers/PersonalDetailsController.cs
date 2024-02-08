@@ -99,17 +99,17 @@ public class PersonalDetailsController : Controller
 
     [HttpGet]
     [Route("name", Name = RouteNames.Name_Get, Order = 0)]
-    public async Task<IActionResult> Name(Guid studentSurveyId, bool? isSummaryReview)
+    public async Task<IActionResult> Name(TriageRouteModel m)
     {
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
-            SurveyGuid = studentSurveyId
+            SurveyGuid = m.StudentSurveyId
         });
 
         return View(new NameViewModel
         {
-            StudentSurveyId = studentSurveyId,
-            IsCheck = isSummaryReview.GetValueOrDefault(),
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
             FirstName = studentSurveyResponse.FirstName,
             LastName = studentSurveyResponse.LastName
         });
@@ -217,5 +217,47 @@ public class PersonalDetailsController : Controller
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
+
+    [HttpGet]
+    [Route("industry", Name = RouteNames.Industry_Get, Order = 0)]
+    public async Task<IActionResult> Industry(Guid studentSurveyId, bool? isSummaryReview)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = studentSurveyId
+        });
+
+        IndustryViewModel viewModel = new IndustryViewModel
+        {
+            StudentSurveyId = studentSurveyId,
+            Areas = studentSurveyResponse.Industry.Split("|").ToList(),
+            IsCheck = isSummaryReview.GetValueOrDefault()
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [Route("industry", Name = RouteNames.Industry_Post, Order = 0)]
+    public async Task<IActionResult> Industry(IndustryViewModel model)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = model.StudentSurveyId
+        });
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = model.MapFromIndustryRequest(studentSurveyResponse),
+            SurveyGuid = model.StudentSurveyId
+        });
+
+
+        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get;
+
+        return RedirectToRoute(routeName, new { model.StudentSurveyId });
+
+    }
+
 }
 
