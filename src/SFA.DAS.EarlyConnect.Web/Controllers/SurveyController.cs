@@ -193,8 +193,6 @@ public class SurveyController : Controller
             answer.IsSelected = true;
         }
 
-        m = MapViewModel(m, studentSurveyResponse, SurveyPage.Page.Relocate);
-
         var response = await _mediator.Send(new CreateStudentTriageDataCommand
         {
             StudentData = m.MapFromRelocateRequest(studentSurveyResponse),
