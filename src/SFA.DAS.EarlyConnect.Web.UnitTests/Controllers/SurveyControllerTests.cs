@@ -590,5 +590,21 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
         }
 
+
+        [Test]
+        public async Task Confirmation_Get_ReturnsViewResult()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<SurveyController>>();
+
+            var controller = new SurveyController(mediatorMock.Object, loggerMock.Object);
+
+            var result =
+                await controller.Confirmation() as ViewResult;
+
+            Assert.That(result, Is.Not.Null);
+           
+
+        }
     }
 }

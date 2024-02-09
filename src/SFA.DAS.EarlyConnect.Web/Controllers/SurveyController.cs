@@ -8,6 +8,7 @@ using SFA.DAS.EarlyConnect.Web.Mappers;
 using SFA.DAS.EarlyConnect.Web.Mappers.SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EarlyConnect.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -202,6 +203,13 @@ public class SurveyController : Controller
         string routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Support_Get;
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
+    }
+
+    [HttpGet]
+    [Route("confirmation", Name = RouteNames.Confirmation_Get, Order = 0)]
+    public async Task<IActionResult> Confirmation()
+    {
+        return View();
     }
 
     private bool ValidateAnswers<T>(T m, Func<T, List<Answers>> answersSelector, string validationMessage, int? minSelectedCount = null)
