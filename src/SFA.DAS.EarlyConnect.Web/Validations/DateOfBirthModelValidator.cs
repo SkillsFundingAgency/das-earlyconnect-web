@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 
 namespace SFA.DAS.EarlyConnect.Web.Validations
@@ -55,11 +56,11 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
                     .WithMessage("Year must include 4 number");
 
                 RuleFor(x => x.DateOfBirth)
-                    .Must(DateOfBirth => DateTime.TryParse(DateOfBirth, out DateTime parsedDate))
+                    .Must(DateOfBirth => DateOfBirth.AsDateTimeUk().HasValue)
                     .WithMessage("Date of birth must be a real date");
 
                 RuleFor(x => x.DateOfBirth)
-                    .Must(DateOfBirth => DateTime.TryParse(DateOfBirth, out DateTime parsedDate) && parsedDate.Year < DateTime.Now.Year)
+                    .Must(DateOfBirth => DateOfBirth.AsDateTimeUk().HasValue && DateOfBirth.AsDateTimeUk().Value.Year < DateTime.Now.Year)
                     .WithMessage("Date of birth must be in the past");
             });
         }

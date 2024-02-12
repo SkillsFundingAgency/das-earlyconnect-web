@@ -192,9 +192,9 @@ public class PersonalDetailsController : Controller
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
-            Day = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : 00)}",
-            Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : 00)}",
-            Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : 00)}",
+            Day = $"{ (result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : string.Empty)}",
+            Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : string.Empty)}",
+            Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : string.Empty)}",
         });
     }
 
