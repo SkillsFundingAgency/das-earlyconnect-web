@@ -8,7 +8,6 @@ using SFA.DAS.EarlyConnect.Web.Mappers;
 using SFA.DAS.EarlyConnect.Web.Mappers.SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using Microsoft.AspNetCore.Authorization;
-using SFA.DAS.EarlyConnect.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -31,7 +30,7 @@ public class SurveyController : Controller
     [Route("apprenticeshiplevel", Name = RouteNames.ApprenticeshipLevel_Get, Order = 0)]
     public async Task<IActionResult> ApprenticeshipLevel(ApprenticeshiplevelViewModel m)
     {
-        ModelState.Clear();
+        ClearModelState();
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
             SurveyGuid = m.StudentSurveyId
@@ -76,7 +75,7 @@ public class SurveyController : Controller
     [Route("appliedfor", Name = RouteNames.AppliedFor_Get, Order = 0)]
     public async Task<IActionResult> AppliedFor(AppliedForViewModel m)
     {
-        ModelState.Clear();
+        ClearModelState();
 
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
@@ -122,7 +121,7 @@ public class SurveyController : Controller
     [Route("support", Name = RouteNames.Support_Get, Order = 0)]
     public async Task<IActionResult> Support(SupportViewModel m)
     {
-        ModelState.Clear();
+        ClearModelState();
 
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
@@ -168,6 +167,8 @@ public class SurveyController : Controller
     [Route("relocate", Name = RouteNames.Relocate_Get, Order = 0)]
     public async Task<IActionResult> Relocate(TriageRouteModel m)
     {
+        ClearModelState();
+
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
             SurveyGuid = m.StudentSurveyId
@@ -237,6 +238,14 @@ public class SurveyController : Controller
         }
 
         return ModelState.IsValid;
+    }
+
+    private void ClearModelState()
+    {
+        if (ModelState.ContainsKey("Question.Answers"))
+        {
+            ModelState.Clear();
+        }
     }
 
     private T MapViewModel<T>(T m, GetStudentTriageDataBySurveyIdResult request, SurveyPage.Page surveyPage)

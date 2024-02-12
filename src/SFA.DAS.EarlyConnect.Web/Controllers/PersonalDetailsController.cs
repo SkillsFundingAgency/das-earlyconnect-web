@@ -4,7 +4,6 @@ using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
-using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
 using SFA.DAS.EarlyConnect.Web.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
@@ -30,6 +29,7 @@ public class PersonalDetailsController : Controller
     [Route("schoolname", Name = RouteNames.SchoolName_Get, Order = 0)]
     public async Task<IActionResult> SchoolName(SchoolNameViewModel m)
     {
+        ClearModelState();
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
         return View(new SchoolNameEditViewModel
@@ -192,7 +192,7 @@ public class PersonalDetailsController : Controller
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
-            Day = $"{ (result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : 00)}",
+            Day = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : 00)}",
             Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : 00)}",
             Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : 00)}",
         });
@@ -258,6 +258,12 @@ public class PersonalDetailsController : Controller
         return RedirectToRoute(routeName, new { model.StudentSurveyId });
 
     }
-
+    private void ClearModelState()
+    {
+        if (ModelState.ContainsKey("Question.Answers"))
+        {
+            ModelState.Clear();
+        }
+    }
 }
 
