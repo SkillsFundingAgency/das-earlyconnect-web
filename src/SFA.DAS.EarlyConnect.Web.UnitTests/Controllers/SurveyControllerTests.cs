@@ -33,7 +33,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var surveyId = new Guid();
             var createCommandResult = new GetStudentTriageDataBySurveyIdResult
             {
-                Id = 2,
+                Id = 1,
                 FirstName = "John",
                 LastName = "Doe",
                 DateOfBirth = new DateTime(1990, 1, 1),
@@ -47,9 +47,12 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 {
                     new SurveyQuestionsDto
                     {
-                        Id = 2,
+                        Id = 1,
                         SurveyId = 1001,
                         QuestionText = "Dummy Question 1",
+                        GroupNumber = 1,
+                        GroupLabel = "Group 1",
+                        SummaryLabel = "Group 1 Summary",
                         Answers = new List<AnswersDto>
                         {
                             new AnswersDto { Id = 1, QuestionId=2 },
@@ -173,9 +176,15 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 {
                     new SurveyQuestionsDto
                     {
-                        Id = 3,
+                        Id = 2,
                         SurveyId = 1001,
+                        QuestionTypeId = 1,
                         QuestionText = "Dummy Question 1",
+                        ShortDescription = "",
+                        SummaryLabel="Summary",
+                        GroupLabel="Group Label",
+                        GroupNumber= 1,
+                        ValidationMessage = "None",
                         Answers = new List<AnswersDto>
                         {
                             new AnswersDto { Id = 1, QuestionId=2 },
@@ -286,7 +295,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var surveyId = new Guid();
             var createCommandResult = new GetStudentTriageDataBySurveyIdResult
             {
-                Id = 5,
+                Id = 4,
                 FirstName = "John",
                 LastName = "Doe",
                 DateOfBirth = new DateTime(1990, 1, 1),
@@ -300,9 +309,11 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 {
                     new SurveyQuestionsDto
                     {
-                        Id = 5,
+                        Id = 4,
                         SurveyId = 1001,
                         QuestionText = "Dummy Question 1",
+                        GroupLabel = "Label A",
+                        GroupNumber = 1,
                         Answers = new List<AnswersDto>
                         {
                             new AnswersDto { Id = 1, QuestionId=2 },
