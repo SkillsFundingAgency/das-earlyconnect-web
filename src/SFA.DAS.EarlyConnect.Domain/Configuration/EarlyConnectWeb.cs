@@ -3,4 +3,5 @@
 public class EarlyConnectWeb
 {
     public string? LepCodes { get; set; }
+    public int? LinkValidityDays { get; set; }
 }

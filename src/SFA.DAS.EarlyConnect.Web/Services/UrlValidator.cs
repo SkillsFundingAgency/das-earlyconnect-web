@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.EarlyConnect.Domain.Configuration;
 using Microsoft.Extensions.Options;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
+using SFA.DAS.EarlyConnect.Web.Extensions;
 
 namespace SFA.DAS.EarlyConnect.Web.Services
 {
@@ -21,6 +22,16 @@ namespace SFA.DAS.EarlyConnect.Web.Services
             }
 
             return _config.LepCodes.Split(',').Contains(lepsCode.Trim().ToUpper());
+        }
+
+        public bool IsValidLinkDate(string date)
+        {
+            if (!_config.LinkValidityDays.HasValue)
+            {
+                return false;
+            }
+
+            return date.AsUKDateTime().Value.AddDays(_config.LinkValidityDays.Value) > DateTime.Now;
         }
     }
 }

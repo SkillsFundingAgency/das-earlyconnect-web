@@ -87,7 +87,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;
             manageStudentPersonalData.FirstName = studentTriageDataBySurveyIdResult.FirstName;
             manageStudentPersonalData.LastName = studentTriageDataBySurveyIdResult.LastName;
-            manageStudentPersonalData.DateOfBirth = request.DateOfBirth.AsDateTimeUk();
+            manageStudentPersonalData.DateOfBirth = request.DateOfBirth.AsUKDate();
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
