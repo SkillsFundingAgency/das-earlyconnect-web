@@ -18,6 +18,7 @@
 
             <form asp-route="@RouteNames.Industry_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
                 @Html.HiddenFor(model => model.IsCheck)
+                @Html.HiddenFor(model => model.IsOther)
                 <div class="govuk-form-group">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">

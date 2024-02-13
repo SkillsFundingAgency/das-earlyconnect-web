@@ -27,7 +27,7 @@
                             @string.Concat(Model.FirstName, " ", Model.LastName)
                         </dd>
                         <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Name_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Name_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
                                 Change
                                 <span class="govuk-visually-hidden">
                                     name
@@ -43,7 +43,7 @@
                             @(Model.DateOfBirth?.ToString("dd MMMM yyyy") ?? "N/A")
                         </dd>
                         <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.DateOfBirth_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.DateOfBirth_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
                                 Change
                                 <span class="govuk-visually-hidden">
                                     date of birth
@@ -67,7 +67,7 @@
                             <p class="govuk-body">@Model.Telephone</p>
                         </dd>
                         <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Telephone_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Telephone_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
                                 Change
                                 <span class="govuk-visually-hidden">
                                     Telephone
@@ -83,7 +83,7 @@
                             @Model.Postcode
                         </dd>
                         <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Postcode_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Postcode_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
                                 Change<span class="govuk-visually-hidden"> postcode</span>
                             </a>
                         </dd>
@@ -107,7 +107,7 @@
                                     @Model.SchoolName
                                 </dd>
                                 <dd class="govuk-summary-list__actions">
-                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
                                         Change<span class="govuk-visually-hidden"> school or college</span>
                                     </a>
                                 </dd>
@@ -126,7 +126,7 @@
                                 </dd>
 
                                 <dd class="govuk-summary-list__actions">
-                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
                                         Change
                                         <span class="govuk-visually-hidden">
                                             areas of
@@ -168,7 +168,7 @@
                                     </dd>
                                 }
                                 <dd class="govuk-summary-list__actions">
-                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(question.RouteName, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(question.RouteName, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
                                         Change
                                         <span class="govuk-visually-hidden">
                                             @question.SummaryLabel

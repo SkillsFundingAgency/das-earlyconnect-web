@@ -38,6 +38,7 @@ public class SurveyController : Controller
         var apprenticeshiplevelEditViewModel = (ApprenticeshipLevelEditViewModel)studentSurveyResponse;
         apprenticeshiplevelEditViewModel.StudentSurveyId = m.StudentSurveyId;
         apprenticeshiplevelEditViewModel.IsCheck = m.IsCheck;
+        apprenticeshiplevelEditViewModel.IsOther = studentSurveyResponse.DataSource == Datasource.Others;
 
         return View(apprenticeshiplevelEditViewModel);
     }
@@ -84,6 +85,7 @@ public class SurveyController : Controller
         var appliedForEditViewModel = (AppliedForEditViewModel)studentSurveyResponse;
         appliedForEditViewModel.StudentSurveyId = m.StudentSurveyId;
         appliedForEditViewModel.IsCheck = m.IsCheck;
+        appliedForEditViewModel.IsOther = studentSurveyResponse.DataSource == Datasource.Others;
 
         return View(appliedForEditViewModel);
     }
@@ -111,8 +113,8 @@ public class SurveyController : Controller
         });
 
         string routeName = m.IsOther
-            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Support_Get)
-            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.Support_Get);
+            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Relocate_Get)
+            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.Relocate_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
@@ -130,6 +132,7 @@ public class SurveyController : Controller
         var supportEditViewModel = (SupportEditViewModel)studentSurveyResponse;
         supportEditViewModel.StudentSurveyId = m.StudentSurveyId;
         supportEditViewModel.IsCheck = m.IsCheck;
+        supportEditViewModel.IsOther = studentSurveyResponse.DataSource == Datasource.Others;
 
         return View(supportEditViewModel);
     }
@@ -177,6 +180,7 @@ public class SurveyController : Controller
         var relocateEditViewModel = (RelocateEditViewModel)studentSurveyResponse;
         relocateEditViewModel.StudentSurveyId = m.StudentSurveyId;
         relocateEditViewModel.IsCheck = m.IsCheck;
+        relocateEditViewModel.IsOther = studentSurveyResponse.DataSource == Datasource.Others;
 
         return View(relocateEditViewModel);
     }

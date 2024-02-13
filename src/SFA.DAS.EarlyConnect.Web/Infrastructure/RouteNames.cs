@@ -33,8 +33,6 @@ public static class RouteNames
     public const string CheckYourAnswers_Post = "Check_Post";
     public const string AppliedFor_Get = "AppliedFor_Get";
     public const string AppliedFor_Post = "AppliedFor_Post";
-    public const string Location_Get = "Location_Get";
-    public const string Location_Post = "Location_Post";
     public const string Support_Get = "Support_Get";
     public const string Support_Post = "Support_Post";
     public const string Confirmation_Get = "Confirmation_Get";
