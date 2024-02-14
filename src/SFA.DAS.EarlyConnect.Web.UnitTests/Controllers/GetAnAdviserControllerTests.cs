@@ -23,13 +23,15 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<GetAnAdviserController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectionServiceMock = new Mock<IDataProtectorService>();
+            var authenticateServiecMock = new Mock<IAuthenticateService>();
+
             urlValidatorMock.Setup(x => x.IsValidLepsCode(It.IsAny<string>())).Returns(true);
             urlValidatorMock.Setup(x => x.IsValidLinkDate(It.IsAny<string>())).Returns(true);
 
             dataProtectionServiceMock.Setup(x => x.DecodeData(It.IsAny<string>())).Returns(new Guid().ToString() + "|" + DateTime.Now.ToString());
 
             var controller =
-                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
+                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object, authenticateServiecMock.Object);
 
             var result = controller.Index("validLepsCode") as ViewResult;
 
@@ -43,11 +45,12 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<GetAnAdviserController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectionServiceMock = new Mock<IDataProtectorService>();
+            var authenticateServiecMock = new Mock<IAuthenticateService>();
 
             urlValidatorMock.Setup(x => x.IsValidLepsCode(It.IsAny<string>())).Returns(false);
 
             var controller =
-                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
+                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object, authenticateServiecMock.Object);
 
             var result = controller.Index("invalidLepsCode") as NotFoundResult;
 
@@ -61,9 +64,10 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<GetAnAdviserController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectionServiceMock = new Mock<IDataProtectorService>();
+            var authenticateServiecMock = new Mock<IAuthenticateService>();
 
             var controller =
-                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
+                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object, authenticateServiecMock.Object);
 
             var result = controller.GetAnAdviser_Post("someLepsCode") as RedirectToRouteResult;
 
@@ -80,6 +84,8 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<GetAnAdviserController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectionServiceMock = new Mock<IDataProtectorService>();
+            var authenticateServiecMock = new Mock<IAuthenticateService>();
+
             urlValidatorMock.Setup(x => x.IsValidLepsCode(It.IsAny<string>())).Returns(true);
             urlValidatorMock.Setup(x => x.IsValidLinkDate(It.IsAny<string>())).Returns(true);
 
@@ -91,7 +97,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
 
             var controller =
-                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
+                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object, authenticateServiecMock.Object);
 
             var result = await controller.UCASIndex("any string") as ViewResult;
 
@@ -108,6 +114,8 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<GetAnAdviserController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectionServiceMock = new Mock<IDataProtectorService>();
+            var authenticateServiecMock = new Mock<IAuthenticateService>();
+
             urlValidatorMock.Setup(x => x.IsValidLepsCode(It.IsAny<string>())).Returns(true);
             urlValidatorMock.Setup(x => x.IsValidLinkDate(It.IsAny<string>())).Returns(false);
 
@@ -117,7 +125,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
 
             var controller =
-                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
+                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object, authenticateServiecMock.Object);
 
             var result = await controller.UCASIndex("any string") as ViewResult;
 
@@ -132,12 +140,14 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<GetAnAdviserController>>();
             var urlValidatorMock = new Mock<IUrlValidator>();
             var dataProtectionServiceMock = new Mock<IDataProtectorService>();
+            var authenticateServiecMock = new Mock<IAuthenticateService>();
+
             urlValidatorMock.Setup(x => x.IsValidLinkDate(It.IsAny<string>())).Returns(true);
 
             dataProtectionServiceMock.Setup(x => x.DecodeData(It.IsAny<string>())).Returns(new Guid().ToString() + "|" + DateTime.Now.ToString());
 
             var controller =
-                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
+                new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object, authenticateServiecMock.Object);
 
             var result = await controller.UCASIndex("any string") as ViewResult;
 
