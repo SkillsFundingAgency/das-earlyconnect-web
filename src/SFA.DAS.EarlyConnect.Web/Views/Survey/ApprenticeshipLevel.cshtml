@@ -35,7 +35,7 @@
                                     <div class="govuk-checkboxes__item">
                                         <input type="hidden" asp-for="Question.Answers[answer.Serial].Id" />
                                         <input class="govuk-checkboxes__input ordered-checkbox" type="checkbox" asp-for="Question.Answers[answer.Serial].IsSelected" data-behaviour="exclusive" />
-                                        <label class="govuk-label govuk-checkboxes__label" for="answer-@answer.Id">
+                                        <label class="govuk-label govuk-checkboxes__label" asp-for="Question.Answers[answer.Serial].IsSelected">
                                             @answer.AnswerText
                                         </label>
                                         <div class="govuk-hint govuk-checkboxes__hint">
@@ -50,7 +50,7 @@
                                     <div class="govuk-checkboxes__item">
                                         <input type="hidden" asp-for="Question.Answers[answer.Serial].Id" />
                                         <input class="govuk-checkboxes__input toggled-checkbox" type="checkbox" asp-for="Question.Answers[answer.Serial].IsSelected" data-behaviour="exclusive" />
-                                        <label class="govuk-label govuk-checkboxes__label" for="answer-@answer.Id">
+                                        <label class="govuk-label govuk-checkboxes__label" asp-for="Question.Answers[answer.Serial].IsSelected">
                                             @answer.AnswerText
                                         </label>
                                         <div class="govuk-hint govuk-checkboxes__hint">
