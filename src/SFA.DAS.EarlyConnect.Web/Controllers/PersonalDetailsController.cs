@@ -73,6 +73,7 @@ public class PersonalDetailsController : Controller
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
+            IsOther= result.DataSource == Datasource.Others,
             Postcode = result.Postcode
         });
     }
@@ -110,6 +111,7 @@ public class PersonalDetailsController : Controller
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
+            IsOther = studentSurveyResponse.DataSource == Datasource.Others,
             FirstName = studentSurveyResponse.FirstName,
             LastName = studentSurveyResponse.LastName
         });
@@ -155,6 +157,7 @@ public class PersonalDetailsController : Controller
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
+            IsOther = result.DataSource == Datasource.Others,
             Telephone = result.Telephone
         });
     }
@@ -192,6 +195,7 @@ public class PersonalDetailsController : Controller
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
+            IsOther = result.DataSource == Datasource.Others,
             Day = $"{ (result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : string.Empty)}",
             Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : string.Empty)}",
             Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : string.Empty)}",
@@ -220,7 +224,7 @@ public class PersonalDetailsController : Controller
 
     [HttpGet]
     [Route("industry", Name = RouteNames.Industry_Get, Order = 0)]
-    public async Task<IActionResult> Industry(Guid studentSurveyId, bool? isSummaryReview)
+    public async Task<IActionResult> Industry(Guid studentSurveyId, bool? isCheck)
     {
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
@@ -231,7 +235,8 @@ public class PersonalDetailsController : Controller
         {
             StudentSurveyId = studentSurveyId,
             Areas = studentSurveyResponse.Industry.Split("|").ToList(),
-            IsCheck = isSummaryReview.GetValueOrDefault()
+            IsCheck = isCheck.GetValueOrDefault(),
+            IsOther = studentSurveyResponse.DataSource == Datasource.Others,
         };
 
         return View(viewModel);
