@@ -12,7 +12,6 @@ using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
-using System.Globalization;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 {
@@ -326,9 +325,11 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = true,
+                IsOther = true
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
+            
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
                 {
