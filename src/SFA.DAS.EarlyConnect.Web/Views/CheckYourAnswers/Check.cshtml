@@ -27,14 +27,17 @@
                         <dd class="govuk-summary-list__value">
                             @string.Concat(Model.FirstName, " ", Model.LastName)
                         </dd>
-                        <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Name_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
-                                Change
-                                <span class="govuk-visually-hidden">
-                                    name
-                                </span>
-                            </a>
-                        </dd>
+                        @if (Model.IsOther)
+                        {
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Name_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    Change
+                                    <span class="govuk-visually-hidden">
+                                        name
+                                    </span>
+                                </a>
+                            </dd>
+                        }
                     </div>
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
@@ -43,14 +46,17 @@
                         <dd class="govuk-summary-list__value">
                             @(Model.DateOfBirth?.ToString("dd MMMM yyyy") ?? "N/A")
                         </dd>
-                        <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.DateOfBirth_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
-                                Change
-                                <span class="govuk-visually-hidden">
-                                    date of birth
-                                </span>
-                            </a>
-                        </dd>
+                        @if (Model.IsOther)
+                        {
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.DateOfBirth_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    Change
+                                    <span class="govuk-visually-hidden">
+                                        date of birth
+                                    </span>
+                                </a>
+                            </dd>
+                        }
                     </div>
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
@@ -83,11 +89,14 @@
                         <dd class="govuk-summary-list__value">
                             @Model.Postcode
                         </dd>
-                        <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Postcode_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
-                                Change<span class="govuk-visually-hidden"> postcode</span>
-                            </a>
-                        </dd>
+                        @if(Model.IsOther)
+                        {
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Postcode_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    Change<span class="govuk-visually-hidden"> postcode</span>
+                                </a>
+                            </dd>
+                        }
                     </div>
                 </dl>
                 @{
@@ -125,16 +134,18 @@
                                         }
                                     </ul>
                                 </dd>
-
-                                <dd class="govuk-summary-list__actions">
-                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
-                                        Change
-                                        <span class="govuk-visually-hidden">
-                                            areas of
-                                            interest
-                                        </span>
-                                    </a>
-                                </dd>
+                                @if (Model.IsOther)
+                                {
+                                    <dd class="govuk-summary-list__actions">
+                                        <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                            Change
+                                            <span class="govuk-visually-hidden">
+                                                areas of
+                                                interest
+                                            </span>
+                                        </a>
+                                    </dd>
+                                }
                             </div>
                         }
                         @foreach (var question in group.OrderBy(q => q.SortOrder))
