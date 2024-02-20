@@ -37,7 +37,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 var urlValidatorMock = new Mock<IUrlValidator>();
                 var dataProtectorServiceMock = new Mock<IDataProtectorService>();
                 var authenticateService = new Mock<IAuthenticateService>();
-
                 var httpContext = new DefaultHttpContext();
                 var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
 
