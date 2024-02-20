@@ -21,7 +21,15 @@ namespace SFA.DAS.EarlyConnect.Web.Services
                 return false;
             }
 
-            return _config.LepCodes.Split(',').Contains(lepsCode.Trim().ToUpper());
+            var properties = typeof(LepsRegionCodes).GetProperties();
+            foreach (var property in properties)
+            {
+                if ((string)property.GetValue(_config.LepCodes) == lepsCode.Trim().ToUpper())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool IsValidLinkDate(string date)
@@ -32,6 +40,19 @@ namespace SFA.DAS.EarlyConnect.Web.Services
             }
 
             return date.AsUKDateTime().Value.AddDays(_config.LinkValidityDays.Value) > DateTime.Now;
+        }
+
+        public bool DoesMatchAnyValue(LepsRegionCodes lepsRegionCodes, string valueToCheck)
+        {
+            var properties = typeof(LepsRegionCodes).GetProperties();
+            foreach (var property in properties)
+            {
+                if ((string)property.GetValue(lepsRegionCodes) == valueToCheck)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

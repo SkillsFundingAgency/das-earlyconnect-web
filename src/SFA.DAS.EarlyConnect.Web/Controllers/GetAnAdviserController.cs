@@ -3,11 +3,11 @@ using MediatR;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Application.Services;
-using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
-using Microsoft.AspNetCore.Routing;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
+using SFA.DAS.EarlyConnect.Domain.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -18,11 +18,13 @@ public class GetAnAdviserController : Controller
     private readonly IUrlValidator _urlValidator;
     private readonly IDataProtectorService _dataProtectorService;
     private IAuthenticateService _authenticateService;
+    private readonly IOptions<EarlyConnectWeb> _config;
 
     public GetAnAdviserController(IMediator mediator,
         ILogger<GetAnAdviserController> logger,
         IUrlValidator urlValidator,
         IDataProtectorService dataProtectorService,
+        IOptions<EarlyConnectWeb> config,
         IAuthenticateService authenticateService
         )
     {
@@ -30,6 +32,7 @@ public class GetAnAdviserController : Controller
         _logger = logger;
         _urlValidator = urlValidator;
         _dataProtectorService = dataProtectorService;
+        _config = config;
         _authenticateService = authenticateService;
     }
 
@@ -49,33 +52,51 @@ public class GetAnAdviserController : Controller
     }
 
     [HttpGet]
-    [Route("ucas/{code}", Name = RouteNames.UCASServiceStart_Get, Order = 0)]
-    public async Task<IActionResult> UCASIndex(string code)
+    [Route("ref", Name = RouteNames.UCASServiceStart_Get, Order = 0)]
+    public async Task<IActionResult> UCASIndex()
     {
-        var linkData = _dataProtectorService.DecodeData(code).Split("|");
-
-        if (!_urlValidator.IsValidLinkDate(linkData[1]))
-        { 
-            return View ("Expired");
-        }
-
-        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = new Guid(linkData[0]) });
-        if (result == null)
+        try
         {
-            return View("LinkFault");
-        }
+            var linkCode = Request.QueryString.Value.Substring(Request.QueryString.Value.IndexOf("?") + 1);
+            var linkData = _dataProtectorService.DecodeData(linkCode).Split("|");
 
-        return View(new GetAdvisorViewModel { StudentSurveyId = new Guid(linkData[0]), Email = result.Email });
+            if (!_urlValidator.IsValidLinkDate(linkData[1]))
+            {
+                return View("Expired", GetAdviserLinksModel());
+            }
+
+            var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = new Guid(linkData[0]) });
+            if (result == null)
+            {
+                return View("LinkFault", GetAdviserLinksModel());
+            }
+
+            return View(new GetAdvisorViewModel { StudentSurveyId = new Guid(linkData[0]), Email = result.Email });
+        }
+        catch
+        {
+            return View("LinkFault", GetAdviserLinksModel());
+        }
     }
 
     [HttpPost]
-    [Route("ucas", Name = RouteNames.GetAnAdviserUCAS_Post, Order = 0)]
+    [Route("ref", Name = RouteNames.GetAnAdviserUCAS_Post, Order = 0)]
     public async Task<IActionResult> GetAnAdviserUCAS_Post(GetAdvisorViewModel m)
     {
         await _authenticateService.SignInUser(m.Email, m.StudentSurveyId.ToString());
 
         return RedirectToRoute(RouteNames.PersonalDetails_Get, new { StudentSurveyId = m.StudentSurveyId });
 
+    }
+
+    private AdviserLinksViewModel GetAdviserLinksModel()
+    {
+        return new AdviserLinksViewModel
+        {
+            GreaterLondonLEPSCode = _config.Value.LepCodes.GreaterLondon,
+            LancashireLEPSCode = _config.Value.LepCodes.Lancashire,
+            NorthEastLEPSCode = _config.Value.LepCodes.NorthEast
+        };
     }
 }
 
