@@ -9,7 +9,6 @@ using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Controllers;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
-using SFA.DAS.EarlyConnect.Web.ViewModels;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 {
@@ -93,7 +92,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller =
                 new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
 
-            var result = await controller.UCASIndex("any string") as ViewResult;
+            var result = await controller.UCASIndex() as ViewResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Model, Is.InstanceOf<TriageRouteModel>());
@@ -119,7 +118,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller =
                 new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
 
-            var result = await controller.UCASIndex("any string") as ViewResult;
+            var result = await controller.UCASIndex() as ViewResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ViewName, Is.EqualTo("Expired"));
@@ -139,7 +138,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller =
                 new GetAnAdviserController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object, dataProtectionServiceMock.Object);
 
-            var result = await controller.UCASIndex("any string") as ViewResult;
+            var result = await controller.UCASIndex() as ViewResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.ViewName, Is.EqualTo("LinkFault"));
