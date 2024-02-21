@@ -18,6 +18,7 @@
             <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState }' />
             <form asp-route="@RouteNames.Support_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
                 @Html.HiddenFor(model => model.IsCheck)
+                @Html.HiddenFor(model => model.IsOther)
                 <div class="govuk-form-group">
                     <fieldset class="govuk-fieldset" aria-describedby="interest-hint">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -35,7 +36,7 @@
                                     <div class="govuk-checkboxes__item">
                                         <input type="hidden" asp-for="Question.Answers[answer.Serial].Id" />
                                         <input class="govuk-checkboxes__input ordered-checkbox" type="checkbox" asp-for="Question.Answers[answer.Serial].IsSelected" data-behaviour="exclusive" />
-                                        <label class="govuk-label govuk-checkboxes__label" for="answer-@answer.Id">
+                                        <label class="govuk-label govuk-checkboxes__label" asp-for="Question.Answers[answer.Serial].IsSelected">
                                             @answer.AnswerText
                                         </label>
                                         <div class="govuk-hint govuk-checkboxes__hint">
@@ -50,7 +51,7 @@
                                     <div class="govuk-checkboxes__item">
                                         <input type="hidden" asp-for="Question.Answers[answer.Serial].Id" />
                                         <input class="govuk-checkboxes__input toggled-checkbox" type="checkbox" asp-for="Question.Answers[answer.Serial].IsSelected" data-behaviour="exclusive" />
-                                        <label class="govuk-label govuk-checkboxes__label" for="answer-@answer.Id">
+                                        <label class="govuk-label govuk-checkboxes__label" asp-for="Question.Answers[answer.Serial].IsSelected">
                                             @answer.AnswerText
                                         </label>
                                         <div class="govuk-hint govuk-checkboxes__hint">
