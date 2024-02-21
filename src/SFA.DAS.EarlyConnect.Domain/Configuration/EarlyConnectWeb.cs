@@ -2,5 +2,13 @@
 
 public class EarlyConnectWeb
 {
-    public string? LepCodes { get; set; }
+    public LepsRegionCodes LepCodes { get; set; }
+    public int? LinkValidityDays { get; set; }
+}
+
+public class LepsRegionCodes
+{
+    public string NorthEast { get; set; }
+    public string Lancashire { get; set; }
+    public string GreaterLondon { get; set; }
 }

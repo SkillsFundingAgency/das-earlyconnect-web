@@ -56,11 +56,11 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
                     .WithMessage("Year must include 4 number");
 
                 RuleFor(x => x.DateOfBirth)
-                    .Must(DateOfBirth => DateOfBirth.AsDateTimeUk().HasValue)
+                    .Must(DateOfBirth => DateOfBirth.AsUKDate().HasValue)
                     .WithMessage("Date of birth must be a real date");
 
                 RuleFor(x => x.DateOfBirth)
-                    .Must(DateOfBirth => DateOfBirth.AsDateTimeUk().HasValue && DateOfBirth.AsDateTimeUk().Value.Year < DateTime.Now.Year)
+                    .Must(DateOfBirth => DateOfBirth.AsUKDate().HasValue && DateOfBirth.AsUKDate().Value.Year < DateTime.Now.Year)
                     .WithMessage("Date of birth must be in the past");
             });
         }
