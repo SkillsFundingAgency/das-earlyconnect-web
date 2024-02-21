@@ -36,4 +36,10 @@ public static class RouteNames
     public const string Support_Get = "Support_Get";
     public const string Support_Post = "Support_Post";
     public const string Confirmation_Get = "Confirmation_Get";
+    public const string UCASServiceStart_Get = "UCASServiceStart_Get";
+    public const string GetAnAdviserUCAS_Post = "GetAnAdviserUCAS_Post";
+    public const string UCASDetails_Get = "UCASDetails_Get";
+    public const string UCASDetails_Post = "UCASDetails_Post";
+    public const string Expired_Get = "Expired_Get";
+    public const string LinkFault_Get = "LinkFault_Get";
 }
