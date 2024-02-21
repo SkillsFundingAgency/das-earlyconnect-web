@@ -350,7 +350,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-            var dateOfBirth = "05/12/1999".AsDateTimeUk();
+            var dateOfBirth = "05/12/1999".AsUKDate();
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { DateOfBirth = dateOfBirth };
@@ -362,7 +362,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(result.Model, Is.InstanceOf<DateOfBirthEditViewModel>());
             var viewModel = (DateOfBirthEditViewModel)result.Model;
             Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
-            Assert.That(viewModel.DateOfBirth.AsDateTimeUk(), Is.EqualTo(queryResult.DateOfBirth));
+            Assert.That(viewModel.DateOfBirth.AsUKDate(), Is.EqualTo(queryResult.DateOfBirth));
         }
 
         [Test]
