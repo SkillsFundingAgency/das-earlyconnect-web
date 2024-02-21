@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
 @using Microsoft.AspNetCore.Mvc.TagHelpers 
-@model SFA.DAS.EarlyConnect.Web.RouteModel.TriageRouteModel
+@model SFA.DAS.EarlyConnect.Web.ViewModels.GetAdvisorViewModel
 @{
     ViewBag.Title = "Get an apprenticeship adviser";
 }
@@ -10,6 +10,9 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <form asp-route="@RouteNames.GetAnAdviserUCAS_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
+                @Html.HiddenFor(model => model.Email)
+                @Html.HiddenFor(model => model.IsCheck)
+                @Html.HiddenFor(model => model.IsOther)
                 <h1 class="govuk-heading-xl">Get an apprenticeship adviser</h1>
                 <p class="govuk-body">
                     Get matched with the right adviser. We’ll also ask you a few questions to help your adviser give

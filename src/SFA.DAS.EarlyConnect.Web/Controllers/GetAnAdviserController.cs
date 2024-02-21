@@ -17,13 +17,15 @@ public class GetAnAdviserController : Controller
     private readonly ILogger<GetAnAdviserController> _logger;
     private readonly IUrlValidator _urlValidator;
     private readonly IDataProtectorService _dataProtectorService;
+    private IAuthenticateService _authenticateService;
     private readonly IOptions<EarlyConnectWeb> _config;
 
     public GetAnAdviserController(IMediator mediator,
         ILogger<GetAnAdviserController> logger,
         IUrlValidator urlValidator,
         IDataProtectorService dataProtectorService,
-        IOptions<EarlyConnectWeb>  config
+        IOptions<EarlyConnectWeb> config,
+        IAuthenticateService authenticateService
         )
     {
         _mediator = mediator;
@@ -31,6 +33,7 @@ public class GetAnAdviserController : Controller
         _urlValidator = urlValidator;
         _dataProtectorService = dataProtectorService;
         _config = config;
+        _authenticateService = authenticateService;
     }
 
     [HttpGet]
@@ -68,7 +71,7 @@ public class GetAnAdviserController : Controller
                 return View("LinkFault", GetAdviserLinksModel());
             }
 
-            return View(new TriageRouteModel { StudentSurveyId = new Guid(linkData[0]) });
+            return View(new GetAdvisorViewModel { StudentSurveyId = new Guid(linkData[0]), Email = result.Email });
         }
         catch
         {
@@ -78,9 +81,12 @@ public class GetAnAdviserController : Controller
 
     [HttpPost]
     [Route("ref", Name = RouteNames.GetAnAdviserUCAS_Post, Order = 0)]
-    public IActionResult GetAnAdviserUCAS_Post(TriageRouteModel m)
+    public async Task<IActionResult> GetAnAdviserUCAS_Post(GetAdvisorViewModel m)
     {
-        return RedirectToRoute(RouteNames.UCASDetails_Get, new { studentSurveyId = m.StudentSurveyId });
+        await _authenticateService.SignInUser(m.Email, m.StudentSurveyId.ToString());
+
+        return RedirectToRoute(RouteNames.PersonalDetails_Get, new { StudentSurveyId = m.StudentSurveyId });
+
     }
 
     private AdviserLinksViewModel GetAdviserLinksModel()
