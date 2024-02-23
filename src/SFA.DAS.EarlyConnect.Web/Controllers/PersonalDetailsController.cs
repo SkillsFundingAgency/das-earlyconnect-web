@@ -74,7 +74,7 @@ public class PersonalDetailsController : Controller
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
-            IsOther= result.DataSource == Datasource.Others,
+            IsOther = result.DataSource == Datasource.Others,
             Postcode = result.Postcode
         });
     }
@@ -181,7 +181,9 @@ public class PersonalDetailsController : Controller
             });
         }
 
-        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get;
+        string routeName = m.IsOther
+            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get)
+            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.SchoolName_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
@@ -197,7 +199,7 @@ public class PersonalDetailsController : Controller
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
             IsOther = result.DataSource == Datasource.Others,
-            Day = $"{ (result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : string.Empty)}",
+            Day = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : string.Empty)}",
             Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : string.Empty)}",
             Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : string.Empty)}",
         });
