@@ -13,6 +13,10 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
 
         private static bool BeValidPhoneNumber(string phoneNumber)
         {
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return true;
+            }
             var phoneUtil = PhoneNumberUtil.GetInstance();
             var parsedNumber = phoneUtil.Parse(phoneNumber, "GB");
             return phoneUtil.IsValidNumber(parsedNumber);
