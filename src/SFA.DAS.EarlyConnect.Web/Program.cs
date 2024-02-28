@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(sharedOptions =>
         options.Cookie.Name = "EarlyConnect";
         options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
         options.CookieManager = new ChunkingCookieManager() { ChunkSize = 3000 };
-        options.AccessDeniedPath = "/AccessDenied";
+        options.AccessDeniedPath = "/error/403";
         options.LoginPath = "/AccessDenied";
         options.SlidingExpiration = true;
         options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
