@@ -78,6 +78,12 @@ app.UseEndpoints(endpointBuilder =>
     endpointBuilder.MapControllerRoute(
         name: "default",
         pattern: "{controller=GetAnAdviserController}/{action=Index}/");
+
+    endpointBuilder.MapControllerRoute(
+       name: "privacy",
+       pattern: "privacy",
+       defaults: new { controller = "Privacy", action = "Privacy" }
+   );
 });
 
 app.Run();
