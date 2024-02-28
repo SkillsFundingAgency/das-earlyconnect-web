@@ -13,5 +13,12 @@ namespace SFA.DAS.EarlyConnect.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             return View();
         }
+
+        [HttpGet]
+        [Route("formcompleted", Name = RouteNames.FormCompleted_Get, Order = 0)]
+        public IActionResult FormCompleted()
+        {
+            return View();
+        }
     }
 }

@@ -32,6 +32,12 @@ namespace das_earlyconnect_web.Controllers
             {
                 SurveyGuid = studentSurveyId
             });
+
+            if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+            {
+                return RedirectToRoute(RouteNames.FormCompleted_Get);
+            }
+
             var checkYourAnswersViewModel = (CheckYourAnswersViewModel)studentSurveyResponse;
             checkYourAnswersViewModel.StudentSurveyId = studentSurveyId;
             checkYourAnswersViewModel.IsCheck = true;

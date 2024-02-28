@@ -37,4 +37,5 @@ public static class RouteNames
     public const string Support_Post = "Support_Post";
     public const string Confirmation_Get = "Confirmation_Get";
     public const string Privacy_Get = "Privacy_Get";
+    public const string FormCompleted_Get = "FormCompleted_Get";
 }
