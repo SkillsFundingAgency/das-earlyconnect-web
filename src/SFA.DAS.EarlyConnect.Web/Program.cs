@@ -21,20 +21,20 @@ builder.Services.AddMediatRHandlers();
 
 builder.Services.AddHealthChecks();
 
-builder.Services.AddAuthentication(sharedOptions =>
-    {
-        sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    })
-    .AddCookie(options =>
-    {
-        options.Cookie.Name = "EarlyConnect";
-        options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
-        options.CookieManager = new ChunkingCookieManager() { ChunkSize = 3000 };
-        options.AccessDeniedPath = "/AccessDenied";
-        options.SlidingExpiration = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-    });
+//builder.Services.AddAuthentication(sharedOptions =>
+//    {
+//        sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//        sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    })
+//builder.Services.AddCookie(options =>
+//    {
+//        options.Cookie.Name = "EarlyConnect";
+//        options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+//        options.CookieManager = new ChunkingCookieManager() { ChunkSize = 3000 };
+//        options.AccessDeniedPath = "/AccessDenied";
+//        options.SlidingExpiration = true;
+//        options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+//    });
 
 builder.Services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
