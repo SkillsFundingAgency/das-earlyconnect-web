@@ -36,6 +36,8 @@ builder.Services.AddAuthentication(sharedOptions =>
         options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
     });
 
+builder.Services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
+
 builder.Services.Configure<RouteOptions>(options =>
 {
 
