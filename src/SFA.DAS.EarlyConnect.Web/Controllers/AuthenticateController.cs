@@ -8,6 +8,7 @@ using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Web.Configuration;
+using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -67,6 +68,16 @@ public class AuthenticateController : Controller
 
             if (viewModel.ExpiryDate < DateTime.Now)
                 return HandleAuthCodeError("The code you entered has expired. Enter the latest confirmation code.", viewModel.LepsCode, viewModel);
+
+            var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+            {
+                SurveyGuid = new Guid(viewModel.StudentSurveyId)
+            });
+
+            if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+            {
+                return RedirectToRoute(RouteNames.FormCompleted_Get);
+            }
 
             await _authenticateService.SignInUser(viewModel.Email, viewModel.StudentSurveyId);
 
