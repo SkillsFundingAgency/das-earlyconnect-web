@@ -191,6 +191,7 @@ public class PersonalDetailsController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
+        
         if (m.Telephone != null)
         {
             var response = await _mediator.Send(new CreateStudentTriageDataCommand
