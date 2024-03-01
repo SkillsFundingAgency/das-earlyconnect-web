@@ -191,15 +191,13 @@ public class PersonalDetailsController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
-        
-        if (m.Telephone != null)
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
         {
-            var response = await _mediator.Send(new CreateStudentTriageDataCommand
-            {
-                StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
-                SurveyGuid = m.StudentSurveyId
-            });
-        }
+            StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
 
         var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get;
 
