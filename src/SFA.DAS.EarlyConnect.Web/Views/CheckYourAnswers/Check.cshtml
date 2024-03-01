@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
 @model SFA.DAS.EarlyConnect.Web.ViewModels.CheckYourAnswersViewModel
 @{
-    ViewBag.Title = "Check your answers before sending your request";
+    ViewBag.Title = "Check your details before they're sent to DfE";
 }
 
 @section BackLink
@@ -16,7 +16,8 @@
             <form asp-route="@RouteNames.CheckYourAnswers_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
                 @Html.HiddenFor(model => model.IsCheck)
                 @Html.HiddenFor(model => model.IsOther)
-                <h1 class="govuk-heading-l">Check your answers before sending your request</h1>
+                <h1 class="govuk-heading-l">Check your details before they’re sent to DfE</h1>
+                <p class="govuk-body">We’ll send this information to our team, who will match you with an adviser.</p>
                 <h2 class="govuk-heading-m">Personal details</h2>
                 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
                     <div class="govuk-summary-list__row">
@@ -26,14 +27,19 @@
                         <dd class="govuk-summary-list__value">
                             @string.Concat(Model.FirstName, " ", Model.LastName)
                         </dd>
-                        <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Name_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
-                                Change
-                                <span class="govuk-visually-hidden">
-                                    name
-                                </span>
-                            </a>
-                        </dd>
+                      
+                        @if (Model.IsOther)
+                        {
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Name_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    Change
+                                    <span class="govuk-visually-hidden">
+                                        name
+                                    </span>
+                                </a>
+                            </dd>
+                        }
+
                     </div>
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
@@ -42,18 +48,23 @@
                         <dd class="govuk-summary-list__value">
                             @(Model.DateOfBirth?.ToString("dd MMMM yyyy") ?? "N/A")
                         </dd>
-                        <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.DateOfBirth_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
-                                Change
-                                <span class="govuk-visually-hidden">
-                                    date of birth
-                                </span>
-                            </a>
-                        </dd>
+
+                        @if (Model.IsOther)
+                        {
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.DateOfBirth_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    Change
+                                    <span class="govuk-visually-hidden">
+                                        date of birth
+                                    </span>
+                                </a>
+                            </dd>
+                        }
+
                     </div>
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
-                            Email
+                            Email address
                         </dt>
                         <dd class="govuk-summary-list__value">
                             <p class="govuk-body">@Model.Email</p>
@@ -61,7 +72,7 @@
                     </div>
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
-                            Telephone
+                            Telephone number
                         </dt>
                         <dd class="govuk-summary-list__value">
                             <p class="govuk-body">@Model.Telephone</p>
@@ -82,11 +93,16 @@
                         <dd class="govuk-summary-list__value">
                             @Model.Postcode
                         </dd>
-                        <dd class="govuk-summary-list__actions">
-                            <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Postcode_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
-                                Change<span class="govuk-visually-hidden"> postcode</span>
-                            </a>
-                        </dd>
+
+                        @if(Model.IsOther)
+                        {
+                            <dd class="govuk-summary-list__actions">
+                                <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Postcode_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                    Change<span class="govuk-visually-hidden"> postcode</span>
+                                </a>
+                            </dd>
+                        }
+
                     </div>
                 </dl>
                 @{
@@ -125,15 +141,19 @@
                                     </ul>
                                 </dd>
 
-                                <dd class="govuk-summary-list__actions">
-                                    <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
-                                        Change
-                                        <span class="govuk-visually-hidden">
-                                            areas of
-                                            interest
-                                        </span>
-                                    </a>
-                                </dd>
+                                @if (Model.IsOther)
+                                {
+                                    <dd class="govuk-summary-list__actions">
+                                        <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Industry_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck, IsOther = @Model.IsOther })">
+                                            Change
+                                            <span class="govuk-visually-hidden">
+                                                areas of
+                                                interest
+                                            </span>
+                                        </a>
+                                    </dd>
+                                }
+                      
                             </div>
                         }
                         @foreach (var question in group.OrderBy(q => q.SortOrder))
@@ -181,14 +201,75 @@
                     </dl>
                     serialCounter++;
                 }
-                <h2 class="govuk-heading-m">Now send your application</h2>
+                <h2 class="govuk-heading-m">Terms and conditions</h2>
                 <p class="govuk-body">
-                    By submitting this request you are confirming that, to the best of your knowledge, the
-                    details you are providing are
-                    correct.
+                    The Department for Education (DfE) is working with regional partners to deliver this
+                    service.
+                </p>
+                <p class="govuk-body">By submitting this information, you agree that:</p>
+                <ul class="govuk-list--bullet govuk-list">
+                    <li>we can share your information with our partner in your region</li>
+                    <li>our regional partner can contact you about apprenticeships</li>
+                    <li>we can ask you for feedback on this service</li>
+
+                </ul>
+
+                <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">
+                            Who are our regional partners?
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        <p class="govuk-body">
+                            Based on your postcode, we'll share your information with your local regional
+                            partner.
+                        </p>
+
+                        <table class="govuk-table">
+                            <thead class="govuk-table__head">
+                                <tr class="govuk-table__row">
+                                    <th scope="col" class="govuk-table__header">Region</th>
+                                    <th scope="col" class="govuk-table__header">Partner</th>
+                                </tr>
+                            </thead>
+                            <tbody class="govuk-table__body">
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Lancashire</th>
+                                    <td class="govuk-table__cell">Lancashire Enterprise Partnership&nbsp;</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">London</th>
+                                    <td class="govuk-table__cell">Greater London Authority&nbsp;</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">The North East</th>
+                                    <td class="govuk-table__cell">
+                                        North of Tyne Combined Authority, working with Education
+                                        Development Trust&nbsp;
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
+
+                <p class="govuk-body">
+                    We'll use and share your data according to our <a href="@Url.RouteUrl(RouteNames.Privacy_Get)" class="govuk-link govuk-link--no-visited-state" target="_blank">privacy policy (opens in new tab)</a>.
+                    We'll keep your
+                    data until 31 October
+                    2024 to provide you this service. We'll then keep your data for up to another year so we can assess and
+                    improve this
+                    service.
+                </p>
+
+                <p class="govuk-body">
+                    If you want to view your data, ask for your data to be deleted, or to withdraw from this
+                    service, contact us at
+                    <a href="mailto:engage.apprenticeships@education.gov.uk?subject=Get an apprenticeship adviser service" class="govuk-link govuk-link--no-visited-state" target=" _blank">engage.apprenticeships@education.gov.uk</a>.
                 </p>
                 <button type="submit" class="govuk-button" data-module="govuk-button" esfa-automation="continue-button">
-                    Accept and send
+                    Accept and submit
                 </button>
             </form>
         </div>

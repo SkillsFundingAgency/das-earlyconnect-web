@@ -7,7 +7,7 @@ public class EarlyConnectWeb
 }
 
 public class LepsRegionCodes
-{ 
+{
     public string NorthEast { get; set; }
     public string Lancashire { get; set; }
     public string GreaterLondon { get; set; }
