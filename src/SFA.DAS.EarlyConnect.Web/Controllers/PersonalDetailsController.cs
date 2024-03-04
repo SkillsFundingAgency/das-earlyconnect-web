@@ -8,7 +8,6 @@ using SFA.DAS.EarlyConnect.Web.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
-using SFA.DAS.EarlyConnect.Application.Services;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -202,7 +201,7 @@ public class PersonalDetailsController : Controller
 
         string routeName = m.IsOther
             ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get)
-            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.SchoolName_Get);
+            : (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
