@@ -17,9 +17,17 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
             {
                 return true;
             }
-            var phoneUtil = PhoneNumberUtil.GetInstance();
-            var parsedNumber = phoneUtil.Parse(phoneNumber, "GB");
-            return phoneUtil.IsValidNumber(parsedNumber);
+
+            try
+            {
+                var phoneUtil = PhoneNumberUtil.GetInstance();
+                var parsedNumber = phoneUtil.Parse(phoneNumber, "GB");
+                return phoneUtil.IsValidNumber(parsedNumber);
+            }
+            catch 
+            {
+                return false;
+            }
         }
     }
 
