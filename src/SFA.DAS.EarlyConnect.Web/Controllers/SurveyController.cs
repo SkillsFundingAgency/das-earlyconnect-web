@@ -35,12 +35,19 @@ public class SurveyController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         var apprenticeshiplevelEditViewModel = (ApprenticeshipLevelEditViewModel)studentSurveyResponse;
         apprenticeshiplevelEditViewModel.StudentSurveyId = m.StudentSurveyId;
         apprenticeshiplevelEditViewModel.IsCheck = m.IsCheck;
         apprenticeshiplevelEditViewModel.IsOther = studentSurveyResponse.DataSource == Datasource.Others;
 
         return View(apprenticeshiplevelEditViewModel);
+
     }
 
     [HttpPost]
@@ -51,6 +58,11 @@ public class SurveyController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
 
         m = MapViewModel(m, studentSurveyResponse, SurveyPage.Page.Apprenticeshiplevel);
 
@@ -82,12 +94,19 @@ public class SurveyController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         var appliedForEditViewModel = (AppliedForEditViewModel)studentSurveyResponse;
         appliedForEditViewModel.StudentSurveyId = m.StudentSurveyId;
         appliedForEditViewModel.IsCheck = m.IsCheck;
         appliedForEditViewModel.IsOther = studentSurveyResponse.DataSource == Datasource.Others;
 
         return View(appliedForEditViewModel);
+
     }
 
     [HttpPost]
@@ -129,6 +148,12 @@ public class SurveyController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         var supportEditViewModel = (SupportEditViewModel)studentSurveyResponse;
         supportEditViewModel.StudentSurveyId = m.StudentSurveyId;
         supportEditViewModel.IsCheck = m.IsCheck;
@@ -176,6 +201,11 @@ public class SurveyController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
 
         var relocateEditViewModel = (RelocateEditViewModel)studentSurveyResponse;
         relocateEditViewModel.StudentSurveyId = m.StudentSurveyId;

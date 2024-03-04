@@ -32,6 +32,11 @@ public class PersonalDetailsController : Controller
         ClearModelState();
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         return View(new SchoolNameEditViewModel
         {
             StudentSurveyId = m.StudentSurveyId,
@@ -39,6 +44,7 @@ public class PersonalDetailsController : Controller
             SchoolName = result.SchoolName,
             IsOther = result.DataSource == Datasource.Others
         });
+
     }
 
     [HttpPost]
@@ -67,6 +73,11 @@ public class PersonalDetailsController : Controller
     {
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         return View(new PostcodeEditViewModel
         {
             StudentSurveyId = m.StudentSurveyId,
@@ -74,6 +85,7 @@ public class PersonalDetailsController : Controller
             IsOther = result.DataSource == Datasource.Others,
             Postcode = result.Postcode
         });
+
     }
 
     [HttpPost]
@@ -104,6 +116,11 @@ public class PersonalDetailsController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
 
         return View(new NameViewModel
         {
@@ -151,6 +168,11 @@ public class PersonalDetailsController : Controller
     {
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         return View(new TelephoneEditViewModel
         {
             StudentSurveyId = m.StudentSurveyId,
@@ -158,6 +180,7 @@ public class PersonalDetailsController : Controller
             IsOther = result.DataSource == Datasource.Others,
             Telephone = result.Telephone
         });
+
     }
 
     [HttpPost]
@@ -169,14 +192,12 @@ public class PersonalDetailsController : Controller
             SurveyGuid = m.StudentSurveyId
         });
 
-        if (m.Telephone != null)
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
         {
-            var response = await _mediator.Send(new CreateStudentTriageDataCommand
-            {
-                StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
-                SurveyGuid = m.StudentSurveyId
-            });
-        }
+            StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
 
         string routeName = m.IsOther
             ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get)
@@ -191,6 +212,11 @@ public class PersonalDetailsController : Controller
     {
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         return View(new DateOfBirthEditViewModel
         {
             StudentSurveyId = m.StudentSurveyId,
@@ -200,6 +226,7 @@ public class PersonalDetailsController : Controller
             Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : string.Empty)}",
             Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : string.Empty)}",
         });
+
     }
 
     [HttpPost]
@@ -230,6 +257,12 @@ public class PersonalDetailsController : Controller
         {
             SurveyGuid = studentSurveyId
         });
+
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
 
         IndustryViewModel viewModel = new IndustryViewModel
         {

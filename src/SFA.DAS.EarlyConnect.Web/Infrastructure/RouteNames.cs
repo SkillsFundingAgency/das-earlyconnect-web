@@ -42,4 +42,6 @@ public static class RouteNames
     public const string LinkFault_Get = "LinkFault_Get";
     public const string PersonalDetails_Get = "PersonalDetails_Get";
     public const string PersonalDetails_Post = "PersonalDetails_Post";
+    public const string Privacy_Get = "Privacy_Get";
+    public const string FormCompleted_Get = "FormCompleted_Get";
 }
