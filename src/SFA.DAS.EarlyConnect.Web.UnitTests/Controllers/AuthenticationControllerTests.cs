@@ -8,7 +8,9 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
+using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Application.Services;
+using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Configuration;
 using SFA.DAS.EarlyConnect.Web.Controllers;
@@ -37,7 +39,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 var urlValidatorMock = new Mock<IUrlValidator>();
                 var dataProtectorServiceMock = new Mock<IDataProtectorService>();
                 var authenticateService = new Mock<IAuthenticateService>();
-
                 var httpContext = new DefaultHttpContext();
                 var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
 
@@ -124,7 +125,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 Email = "ratheesh@education.com",
                 ExpiryDate = DateTime.Now.AddDays(1),
                 LepsCode = "E37000025",
-                StudentSurveyId = "abc"
+                StudentSurveyId = new Guid().ToString()
             };
 
             var serializedViewModel = JsonConvert.SerializeObject(viewModel);
@@ -150,11 +151,78 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 HttpContext = httpContext
             };
 
+            var surveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                StudentSurvey = new StudentSurveyDto() 
+            };
+
+            mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(surveyResponse);
+
             var result = await controller.Authenticate(authCodeViewModel) as RedirectToRouteResult;
 
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.RouteName, Is.EqualTo(RouteNames.Name_Get));
+        }
+
+        [Test]
+        public async Task Authenticate_Post_ValidAuthCode_ReturnsRedirectToFormCompleted()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<AuthenticateController>>();
+            var urlValidatorMock = new Mock<IUrlValidator>();
+            var dataProtectorServiceMock = new Mock<IDataProtectorService>();
+            var authenticateService = new Mock<IAuthenticateService>();
+
+            var httpContext = new DefaultHttpContext();
+            var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
+
+            var viewModel = new AuthenticateViewModel
+            {
+                AuthCode = "decrypted_auth_code",
+                Email = "ratheesh@education.com",
+                ExpiryDate = DateTime.Now.AddDays(1),
+                LepsCode = "E37000025",
+                StudentSurveyId = new Guid().ToString()
+            };
+
+            var serializedViewModel = JsonConvert.SerializeObject(viewModel);
+
+            tempData["AuthenticateModel"] = serializedViewModel;
+
+            var controller =
+                new AuthenticateController(mediatorMock.Object, loggerMock.Object, urlValidatorMock.Object,
+                    dataProtectorServiceMock.Object, authenticateService.Object)
+                {
+                    TempData = tempData
+                };
+
+            var authCodeViewModel = new AuthCodeViewModel
+            {
+                AuthCode = "decrypted_auth_code"
+            };
+
+            dataProtectorServiceMock.Setup(x => x.DecodeData(It.IsAny<string>())).Returns("decrypted_auth_code");
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
+            var surveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                StudentSurvey = new StudentSurveyDto() { DateCompleted = DateTime.Now}
+            };
+
+            mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(surveyResponse);
+
+            var result = await controller.Authenticate(authCodeViewModel) as RedirectToRouteResult;
+
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.FormCompleted_Get));
         }
 
         [Test]

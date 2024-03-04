@@ -37,7 +37,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
             manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
-            manageStudentPersonalData.Telephone = request.Telephone;
+            manageStudentPersonalData.Telephone = request.Telephone ?? string.Empty;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
@@ -87,7 +87,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;
             manageStudentPersonalData.FirstName = studentTriageDataBySurveyIdResult.FirstName;
             manageStudentPersonalData.LastName = studentTriageDataBySurveyIdResult.LastName;
-            manageStudentPersonalData.DateOfBirth = request.DateOfBirth.AsDateTimeUk();
+            manageStudentPersonalData.DateOfBirth = request.DateOfBirth.AsUKDate();
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;

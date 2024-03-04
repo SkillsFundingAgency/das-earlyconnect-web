@@ -1,0 +1,30 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+
+@model SFA.DAS.EarlyConnect.Web.ViewModels.AdviserLinksViewModel
+@{
+    ViewBag.Title = "This link has expired";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-xl">This link has expired</h1>
+            <p class="govuk-body govuk-!-margin-top-8">Get an apprenticeship adviser by selecting your region:</p>
+
+            <ul class="govuk-list">
+                <li>
+                    <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.LancashireLEPSCode})">Get an adviser in Lancashire</a>
+                </li>
+                <li>
+                    <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.GreaterLondonLEPSCode})">Get an adviser in Greater London</a>
+                </li>
+                <li>
+                    <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.NorthEastLEPSCode})">Get an adviser in North East</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</main>
