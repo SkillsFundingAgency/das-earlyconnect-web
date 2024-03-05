@@ -201,7 +201,7 @@ public class PersonalDetailsController : Controller
 
         string routeName = m.IsOther
             ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get)
-            : (m.IsCheck ? RouteNames.CheckYourAnswersDummy_Get : RouteNames.SchoolName_Get);
+            : (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
