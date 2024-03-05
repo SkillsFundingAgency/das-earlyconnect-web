@@ -5,7 +5,10 @@
 @{
     ViewBag.Title = "What's your name?";
 }
-
+@section BackLink
+{
+    <a asp-show="@Model.IsCheck" asp-route="@RouteNames.CheckYourAnswers_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+}
 <main class="govuk-main-wrapper " id="main-content" role="main">
 
     <div class="govuk-grid-row">
@@ -26,7 +29,7 @@
                         First name
                     </label>
                     <span style=" margin:0" esfa-validation-message-for="FirstName" class="govuk-error-message"></span>
-                    <input asp-for="FirstName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="given-name"> 
+                    <input asp-for="FirstName" class="govuk-input govuk-!-width-one-half" type="text" spellcheck="false" autocomplete="given-name">
                 </div>
 
                 <div esfa-validation-marker-for="LastName" class="govuk-form-group">
