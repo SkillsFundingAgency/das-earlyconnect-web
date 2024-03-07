@@ -6,13 +6,13 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
+using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Controllers;
 using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
-using System.Globalization;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 {
@@ -69,7 +69,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         public async Task SchoolName_Post_RedirectsToCorrectRoute()
         {
             var mediatorMock = new Mock<IMediator>();
-            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();;
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
 
@@ -168,7 +168,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
             var viewModel = new PostcodeEditViewModel
             {
                 StudentSurveyId = new Guid(),
@@ -198,9 +197,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
-            var controller =
-                new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
                 Id = 1,
@@ -399,14 +396,15 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
             var viewModel = new TelephoneEditViewModel
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = true,
+                IsOther = true
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
+            
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
                 {
@@ -501,7 +499,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
             var viewModel = new DateOfBirthEditViewModel
             {
                 StudentSurveyId = new Guid(),
@@ -552,10 +549,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(surveyResponse);
 
-            var controller =
-                new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
-
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
 
             var result = await controller.Industry(new Guid(), false) as ViewResult;
 
@@ -616,8 +610,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(createCommandResult);
 
-            var controller =
-                new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
 
             var model = new IndustryViewModel
             {
@@ -660,8 +653,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(createCommandResult);
 
-            var controller =
-                new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
 
             var model = new IndustryViewModel
             {

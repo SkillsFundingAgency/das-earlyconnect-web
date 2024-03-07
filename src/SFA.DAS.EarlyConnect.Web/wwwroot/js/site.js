@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     var orderedCheckboxes = document.querySelectorAll('.ordered-checkbox');
     var toggledCheckboxes = document.querySelectorAll('.toggled-checkbox');
-
+    
     orderedCheckboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', function () {
             toggledCheckboxes.forEach(function (toggledCheckbox) {
@@ -22,4 +22,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    var submitButton = document.querySelector('button[type="submit"]');
+    submitButton.addEventListener('click', function () {
+        var currentForm = document.querySelector('form');
+        this.disabled = 'disabled';
+        currentForm.submit();
+    });
+
 });

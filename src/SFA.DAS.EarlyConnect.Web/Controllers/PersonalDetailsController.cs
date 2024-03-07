@@ -199,7 +199,9 @@ public class PersonalDetailsController : Controller
         });
 
 
-        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get;
+        string routeName = m.IsOther
+            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get)
+            : (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
@@ -294,6 +296,31 @@ public class PersonalDetailsController : Controller
         return RedirectToRoute(routeName, new { model.StudentSurveyId });
 
     }
+
+    [HttpGet]
+    [Route("personaldetails", Name = RouteNames.PersonalDetails_Get, Order = 0)]
+    public async Task<IActionResult> PersonalDetails(TriageRouteModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var viewModel = (PersonalDetailsViewModel)studentSurveyResponse;
+        viewModel.IsCheck = m.IsCheck;
+        viewModel.IsOther = m.IsOther;
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [Route("personaldetails", Name = RouteNames.PersonalDetails_Post, Order = 0)]
+    public IActionResult PersonalDetails(PersonalDetailsViewModel m)
+    {
+        return RedirectToRoute(RouteNames.Telephone_Get, new { studentSurveyId = m.StudentSurveyId });
+
+    }
+
     private void ClearModelState()
     {
         if (ModelState.ContainsKey("Question.Answers"))
