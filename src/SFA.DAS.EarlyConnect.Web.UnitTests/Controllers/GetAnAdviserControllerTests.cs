@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.Configuration;
+using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Controllers;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
@@ -122,7 +123,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             
             dataProtectionServiceMock.Setup(x => x.DecodeData(It.IsAny<string>())).Returns(surveyId + "|" + DateTime.Now.ToString());
 
-            var queryResult = new GetStudentTriageDataBySurveyIdResult {  };
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto() { DateCompleted = null} };
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
 
             var controller =
