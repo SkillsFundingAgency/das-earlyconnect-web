@@ -24,5 +24,6 @@ public static class AddServiceRegistrationExtension
         services.AddSingleton<IValidator<SchoolNameEditViewModel>, SchoolModelValidator>();
         services.AddSingleton<IValidator<RelocateEditViewModel>, RelocateModelValidator>();
         services.AddTransient<IAuthenticateService, AuthenticateService>();
+        services.AddTransient<IJsonHelper, AreasOfInterestJsonHelper>();
     }
 }
