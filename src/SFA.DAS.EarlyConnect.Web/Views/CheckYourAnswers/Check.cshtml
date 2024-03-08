@@ -75,7 +75,7 @@
                             Telephone number
                         </dt>
                         <dd class="govuk-summary-list__value">
-                            <p class="govuk-body">@Model.Telephone</p>
+                            <p class="govuk-body">@(string.IsNullOrEmpty(@Model.Telephone) ? "Not provided" : @Model.Telephone)</p>
                         </dd>
                         <dd class="govuk-summary-list__actions">
                             <a class="govuk-link govuk-link--no-visited-state" href="@Url.RouteUrl(RouteNames.Telephone_Get, new { StudentSurveyId = @Model.StudentSurveyId, IsCheck = @Model.IsCheck })">
@@ -133,12 +133,21 @@
                                     Areas of interest
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    <ul class="govuk-list govuk-list--bullet">
-                                        @foreach (var item in Model.Industry.Split('|'))
-                                        {
-                                            <li>@item.Trim()</li>
-                                        }
-                                    </ul>
+                                    @if (Model.Industry.Any())
+                                    {
+                                        <ul class="govuk-list govuk-list--bullet">
+                                            @if (Model.Industry.Any())
+                                                @foreach (var item in Model.Industry.Split('|'))
+                                                {
+                                                    <li>@item.Trim()</li>
+                                                }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <span>Not provided</span>
+
+                                    }
                                 </dd>
 
                                 @if (Model.IsOther)

@@ -74,6 +74,33 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         }
 
         [Test]
+        public async Task CheckYourAnswers_Get_RedirectsToSurveyComplete()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<CheckYourAnswersController>>();
+
+            var controller = new CheckYourAnswersController(mediatorMock.Object, loggerMock.Object);
+
+            var surveyId = new Guid();
+            var createCommandResult = new GetStudentTriageDataBySurveyIdResult
+            {
+                StudentSurvey = new StudentSurveyDto
+                {
+                    SurveyId = 100,
+                    DateCompleted = DateTime.Now,
+                }
+            };
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
+                .ReturnsAsync(createCommandResult);
+
+            var result = await controller.Check(surveyId) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(RouteNames.FormCompleted_Get, Is.EqualTo(result.RouteName));
+        }
+
+        [Test]
         public async Task CheckYourAnswers_Post_RedirectsToCorrectRoute()
         {
             {
@@ -134,5 +161,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                 Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
             }
         }
+
     }
 }

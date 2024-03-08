@@ -1,0 +1,75 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model SFA.DAS.EarlyConnect.Web.ViewModels.PersonalDetailsViewModel;
+@{
+    ViewBag.Title = "Confirm your details";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-l">Confirm your details</h1>
+            <p class="govuk-body">Details provided by UCAS:</p>
+            <h2 class="govuk-heading-m">Your details</h2>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+                    <dt class="govuk-summary-list__key">
+                        Name
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @string.Concat(Model.FirstName, " ", Model.LastName)
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+                    <dt class="govuk-summary-list__key">
+                        Date of birth
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @(Model.DateOfBirth?.ToString("dd MMMM yyyy") ?? "N/A")
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+                    <dt class="govuk-summary-list__key">
+                        Email address
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.Email
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+                    <dt class="govuk-summary-list__key">
+                        Postcode
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.Postcode
+                    </dd>
+                </div>
+
+            </dl>
+            <h2 class="govuk-heading-m">Interests</h2>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+                    <dt class="govuk-summary-list__key">
+                        Areas of interest
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        <ul class="govuk-list govuk-list--bullet">
+                            @foreach (var item in Model.Industry.Split('|'))
+                            {
+                                <li>@item.Trim()</li>
+                            }
+                        </ul>
+                    </dd>
+                </div>
+            </dl>
+            <form asp-route="@RouteNames.PersonalDetails_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" novalidate>
+                @Html.HiddenFor(model => model.IsCheck)
+                @Html.HiddenFor(model => model.IsOther)
+                <button type="submit" class="govuk-button" data-module="govuk-button">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</main>

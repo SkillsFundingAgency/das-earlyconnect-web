@@ -32,6 +32,11 @@ public class PersonalDetailsController : Controller
         ClearModelState();
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         return View(new SchoolNameEditViewModel
         {
             StudentSurveyId = m.StudentSurveyId,
@@ -39,6 +44,7 @@ public class PersonalDetailsController : Controller
             SchoolName = result.SchoolName,
             IsOther = result.DataSource == Datasource.Others
         });
+
     }
 
     [HttpPost]
@@ -67,13 +73,19 @@ public class PersonalDetailsController : Controller
     {
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         return View(new PostcodeEditViewModel
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
-            IsOther= result.DataSource == Datasource.Others,
+            IsOther = result.DataSource == Datasource.Others,
             Postcode = result.Postcode
         });
+
     }
 
     [HttpPost]
@@ -104,6 +116,11 @@ public class PersonalDetailsController : Controller
         {
             SurveyGuid = m.StudentSurveyId
         });
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
 
         return View(new NameViewModel
         {
@@ -151,6 +168,11 @@ public class PersonalDetailsController : Controller
     {
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         return View(new TelephoneEditViewModel
         {
             StudentSurveyId = m.StudentSurveyId,
@@ -158,6 +180,7 @@ public class PersonalDetailsController : Controller
             IsOther = result.DataSource == Datasource.Others,
             Telephone = result.Telephone
         });
+
     }
 
     [HttpPost]
@@ -169,7 +192,6 @@ public class PersonalDetailsController : Controller
             SurveyGuid = m.StudentSurveyId
         });
 
-
         var response = await _mediator.Send(new CreateStudentTriageDataCommand
         {
             StudentData = m.MapFromTelephoneRequest(studentSurveyResponse),
@@ -177,7 +199,9 @@ public class PersonalDetailsController : Controller
         });
 
 
-        var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get;
+        string routeName = m.IsOther
+            ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get)
+            : (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
@@ -188,15 +212,21 @@ public class PersonalDetailsController : Controller
     {
         var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
 
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
         return View(new DateOfBirthEditViewModel
         {
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
             IsOther = result.DataSource == Datasource.Others,
-            Day = $"{ (result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : string.Empty)}",
+            Day = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Day : string.Empty)}",
             Month = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Month : string.Empty)}",
             Year = $"{(result.DateOfBirth.HasValue ? result.DateOfBirth.Value.Year : string.Empty)}",
         });
+
     }
 
     [HttpPost]
@@ -227,6 +257,12 @@ public class PersonalDetailsController : Controller
         {
             SurveyGuid = studentSurveyId
         });
+
+
+        if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
 
         IndustryViewModel viewModel = new IndustryViewModel
         {
@@ -260,6 +296,31 @@ public class PersonalDetailsController : Controller
         return RedirectToRoute(routeName, new { model.StudentSurveyId });
 
     }
+
+    [HttpGet]
+    [Route("personaldetails", Name = RouteNames.PersonalDetails_Get, Order = 0)]
+    public async Task<IActionResult> PersonalDetails(TriageRouteModel m)
+    {
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var viewModel = (PersonalDetailsViewModel)studentSurveyResponse;
+        viewModel.IsCheck = m.IsCheck;
+        viewModel.IsOther = m.IsOther;
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [Route("personaldetails", Name = RouteNames.PersonalDetails_Post, Order = 0)]
+    public IActionResult PersonalDetails(PersonalDetailsViewModel m)
+    {
+        return RedirectToRoute(RouteNames.Telephone_Get, new { studentSurveyId = m.StudentSurveyId });
+
+    }
+
     private void ClearModelState()
     {
         if (ModelState.ContainsKey("Question.Answers"))

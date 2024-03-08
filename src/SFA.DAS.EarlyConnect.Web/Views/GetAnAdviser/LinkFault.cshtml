@@ -1,0 +1,32 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@model SFA.DAS.EarlyConnect.Web.ViewModels.AdviserLinksViewModel
+@{
+    ViewBag.Title = "There is a problem with this link";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-xl">
+                There is a problem with this link
+            </h1>
+            <p class="govuk-body">If you pasted the web address, check you copied the entire address.</p>
+            <p class="govuk-body govuk-!-margin-top-8">You can also continue by selecting your region:</p>
+
+            <ul class="govuk-list">
+                <li>
+                    <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.LancashireLEPSCode})">Get an adviser in Lancashire</a>
+                </li>
+                <li>
+                    <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.GreaterLondonLEPSCode})">Get an adviser in Greater London</a>
+                </li>
+                <li>
+                    <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.NorthEastLEPSCode})">Get an adviser in North East</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</main>
