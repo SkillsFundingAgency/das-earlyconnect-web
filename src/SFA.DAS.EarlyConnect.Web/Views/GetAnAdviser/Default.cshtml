@@ -1,0 +1,61 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewBag.Title = "Get an apprenticeship adviser";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form asp-route="@RouteNames.GetAnAdviser_Post">
+                <h1 class="govuk-heading-xl">Get an apprenticeship adviser</h1>
+                <div class="govuk-inset-text">
+                    Advisers are currently only available for year 13 students in Greater London, Lancashire and the North East.
+                </div>
+                <p class="govuk-body">
+                    Our advisers offer free support by email or phone. You can still be unsure about doing an
+                    apprenticeship and speak to an adviser.
+                </p>
+
+                <p class="govuk-body">
+                    Your adviser can help you:
+                </p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>decide if an apprenticeship is right for you</li>
+                    <li>find the right apprenticeship based on your interests</li>
+                    <li>apply and interview, including help with your CV</li>
+                </ul>
+
+                <p class="govuk-body">
+                    Your apprenticeship adviser will be from your area. They'll know local companies that take on
+                    apprentices.
+                </p>
+
+                <p class="govuk-body govuk-!-margin-top-8">Get an apprenticeship adviser by selecting your region:</p>
+
+                <ul class="govuk-list">
+                    <li>
+                        <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.LancashireLEPSCode})">Get an adviser in Lancashire</a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.GreaterLondonLEPSCode})">Get an adviser in Greater London</a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.NorthEastLEPSCode})">Get an adviser in North East</a>
+                    </li>
+                </ul>
+
+                <h2 class="govuk-heading-m govuk-!-margin-top-8">Other resources</h2>
+
+                <p class="govuk-body">Find out more about <a href="https://www.gov.uk/become-apprentice" class="govuk-link" target="_blank">how apprenticeships work</a>.</p>
+
+                <p class="govuk-body">
+                    You can search and apply for all apprenticeships in England on <a href="https://www.gov.uk/apply-apprenticeship"
+                                                                                      class="govuk-link" target="_blank">Find an apprenticeship</a>.
+                </p>
+            </form>
+        </div>
+    </div>
+</main>

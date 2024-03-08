@@ -4,7 +4,6 @@ using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
-using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Domain.Configuration;
 using Microsoft.Extensions.Options;
@@ -37,10 +36,12 @@ public class GetAnAdviserController : Controller
     }
 
     [HttpGet]
-    [Route("{lepsCode}", Name = RouteNames.ServiceStartDefault, Order = 0)]
-    public IActionResult Index(string lepsCode)
+    [Route("{lepsCode?}", Name = RouteNames.ServiceStartDefault, Order = 0)]
+    public IActionResult Index(string? lepsCode)
     {
-        return _urlValidator.IsValidLepsCode(lepsCode) ? View() : NotFound();
+        return string.IsNullOrEmpty(lepsCode)
+            ? View("Default", GetAdviserLinksModel())
+            : (_urlValidator.IsValidLepsCode(lepsCode) ? View() : NotFound());
     }
 
     [HttpPost]
@@ -69,6 +70,11 @@ public class GetAnAdviserController : Controller
             if (result == null)
             {
                 return View("LinkFault", GetAdviserLinksModel());
+            }
+
+            if (result.StudentSurvey.DateCompleted.HasValue)
+            {
+                return RedirectToRoute(RouteNames.FormCompleted_Get);
             }
 
             return View(new GetAdvisorViewModel { StudentSurveyId = new Guid(linkData[0]), Email = result.Email });
