@@ -50,6 +50,8 @@ builder.Services.Configure<RouteOptions>(options =>
 
 });
 
+builder.Services.AddDataProtection(rootConfiguration);
+
 builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddApplicationInsightsTelemetry();
