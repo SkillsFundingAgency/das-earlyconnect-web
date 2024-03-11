@@ -1,0 +1,118 @@
+{
+  "AreasOfInterest": [
+    {
+      "Area": "Agriculture, environment and animal care",
+      "Industry": [
+        {
+          "Title": "Agriculture, environmental and animal care",
+          "Roles": "Farmer, horticulture, vet and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Business, sales and legal",
+      "Industry": [
+        {
+          "Title": "Business and administration",
+          "Roles": "Administrator, project manager, human resources and similar"
+        },
+        {
+          "Title": "Finance and accounting",
+          "Roles": "Financial advisor, payroll assistant and similar"
+        },
+        {
+          "Title": "Law and legal studies",
+          "Roles": "Solicitor, barrister and similar"
+        },
+        {
+          "Title": "Sales, marketing and procurement",
+          "Roles": "Sales manager, digital marketer and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Care, health and science",
+      "Industry": [
+        {
+          "Title": "Care services",
+          "Roles": "Social worker, play therapist, adult carer and similar"
+        },
+        {
+          "Title": "Hair and beauty",
+          "Roles": "Hairdresser, barber, holistic therapist and similar"
+        },
+        {
+          "Title": "Health and science",
+          "Roles": "Ambulance worker, sports coach, clinical scientist and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Catering and hospitality",
+      "Industry": [
+        {
+          "Title": "Catering and hospitality",
+          "Roles": "Chef, baker, hospitality team member and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Construction, engineering and buildings",
+      "Industry": [
+        {
+          "Title": "Construction and the built environment",
+          "Roles": "Bricklayer, smart home technician, architect and similar"
+        },
+        {
+          "Title": "Engineering and manufacturing",
+          "Roles": "Autocare technician, welder, rail engineer and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Creative and design",
+      "Industry": [
+        {
+          "Title": "Creative and design",
+          "Roles": "Music technologist, camera technician, graphic designer and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Digital",
+      "Industry": [
+        {
+          "Title": "Digital and IT",
+          "Roles": "Cyber security officer, software engineer, data scientist and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Education and early years",
+      "Industry": [
+        {
+          "Title": "Education, teaching, and childcare",
+          "Roles": "Teaching assistant, early years educator and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Protective services (emergency and uniformed services)",
+      "Industry": [
+        {
+          "Title": "Protective services (emergency and uniformed services)",
+          "Roles": "Security, firefighter, coastguard and similar"
+        }
+      ]
+    },
+    {
+      "Area": "Transport and logistics",
+      "Industry": [
+        {
+          "Title": "Transport and logistics",
+          "Roles": "Aviation ground handler, train driver, fleet manager and similar"
+        }
+      ]
+    }
+  ]
+}
