@@ -99,7 +99,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             return manageStudentPersonalData;
         }
 
-        public static StudentTriageData MapFromIndustryRequest(this IndustryViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        public static StudentTriageData MapFromIndustryRequest(this IndustryEditModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
         {
             StudentTriageData manageStudentPersonalData = new StudentTriageData();
             manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;

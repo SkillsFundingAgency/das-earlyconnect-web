@@ -23,195 +23,28 @@
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-heading-l">What areas of work interest you? (optional)</h1>
                         </legend>
-
+                        @{int serialCounter = 1;}
                         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                            <h2 class="govuk-heading-m">Agriculture, environment and animal care</h2>
-                            <div class="govuk-checkboxes__item govuk-!-padding-bottom-5">
-                                <input class="govuk-checkboxes__input" id="sector-1" name="sector" type="checkbox"
-                                       value="Agriculture, environmental and animal care" @(Model.Areas.Contains("Agriculture, environmental and animal care") ? "checked" : "") />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-1">
-                                    Agriculture, environmental and animal care
-                                </label>
-                                <div id="agriculture-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Farmer, horticulture, vet and similar
-                                </div>
-                            </div>
+                            @foreach (var area in Model.AreasOfInterest.AreasOfInterest)
+                            {
+                                <h2 class="govuk-heading-m">@area.Area</h2>
 
+                                foreach(var industry in @area.Industry)
+                                {
+                                    <div class="govuk-checkboxes__item govuk-!-padding-bottom-5">
+                                        <input class="govuk-checkboxes__input" id="sector-@serialCounter" name="sector" type="checkbox"
+                                               value="@industry.Title" @(Model.Areas.Contains(industry.Title) ? "checked" : "") />
+                                        <label class="govuk-label govuk-checkboxes__label" for="sector-@serialCounter">
+                                            @industry.Title
+                                        </label>
+                                        <div id="agriculture-item-hint" class="govuk-hint govuk-checkboxes__hint">
+                                            @industry.Roles
+                                        </div>
+                                    </div>
 
-                            <h2 class="govuk-heading-m">Business, sales and legal</h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-2" name="sector" type="checkbox"
-                                       value="Business and administration" @(Model.Areas.Contains("Business and administration") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-2">
-                                    Business and administration
-                                </label>
-                                <div id="business-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Administrator, project manager, human resources and similar
-                                </div>
-                            </div>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-4" name="sector" type="checkbox"
-                                       value="Finance and accounting" @(Model.Areas.Contains("Finance and accounting") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-4">
-                                    Finance and accounting
-                                </label>
-                                <div id="legal-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Financial advisor, payroll assistant and similar
-                                </div>
-                            </div>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-4a" name="sector" type="checkbox"
-                                       value="Law and legal studies" @(Model.Areas.Contains("Law and legal studies") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-4a">
-                                    Law and legal studies
-                                </label>
-                                <div id="legal-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Solicitor, barrister and similar
-                                </div>
-                            </div>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-3" name="sector" type="checkbox"
-                                       value="Sales, marketing and procurement" @(Model.Areas.Contains("Sales, marketing and procurement") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-3">
-                                    Sales, marketing and procurement
-                                </label>
-                                <div id="sales-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Sales manager, digital marketer and similar
-                                </div>
-                            </div>
-
-                            <h2 class="govuk-heading-m govuk-!-padding-top-6">Care, health and science</h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-6" name="sector" type="checkbox"
-                                       value="Care services" @(Model.Areas.Contains("Care services") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-6">
-                                    Care services
-                                </label>
-                                <div id="care-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Social worker, play therapist, adult carer and similar
-                                </div>
-                            </div>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-5" name="sector" type="checkbox"
-                                       value="Hair and beauty" @(Model.Areas.Contains("Hair and beauty") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-5">
-                                    Hair and beauty
-                                </label>
-                                <div id="hair-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Hairdresser, barber, holistic therapist and similar
-                                </div>
-                            </div>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-7" name="sector" type="checkbox"
-                                       value="Health and science" @(Model.Areas.Contains("Health and science") ? "checked" : "") />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-7">
-                                    Health and science
-                                </label>
-                                <div id="health-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Ambulance worker, sports coach, clinical scientist and similar
-                                </div>
-                            </div>
-
-                            <h2 class="govuk-heading-m govuk-!-padding-top-6">Catering and hospitality</h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-8" name="sector" type="checkbox"
-                                       value="Catering and hospitality" @(Model.Areas.Contains("Catering and hospitality") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-8">
-                                    Catering and hospitality
-                                </label>
-                                <div id="catering-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Chef, baker, hospitality team member and similar
-                                </div>
-                            </div>
-
-                            <h2 class="govuk-heading-m govuk-!-padding-top-6">
-                                Construction, engineering and buildings
-                            </h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-9" name="sector" type="checkbox"
-                                       value="Construction and the built environment" @(Model.Areas.Contains("Construction and the built environment") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-9">
-                                    Construction and the built environment
-                                </label>
-                                <div id="construction-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Bricklayer, smart home technician, architect and similar
-                                </div>
-                            </div>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-10" name="sector" type="checkbox"
-                                       value="Engineering and manufacturing" @(Model.Areas.Contains("Engineering and manufacturing") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-10">
-                                    Engineering and manufacturing
-                                </label>
-                                <div id="engineering-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Autocare technician, welder, rail engineer and similar
-                                </div>
-                            </div>
-
-                            <h2 class="govuk-heading-m govuk-!-padding-top-6">Creative and design</h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-11" name="sector" type="checkbox"
-                                       value="Creative and design" @(Model.Areas.Contains("Creative and design") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-11">
-                                    Creative and design
-                                </label>
-                                <div id="creative-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Music technologist, camera technician, graphic designer and similar
-                                </div>
-                            </div>
-
-                            <h2 class="govuk-heading-m govuk-!-padding-top-6">Digital</h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-12" name="sector" type="checkbox"
-                                       value="Digital and IT" @(Model.Areas.Contains("Digital and IT") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-12">
-                                    Digital and IT
-                                </label>
-                                <div id="digital-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Cyber security officer, software engineer, data scientist and similar
-                                </div>
-                            </div>
-
-                            <h2 class="govuk-heading-m govuk-!-padding-top-6">Education and early years</h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-13" name="sector" type="checkbox"
-                                       value="Education, teaching, and childcare" @(Model.Areas.Contains("Education, teaching, and childcare") ? "checked" : "" ) />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-13">
-                                    Education, teaching, and childcare
-                                </label>
-                                <div id="education-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Teaching assistant, early years educator and similar
-                                </div>
-                            </div>
-
-                            <h2 class="govuk-heading-m govuk-!-padding-top-6">
-                                Protective services (emergency and
-                                uniformed
-                                services)
-                            </h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-14" name="sector" type="checkbox"
-                                       value="Protective services (emergency and uniformed services)" @(Model.Areas.Contains("Protective services (emergency and uniformed services)") ? "checked" : "" )/>
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-14">
-                                    Protective services (emergency and uniformed services)
-                                </label>
-                                <div id="protective-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Security, firefighter, coastguard and similar
-                                </div>
-                            </div>
-
-                            <h2 class="govuk-heading-m govuk-!-padding-top-6">Transport and logistics</h2>
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="sector-15" name="sector" type="checkbox" 
-                                    value="Transport and logistics" @(Model.Areas.Contains("Transport and logistics") ? "checked" : "") />
-                                <label class="govuk-label govuk-checkboxes__label" for="sector-15">
-                                    Transport and logistics
-                                </label>
-                                <div id="transport-item-hint" class="govuk-hint govuk-checkboxes__hint">
-                                    Aviation ground handler, train driver, fleet manager and similar
-                                </div>
-                            </div>
-
+                                    serialCounter++;
+                                }
+                            }
                         </div>
                     </fieldset>
                 </div>

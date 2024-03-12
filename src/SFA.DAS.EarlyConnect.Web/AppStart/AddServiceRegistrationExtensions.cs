@@ -26,5 +26,6 @@ public static class AddServiceRegistrationExtension
         services.AddSingleton<IValidator<RelocateEditViewModel>, RelocateModelValidator>();
         services.AddTransient<IAuthenticateService, AuthenticateService>();
         services.AddScoped<GoogleAnalyticsFilter>();
+        services.AddTransient<IJsonHelper, AreasOfInterestJsonHelper>();
     }
 }
