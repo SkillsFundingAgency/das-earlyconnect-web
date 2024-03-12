@@ -48,7 +48,6 @@ jobs:
             TargetFileName: '*.schema.json'
             TableName: Configuration
             ConfigurationSecrets:
-	      DefaultSessionRedisConnectionString: $(DefaultSessionRedisConnectionString)
               EarlyConnectApimSubscriptionKey: $(EarlyConnectApimSubscriptionKey)
         - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
           parameters:
