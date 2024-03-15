@@ -26,8 +26,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var submitButton = document.querySelector('button[type="submit"]');
     submitButton.addEventListener('click', function () {
         var currentForm = document.querySelector('form');
-        this.disabled = 'disabled';
-        currentForm.submit();
+        if (currentForm) {
+            this.disabled = 'disabled';
+            currentForm.submit();
+        }
     });
 
 });
