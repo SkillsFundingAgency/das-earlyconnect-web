@@ -24,12 +24,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     var submitButton = document.querySelector('button[type="submit"]');
-    submitButton.addEventListener('click', function () {
-        var currentForm = document.querySelector('form');
-        if (currentForm) {
-            this.disabled = 'disabled';
-            currentForm.submit();
-        }
-    });
+    if (submitButton) {
+        submitButton.addEventListener('click', function () {
+            var currentForm = document.querySelector('form');
+            if (currentForm) {
+                this.disabled = 'disabled';
+                currentForm.submit();
+            }
+        });
+    }
 
 });
