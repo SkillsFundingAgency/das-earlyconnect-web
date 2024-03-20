@@ -27,6 +27,45 @@
         document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
     </script>
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+    <div data-module="cookie-banner" role="region" aria-label="cookie banner" class="das-cookie-banner__wrap">
+        <div class="das-cookie-banner">
+            <div class="das-cookie-banner__wrapper govuk-width-container">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <h2 class="govuk-heading-m das-cookie-banner__header">Cookies on this service</h2>
+                        <p class="govuk-body">We use some essential cookies to make this service work.</p>
+                        <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+                        <div class="govuk-button-group">
+                            <button data-accept-cookies type="button" class="govuk-button" data-module="govuk-button">
+                                Accept additional cookies
+                            </button>
+                            <button data-reject-cookies type="button" class="govuk-button" data-module="govuk-button">
+                                Reject additional cookies
+                            </button>
+                            <a class="govuk-link" asp-route="@RouteNames.CookiesDetails_Get">View cookies</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="das-cookie-banner__confirmation govuk-width-container" tabindex="-1">
+                <p class="govuk-body">
+                    You've accepted additional cookies. You can <a asp-external-controller="cookies" class="govuk-link" id="link-cookie-settings">change your cookie settings</a> at any time.
+                </p>
+                <div class="govuk-button-group">
+                    <button type="button" class="govuk-button" data-hide-cookie-banner="true" id="btn-hide-cookie-banner">Hide cookie message</button>
+                </div>
+            </div>
+            <div class="das-cookie-banner__rejection govuk-width-container" tabindex="-1">
+                <p class="govuk-body">
+                    You've rejected analytics cookies. You can <a asp-external-controller="cookies" class="govuk-link" id="link-cookie-settings">change your cookie settings</a> at any time.
+                </p>
+                <div class="govuk-button-group">
+                    <button type="button" class="govuk-button" data-hide-cookie-banner="true" id="btn-hide-cookie-banner-reject">Hide cookie message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <header class="govuk-header" data-module="govuk-header" id="top">
         <div class="govuk-header__container govuk-width-container">
             <div class="govuk-header__logo">
@@ -91,6 +130,7 @@
     </script>
     <script src="libs/accessible-autocomplete/accessible-autocomplete.min.js"></script>
     <script src="~/js/site.js" no-cdn></script>
+    <script src="~/js/cookiebanner.js" no-cdn></script>
 </body>
 
 </html>

@@ -95,6 +95,18 @@ public class GetAnAdviserController : Controller
 
     }
 
+    [Route("cookies", Name = RouteNames.Cookies_Get)]
+    public IActionResult Cookies()
+    {
+        return View();
+    }
+
+    [Route("cookies-details", Name = RouteNames.CookiesDetails_Get)]
+    public IActionResult CookiesDetails()
+    {
+        return View();
+    }
+
     private AdviserLinksViewModel GetAdviserLinksModel()
     {
         return new AdviserLinksViewModel

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EarlyConnect.Application.RegistrationExtensions;
 using SFA.DAS.EarlyConnect.Web.AppStart;
 using SFA.DAS.EarlyConnect.Web.Configuration;
+using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.Validation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,7 +54,7 @@ builder.Services.Configure<RouteOptions>(options =>
         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
     }
 
-});
+}).EnableCookieBanner();
 
 builder.Services.AddDataProtection(rootConfiguration);
 
