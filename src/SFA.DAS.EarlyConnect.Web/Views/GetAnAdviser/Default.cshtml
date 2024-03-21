@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    ViewBag.Vpv = "/get-an-adviser/page-index";
+    ViewBag.Vpv = "/get-an-adviser/page-default";
     ViewBag.Title = "Get an apprenticeship adviser";
 }
 
@@ -33,12 +33,20 @@
                     Your apprenticeship adviser will be from your area. They'll know local companies that take on
                     apprentices.
                 </p>
-                <button type="submit" class="govuk-button govuk-button--start" esfa-automation="continue-button">
-                    Get an adviser
-                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
-                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
-                    </svg>
-                </button>
+
+                <p class="govuk-body govuk-!-margin-top-8">Get an apprenticeship adviser by selecting your region:</p>
+
+                <ul class="govuk-list">
+                    <li>
+                        <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.LancashireLEPSCode})">Get an adviser in Lancashire</a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.GreaterLondonLEPSCode})">Get an adviser in Greater London</a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.NorthEastLEPSCode})">Get an adviser in North East</a>
+                    </li>
+                </ul>
 
                 <h2 class="govuk-heading-m govuk-!-margin-top-8">Other resources</h2>
 

@@ -1,8 +1,10 @@
+using Esfa.Recruit.Employer.Web.Filters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EarlyConnect.Application.RegistrationExtensions;
 using SFA.DAS.EarlyConnect.Web.AppStart;
+using SFA.DAS.EarlyConnect.Web.Configuration;
 using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.Validation.Mvc.Extensions;
 
@@ -21,6 +23,8 @@ builder.Services.AddServiceRegistration();
 builder.Services.AddMediatRHandlers();
 
 builder.Services.AddHealthChecks();
+
+builder.Services.Configure<GoogleAnalyticsConfiguration>(rootConfiguration.GetSection("GoogleAnalytics"));
 
 builder.Services.AddAuthentication(sharedOptions =>
     {
@@ -43,6 +47,7 @@ builder.Services.Configure<RouteOptions>(options =>
 
 }).AddMvc(options =>
 {
+    options.Filters.AddService<GoogleAnalyticsFilter>();
     options.AddValidation();
     if (!isIntegrationTest)
     {
@@ -50,6 +55,8 @@ builder.Services.Configure<RouteOptions>(options =>
     }
 
 }).EnableCookieBanner();
+
+builder.Services.AddDataProtection(rootConfiguration);
 
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -63,6 +70,8 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
 }
+
+app.UseContentSecurityPolicy();
 
 app.UseHealthChecks("/ping");
 
