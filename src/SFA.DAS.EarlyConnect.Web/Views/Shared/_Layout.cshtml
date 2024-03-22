@@ -49,7 +49,7 @@
             </div>
             <div class="das-cookie-banner__confirmation govuk-width-container" tabindex="-1">
                 <p class="govuk-body">
-                    You've accepted additional cookies. You can <a asp-external-controller="cookies" class="govuk-link" id="link-cookie-settings">change your cookie settings</a> at any time.
+                    You've accepted additional cookies. You can <a asp-route="@RouteNames.Cookies_Get" class="govuk-link" id="link-cookie-settings">change your cookie settings</a> at any time.
                 </p>
                 <div class="govuk-button-group">
                     <button type="button" class="govuk-button" data-hide-cookie-banner="true" id="btn-hide-cookie-banner">Hide cookie message</button>
@@ -57,7 +57,7 @@
             </div>
             <div class="das-cookie-banner__rejection govuk-width-container" tabindex="-1">
                 <p class="govuk-body">
-                    You've rejected analytics cookies. You can <a asp-external-controller="cookies" class="govuk-link" id="link-cookie-settings">change your cookie settings</a> at any time.
+                    You've rejected analytics cookies. You can <a asp-route="@RouteNames.Cookies_Get" class="govuk-link" id="link-cookie-settings">change your cookie settings</a> at any time.
                 </p>
                 <div class="govuk-button-group">
                     <button type="button" class="govuk-button" data-hide-cookie-banner="true" id="btn-hide-cookie-banner-reject">Hide cookie message</button>
