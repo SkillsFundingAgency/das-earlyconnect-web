@@ -197,8 +197,6 @@ const CookieHandler = {
  
         if (saveCookiesButton) {
             saveCookiesButton.addEventListener('click', this.handleButtonClick.bind(this, radioGroupName));
-        } else {
-            console.error(`Button with id "${buttonId}" not found.`);
         }
 
         //Pre-select the value matching the cookie
