@@ -200,7 +200,7 @@ const CookieHandler = {
         }
 
         //Pre-select the value matching the cookie
-        var cookieValue = window.GOVUK.getCookie('AnalyticsConsent');
+        var cookieValue = window.GOVUK.getCookie('AnalyticsConsent' + this.settings.env);
         var analyticsConsentValue = cookieValue && cookieValue == 'true' ? 'on':'off';
 
         const radioButtons = document.getElementsByName('cookies-AnalyticsConsent');
@@ -214,12 +214,13 @@ const CookieHandler = {
 
     handleButtonClick: function (radioGroupName) {
         const selectedRadioButton = document.querySelector(`input[name="${radioGroupName}"]:checked`);
+        var env = this.settings.env;
 
         if (selectedRadioButton) {
             const selectedValue = (selectedRadioButton.value == 'on');
-            window.GOVUK.cookie(this.settings.seenCookieName + this.settings.env, true, { days: 365 })
+            window.GOVUK.cookie(this.settings.seenCookieName + env, true, { days: 365 })
             Object.keys(this.settings.cookiePolicy).forEach(function (cookieName) {
-                window.GOVUK.cookie(cookieName , selectedValue, { days: 365 });
+                window.GOVUK.cookie(cookieName + env, selectedValue, { days: 365 });
             });
         }
 
@@ -231,6 +232,5 @@ const CookieHandler = {
     }
 };
 
-// Usage example:
 CookieHandler.init('btn-save-cookie-settings', 'cookies-AnalyticsConsent');
 
