@@ -116,7 +116,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(result.Model, Is.InstanceOf<PostcodeEditViewModel>());
             var viewModel = (PostcodeEditViewModel)result.Model;
             Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
-            Assert.That(viewModel.Postcode, Is.EqualTo(queryResult.Postcode));
+            Assert.That(viewModel.PostalCode, Is.EqualTo(queryResult.Postcode));
         }
 
         [Test]
@@ -151,6 +151,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = false,
+                PostalCode = "NG82QA"
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
@@ -180,6 +181,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = true,
+                PostalCode = "NG82QA"
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();

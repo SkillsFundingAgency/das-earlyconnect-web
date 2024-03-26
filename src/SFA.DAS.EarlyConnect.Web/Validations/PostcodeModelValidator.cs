@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.EarlyConnect.Web.Validations
 {
@@ -7,11 +8,23 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
     {
         public PostcodeModelValidator()
         {
-            RuleFor(x => x.Postcode)
+            RuleFor(x => x.PostalCode)
                 .NotEmpty().WithMessage("Enter a full UK postcode")
-                .MaximumLength(8).WithMessage("Enter a full UK postcode")
-                .Matches(@"^[A-Za-z]{1,2}\d{1,2}[A-Za-z]?\s*\d[A-Za-z]{2}$")
-                .WithMessage("Enter a full UK postcode");
+                .MaximumLength(15).WithMessage("Enter a full UK postcode")
+                .Must(BeAValidUKPostcode)
+                .WithMessage("Enter a valid UK postcode");
+        }
+
+        private bool BeAValidUKPostcode(string postcode)
+        {
+            string cleanedPostcode = Regex.Replace(postcode, @"[-()\[\]{}<>\.\s]", "");
+
+            if (cleanedPostcode.Length > 8)
+            {
+                return false;
+            }
+
+            return Regex.IsMatch(cleanedPostcode, @"^[A-Za-z]{1,2}\d{1,2}[A-Za-z]?\s*\d[A-Za-z]{2}$");
         }
     }
 }

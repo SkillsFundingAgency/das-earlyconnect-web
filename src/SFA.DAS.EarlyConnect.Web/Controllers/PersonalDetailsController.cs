@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -87,7 +88,7 @@ public class PersonalDetailsController : Controller
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
             IsOther = result.DataSource == Datasource.Others,
-            Postcode = result.Postcode
+            PostalCode = result.Postcode
         });
 
     }
@@ -96,6 +97,8 @@ public class PersonalDetailsController : Controller
     [Route("postcode", Name = RouteNames.Postcode_Post, Order = 0)]
     public async Task<IActionResult> Postcode(PostcodeEditViewModel m)
     {
+        m.PostalCode = Regex.Replace(m.PostalCode, @"[-()\.\s]", "");
+        ;
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
             SurveyGuid = m.StudentSurveyId
