@@ -97,7 +97,7 @@ public class PersonalDetailsController : Controller
     [Route("postcode", Name = RouteNames.Postcode_Post, Order = 0)]
     public async Task<IActionResult> Postcode(PostcodeEditViewModel m)
     {
-        m.PostalCode = Regex.Replace(m.PostalCode, @"[-()\.\s]", "");
+        m.PostalCode = Regex.Replace(m.PostalCode, @"[-()\[\]{}<>\.\s]", ""); ;
         ;
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
