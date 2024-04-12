@@ -1,0 +1,148 @@
+@using SFA.DAS.EarlyConnect.Web.Infrastructure
+
+<main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            
+        <h1 class="govuk-heading-xl">Details about our cookies</h1>
+        <p>
+            This service puts small files (known as ‘cookies’) onto your computer.
+        </p>
+        <p>
+            These cookies are used to:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>help us understand how you use the webservice, so we can make improvements</li>
+            <li>remember what notifications you’ve seen so you’re not shown them more than once</li>
+            <li>temporarily store the selections you make</li>
+        </ul>
+        <p>Find out more about <a class="govuk-link" href="https://ico.org.uk/your-data-matters/online/cookies/" target="_blank" rel="external">how to manage cookies</a>.</p>
+
+        <h2 class="govuk-heading-m">Cookies that measure website usage</h2>
+        <p>
+            We use Google Analytics software (Universal Analytics) to collect anonymised information about how you use the service. We do this to help make sure the service is meeting the needs of its users and to help us make improvements.
+        </p>
+        <p>
+            We do not allow Google to use or share the data about how you use this service.
+        </p>
+        <p>
+            Google Analytics stores information about:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>how you got to the service</li>
+            <li>the pages you visit on this service and how long you spend on them</li>
+            <li>what you click on while you’re visiting the service</li>
+        </ul>
+        <p>We may also set our own cookies to understand how people move through the service.</p>
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr>
+                    <th scope="col" class="govuk-table__header">
+                        Name
+                    </th>
+                    <th scope="col" class="govuk-table__header">
+                        Purpose
+                    </th>
+                    <th scope="col" class="govuk-table__header">
+                        Expires
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr>
+                    <td class="govuk-table__cell">
+                        _ga
+                    </td>
+                    <td class="govuk-table__cell">
+                        Used by Google Analytics, this registers a unique ID to generate statistics about how you use the website
+                    </td>
+                    <td class="govuk-table__cell">
+                        1 year
+                    </td>
+                </tr>
+                <tr>
+                    <td class="govuk-table__cell">
+                        _gat
+                    </td>
+                    <td class="govuk-table__cell">
+                        Google Analytics throttling rate request
+                    </td>
+                    <td class="govuk-table__cell">
+                        1 year
+                    </td>
+                </tr>
+                <tr>
+                    <td class="govuk-table__cell">
+                        _gid
+                    </td>
+                    <td class="govuk-table__cell">
+                        Google Analytics cookie that registers a unique ID to generate statistics about how you use the website
+                    </td>
+                    <td class="govuk-table__cell">
+                        1 year
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <h2 class="govuk-heading-m">Strictly necessary cookies</h2>
+        <p>These cookies carry out essential tasks to help the service perform correctly. For example, we might save a cookie to let us know how many times you’ve seen a message we’ve shown on a page, or if you’ve dismissed it.</p>
+
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr>
+                    <th scope="col" class="govuk-table__header">
+                        Name
+                    </th>
+                    <th scope="col" class="govuk-table__header">
+                        Purpose
+                    </th>
+                    <th scope="col" class="govuk-table__header">
+                        Expires
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr>
+                    <td class="govuk-table__cell">
+                        AnalyticsConsent
+                    </td>
+                    <td class="govuk-table__cell">
+                        Status of consent for Analytics tracking
+                    </td>
+                    <td class="govuk-table__cell">
+                        1 year
+                    </td>
+                </tr>
+                <tr>
+                    <td class="govuk-table__cell">
+                        EarlyConnect
+                    </td>
+                    <td class="govuk-table__cell">
+                        This enables the website to function properly
+                    </td>
+                    <td class="govuk-table__cell">
+                        Session
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="govuk-table__cell">
+                            ECSeenCookiemessage
+                        </td>
+                        <td class="govuk-table__cell">
+                            Stores if the user has seen the cookie message
+                        </td>
+                        <td class="govuk-table__cell">
+                            1 year
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+
+        <h2 class="govuk-heading-m">Change your settings</h2>
+        <p>You can <a asp-route="@RouteNames.Cookies_Get" class="govuk-link govuk-link--no-visited-state">change which cookies you’re happy for us to use</a>.</p>
+
+        </div>
+    </div>
+</main>

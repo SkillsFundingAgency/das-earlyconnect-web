@@ -18,7 +18,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth;
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
-            manageStudentPersonalData.Postcode = request.Postcode;
+            manageStudentPersonalData.Postcode = request.PostalCode;
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
@@ -99,7 +99,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             return manageStudentPersonalData;
         }
 
-        public static StudentTriageData MapFromIndustryRequest(this IndustryViewModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
+        public static StudentTriageData MapFromIndustryRequest(this IndustryEditModel request, GetStudentTriageDataBySurveyIdResult studentTriageDataBySurveyIdResult)
         {
             StudentTriageData manageStudentPersonalData = new StudentTriageData();
             manageStudentPersonalData.Id = studentTriageDataBySurveyIdResult.Id;

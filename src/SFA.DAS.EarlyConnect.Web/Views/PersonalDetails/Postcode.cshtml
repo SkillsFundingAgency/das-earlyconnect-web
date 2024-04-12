@@ -5,6 +5,7 @@
 @using SFA.DAS.EarlyConnect.Web.Views
 @model SFA.DAS.EarlyConnect.Web.ViewModels.PostcodeEditViewModel
 @{
+    ViewBag.Vpv = "/personal-details/page-post-code";
     ViewBag.Title = "What is your home postcode?";
 }
 
@@ -22,16 +23,16 @@
                 @Html.HiddenFor(model => model.IsOther)
                 <div class="govuk-form-group">
                     <h1 class="govuk-label-wrapper">
-                        <label class="govuk-label govuk-label--l" for="postcode">
+                        <label class="govuk-label govuk-label--l" for="postalCode">
                             What is your home postcode?
                         </label>
                     </h1>
-                    <div esfa-validation-marker-for="Postcode" class="govuk-form-group">
+                    <div esfa-validation-marker-for="PostalCode" class="govuk-form-group">
                         <div id="postcode-hint" class="govuk-hint">
                             We'll use your postcode to find opportunities in your area
                         </div>
-                        <span esfa-validation-message-for="Postcode" class="govuk-error-message"></span>
-                        <input asp-for="Postcode" id="postcode" name="postcode" class="govuk-input govuk-input--width-10" type="text">
+                        <span esfa-validation-message-for="PostalCode" class="govuk-error-message"></span>
+                        <input asp-for="PostalCode" id="postalCode" name="postalCode" class="govuk-input govuk-input--width-10" type="text">
                     </div>
                 </div>
                 <button type="submit" class="govuk-button" data-module="govuk-button" esfa-automation="continue-button">

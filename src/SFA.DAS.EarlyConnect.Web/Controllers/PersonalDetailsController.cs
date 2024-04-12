@@ -8,6 +8,8 @@ using SFA.DAS.EarlyConnect.Web.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
+using SFA.DAS.EarlyConnect.Domain.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -16,13 +18,16 @@ public class PersonalDetailsController : Controller
 {
     private readonly IMediator _mediator;
     private readonly ILogger<PersonalDetailsController> _logger;
+    private readonly IJsonHelper _areasOfInterestHelper;
 
     public PersonalDetailsController(IMediator mediator,
-        ILogger<PersonalDetailsController> logger
+        ILogger<PersonalDetailsController> logger,
+        IJsonHelper areasOfInterestHelper
         )
     {
         _mediator = mediator;
         _logger = logger;
+        _areasOfInterestHelper = areasOfInterestHelper;
     }
 
     [HttpGet]
@@ -83,7 +88,7 @@ public class PersonalDetailsController : Controller
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
             IsOther = result.DataSource == Datasource.Others,
-            Postcode = result.Postcode
+            PostalCode = result.Postcode
         });
 
     }
@@ -92,6 +97,8 @@ public class PersonalDetailsController : Controller
     [Route("postcode", Name = RouteNames.Postcode_Post, Order = 0)]
     public async Task<IActionResult> Postcode(PostcodeEditViewModel m)
     {
+        m.PostalCode = Regex.Replace(m.PostalCode, @"[-()\[\]{}<>\.\s]", ""); ;
+        ;
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {
             SurveyGuid = m.StudentSurveyId
@@ -258,7 +265,6 @@ public class PersonalDetailsController : Controller
             SurveyGuid = studentSurveyId
         });
 
-
         if (studentSurveyResponse.StudentSurvey.DateCompleted.HasValue)
         {
             return RedirectToRoute(RouteNames.FormCompleted_Get);
@@ -270,6 +276,7 @@ public class PersonalDetailsController : Controller
             Areas = studentSurveyResponse.Industry.Split("|").ToList(),
             IsCheck = isCheck.GetValueOrDefault(),
             IsOther = studentSurveyResponse.DataSource == Datasource.Others,
+            AreasOfInterest = (IndustryViewModel.AreasOfInterestModel)_areasOfInterestHelper.LoadFromJSON(@"Data\AreasOfInterest.json")
         };
 
         return View(viewModel);
@@ -277,7 +284,7 @@ public class PersonalDetailsController : Controller
 
     [HttpPost]
     [Route("industry", Name = RouteNames.Industry_Post, Order = 0)]
-    public async Task<IActionResult> Industry(IndustryViewModel model)
+    public async Task<IActionResult> Industry(IndustryEditModel model)
     {
         var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
         {

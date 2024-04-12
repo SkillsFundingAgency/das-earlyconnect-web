@@ -13,12 +13,14 @@
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+    <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.30" />
     <PackageReference Include="SFA.DAS.Validation.Mvc" Version="6.0.30" />
     <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.2" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.21" />
   </ItemGroup>
@@ -26,6 +28,14 @@
     <ProjectReference Include="..\SFA.DAS.EarlyConnect.Application\SFA.DAS.EarlyConnect.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.EarlyConnect.Domain\SFA.DAS.EarlyConnect.Domain.csproj" />
     <ProjectReference Include="..\SFA.DAS.EarlyConnect.Infrastructure\SFA.DAS.EarlyConnect.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Data\AreasOfInterest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -4,6 +4,6 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
 {
     public class PostcodeEditViewModel : TriageRouteModel
     {
-        public string? Postcode { get; set; }
+        public string? PostalCode { get; set; }
     }
 }

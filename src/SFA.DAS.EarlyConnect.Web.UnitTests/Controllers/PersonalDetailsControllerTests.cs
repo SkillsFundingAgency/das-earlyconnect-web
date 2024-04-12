@@ -6,13 +6,14 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
-using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
+using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Controllers;
 using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
+using static SFA.DAS.EarlyConnect.Web.ViewModels.IndustryViewModel;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 {
@@ -31,8 +32,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { Postcode = "12345", StudentSurvey= new StudentSurveyDto() };
@@ -52,8 +54,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto { DateCompleted = DateTime.Now} };
@@ -70,8 +73,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();;
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var viewModel = new SchoolNameEditViewModel
             {
@@ -98,8 +102,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { Postcode = "12345", StudentSurvey = new StudentSurveyDto() };
@@ -111,7 +116,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(result.Model, Is.InstanceOf<PostcodeEditViewModel>());
             var viewModel = (PostcodeEditViewModel)result.Model;
             Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
-            Assert.That(viewModel.Postcode, Is.EqualTo(queryResult.Postcode));
+            Assert.That(viewModel.PostalCode, Is.EqualTo(queryResult.Postcode));
         }
 
         [Test]
@@ -119,8 +124,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto { DateCompleted = DateTime.Now } };
@@ -137,13 +143,15 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var viewModel = new PostcodeEditViewModel
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = false,
+                PostalCode = "NG82QA"
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
@@ -166,12 +174,14 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
             var viewModel = new PostcodeEditViewModel
             {
                 StudentSurveyId = new Guid(),
                 IsCheck = true,
+                PostalCode = "NG82QA"
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
@@ -196,8 +206,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
                 Id = 1,
@@ -223,9 +234,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller =
-                new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
@@ -246,6 +257,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
@@ -269,8 +283,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(createCommandResult);
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
             var model = new NameViewModel
             {
                 FirstName = "Mr",
@@ -290,6 +302,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
@@ -332,8 +347,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(createCommandResult);
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
             var model = new NameViewModel
             {
                 FirstName = "Mr",
@@ -354,8 +367,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { Telephone = "07546666666" , StudentSurvey = new StudentSurveyDto()};
@@ -375,8 +389,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
             var queryResult = new GetStudentTriageDataBySurveyIdResult { Telephone = "07546666666", StudentSurvey = new StudentSurveyDto { DateCompleted=DateTime.Now} };
@@ -394,8 +409,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
             var viewModel = new TelephoneEditViewModel
             {
                 StudentSurveyId = new Guid(),
@@ -424,8 +440,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
             var dateOfBirth = "05/12/1999".AsUKDate();
 
             var surveyId = new Guid();
@@ -446,8 +463,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
             var dateOfBirth = "05/12/1999".AsUKDate();
 
             var surveyId = new Guid();
@@ -465,8 +483,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var viewModel = new DateOfBirthEditViewModel
             {
@@ -497,8 +516,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
             var viewModel = new DateOfBirthEditViewModel
             {
                 StudentSurveyId = new Guid(),
@@ -531,6 +551,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
@@ -549,7 +572,32 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(surveyResponse);
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
+            AreasOfInterestModel areasofInterestModel = new AreasOfInterestModel()
+            { 
+                AreasOfInterest = new List<AreaOfInterest>()
+                { 
+                    new AreaOfInterest
+                    {
+                        Area = "Area 1",
+                        Industry =  new List<Industry>
+                        {
+                            new Industry{ Title = "Industry A", Roles = "Role 1, Role 2, Role 3"},
+                            new Industry { Title = "Industry B", Roles = "Role 4, Role 5, Role 6" },
+                        }
+                    },
+                    new AreaOfInterest
+                    {
+                        Area = "Area 2",
+                        Industry =  new List<Industry>
+                        {
+                            new Industry{ Title = "Industry C", Roles = "Role 7, Role 8, Role 9"},
+                            new Industry { Title = "Industry D", Roles = "Role 10, Role 11, Role 12" },
+                        }
+                    }
+                }
+            };
+
+            areasOfInterestHelper.Setup(a => a.LoadFromJSON(It.IsAny<string>())).Returns(areasofInterestModel);
 
             var result = await controller.Industry(new Guid(), false) as ViewResult;
 
@@ -562,6 +610,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
@@ -570,11 +621,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(surveyResponse);
-
-            var controller =
-                new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
-
 
             var result = await controller.Industry(new Guid(), false) as RedirectToRouteResult;
 
@@ -587,7 +633,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
@@ -610,9 +658,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(createCommandResult);
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
-            var model = new IndustryViewModel
+            var model = new IndustryEditModel
             {
                 IsCheck = false,
                 StudentSurveyId = new Guid(),
@@ -630,7 +676,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
 
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
@@ -653,9 +701,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(createCommandResult);
 
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
-
-            var model = new IndustryViewModel
+            var model = new IndustryEditModel
             {
                 IsCheck = true,
                 StudentSurveyId = new Guid(),
@@ -673,6 +719,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult {StudentSurvey = new StudentSurveyDto() };
 
@@ -685,8 +734,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(createCommandResult);
-
-            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object);
 
             var model = new NameViewModel
             {

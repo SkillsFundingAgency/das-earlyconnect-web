@@ -1,3 +1,4 @@
+using Esfa.Recruit.Employer.Web.Filters;
 using FluentValidation;
 using SFA.DAS.EarlyConnect.Application.Services;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
@@ -24,5 +25,7 @@ public static class AddServiceRegistrationExtension
         services.AddSingleton<IValidator<SchoolNameEditViewModel>, SchoolModelValidator>();
         services.AddSingleton<IValidator<RelocateEditViewModel>, RelocateModelValidator>();
         services.AddTransient<IAuthenticateService, AuthenticateService>();
+        services.AddScoped<GoogleAnalyticsFilter>();
+        services.AddTransient<IJsonHelper, AreasOfInterestJsonHelper>();
     }
 }
