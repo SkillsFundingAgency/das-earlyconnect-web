@@ -11,14 +11,13 @@ public static class ApplicationBuilderExtensions
         app.Use(async (context, next) =>
         {
             context.Response.Headers["Content-Security-Policy"] =
-                        $"script-src 'self' 'unsafe-inline' 'unsafe-eval' {dasCdn} https://www.googletagmanager.com https://tagmanager.google.com https://www.google-analytics.com https://ssl.google-analytics.com https://*.services.visualstudio.com https://*.rcrsv.io; " +
-                        $"style-src 'self' 'unsafe-inline' {dasCdn} https://tagmanager.google.com https://fonts.googleapis.com https://*.rcrsv.io ; " +
-                        $"img-src {dasCdn} www.googletagmanager.com https://ssl.gstatic.com https://www.gstatic.com https://www.google-analytics.com https://*.rcrsv.io ; " +
-                        $"font-src {dasCdn} https://fonts.gstatic.com https://*.rcrsv.io ;" +
-                        "connect-src https://www.google-analytics.com https://*.rcrsv.io;" +
-                        "frame-src https://www.googletagmanager.com https://*.rcrsv.io";
+                $"script-src 'self' 'unsafe-inline' 'unsafe-eval' {dasCdn}  *.tagmanager.google.com https://ssl.google-analytics.com *.googletagmanager.com *.google-analytics.com *.googleapis.com https://*.services.visualstudio.com https://*.rcrsv.io; " +
+                $"style-src 'self' 'unsafe-inline' {dasCdn} *.tagmanager.google.com https://fonts.googleapis.com https://*.rcrsv.io ; " +
+                $"img-src {dasCdn} *.googletagmanager.com https://ssl.gstatic.com https://www.gstatic.com *.google-analytics.com https://*.rcrsv.io ; " +
+                $"font-src {dasCdn} https://fonts.gstatic.com https://*.rcrsv.io ;" +
+                "connect-src *.google-analytics.com https://*.rcrsv.io;" +
+                "frame-src *.googletagmanager.com https://*.rcrsv.io";
             await next();
-
         });
 
         return app;
