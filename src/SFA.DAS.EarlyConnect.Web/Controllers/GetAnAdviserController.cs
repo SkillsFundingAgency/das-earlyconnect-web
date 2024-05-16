@@ -61,7 +61,7 @@ public class GetAnAdviserController : Controller
             var linkCode = Request.QueryString.Value.Substring(Request.QueryString.Value.IndexOf("?") + 1);
             var linkData = _dataProtectorService.DecodeData(linkCode).Split("|");
 
-            if (!_urlValidator.IsValidLinkDate(linkData[1]))
+            if (!_urlValidator.IsValidLinkDate(linkData[1].Trim()))
             {
                 return View("Expired", GetAdviserLinksModel());
             }
