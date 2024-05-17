@@ -5,7 +5,7 @@ parameters:
 jobs:
 - job: CodeBuild
   pool:
-    name: DAS - Continuous Integration Beta
+    name: DAS - Continuous Deployment Linux
     workspace:
       clean: all
   variables:
