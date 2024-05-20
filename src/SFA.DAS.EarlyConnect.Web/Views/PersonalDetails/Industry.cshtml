@@ -6,7 +6,7 @@
 }
 
 @section BackLink {
-    <a asp-show="(!@Model.IsCheck)" asp-route="@RouteNames.Telephone_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+    <a asp-show="@(!@Model.IsCheck)" asp-route="@RouteNames.Telephone_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
     <a asp-show="@Model.IsCheck" asp-route="@RouteNames.CheckYourAnswers_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
 }
 
