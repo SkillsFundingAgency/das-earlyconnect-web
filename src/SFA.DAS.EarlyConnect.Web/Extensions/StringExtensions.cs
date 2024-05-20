@@ -18,7 +18,9 @@ namespace SFA.DAS.EarlyConnect.Web.Extensions
 
         public static DateTime? AsUKDateTime(this string date)
         {
-            if (DateTime.TryParse(date, _ukCulture, out var d))
+            string format = "M/d/yyyy h:mm:ss tt";
+
+            if (DateTime.TryParseExact(date, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out var d))
             {
                 return d;
             }
