@@ -7,6 +7,8 @@ using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Domain.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.ApplicationInsights;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -79,8 +81,10 @@ public class GetAnAdviserController : Controller
 
             return View(new GetAdvisorViewModel { StudentSurveyId = new Guid(linkData[0]), Email = result.Email });
         }
-        catch
+        catch (Exception ex)
         {
+            var ai = new TelemetryClient();
+            ai.TrackException(ex);
             return View("LinkFault", GetAdviserLinksModel());
         }
     }
