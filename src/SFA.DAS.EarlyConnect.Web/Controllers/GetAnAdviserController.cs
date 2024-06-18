@@ -9,6 +9,8 @@ using SFA.DAS.EarlyConnect.Domain.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -84,7 +86,7 @@ public class GetAnAdviserController : Controller
         catch (Exception ex)
         {
             var ai = new TelemetryClient();
-            ai.TrackException(ex);
+            ai.TrackException(ex, new Dictionary<string, string> { { "QueryString", Request.QueryString.Value } });
             return View("LinkFault", GetAdviserLinksModel());
         }
     }
