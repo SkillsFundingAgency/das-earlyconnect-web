@@ -56,7 +56,8 @@ namespace SFA.DAS.EarlyConnect.Application.UnitTests.Commands
             // Assert
 
             mockApiClient.Verify(x => x.Post<CreateStudentTriageDataResponse>(It.IsAny<CreateStudentTriageDataRequest>(), It.IsAny<bool>()), Times.Once);
-            Assert.AreEqual(expectedResponse.Message, result.Message);
+            // Assert
+            Assert.That(result.Message, Is.EqualTo(expectedResponse.Message));
         }
 
         [Test]
