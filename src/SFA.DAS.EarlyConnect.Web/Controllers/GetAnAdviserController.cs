@@ -41,7 +41,7 @@ public class GetAnAdviserController : Controller
     {
         return string.IsNullOrEmpty(lepsCode)
             ? View("Default", GetAdviserLinksModel())
-            : (_urlValidator.IsValidLepsCode(lepsCode) ? View() : NotFound());
+            : (_urlValidator.IsValidLepsCode(lepsCode) ? View("Index",lepsCode) : NotFound());
     }
 
     [HttpPost]
