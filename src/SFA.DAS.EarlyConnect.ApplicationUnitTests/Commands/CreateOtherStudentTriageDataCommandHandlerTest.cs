@@ -58,9 +58,9 @@ namespace SFA.DAS.EarlyConnect.Application.UnitTests.Commands
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.AreEqual(expectedResponse.Body.StudentSurveyId, result.StudentSurveyId);
-            Assert.AreEqual(expectedResponse.Body.AuthCode, result.AuthCode);
-            Assert.AreEqual(expectedResponse.Body.Expiry, result.Expiry);
+            Assert.That(result.StudentSurveyId, Is.EqualTo(expectedResponse.Body.StudentSurveyId));
+            Assert.That(result.AuthCode, Is.EqualTo(expectedResponse.Body.AuthCode));
+            Assert.That(result.Expiry, Is.EqualTo(expectedResponse.Body.Expiry));
         }
 
         [Test]
