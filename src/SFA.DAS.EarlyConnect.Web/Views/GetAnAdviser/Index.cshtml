@@ -12,18 +12,17 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <form asp-route="@RouteNames.GetAnAdviser_Post">
-                <h1 class="govuk-heading-xl">Get an apprenticeship adviser</h1>
-                <div class="govuk-inset-text">
-                    Advisers are currently only available for year 13 students in Lancashire and the North East.
-                </div>
                 @if (Model == Region.London)
                 {
-                    <p class="govuk-body">
-                        The GAA service is currently unavailable in the Greater London area, it will be reinstated, at a date to be determined, later in the academic year.
-                    </p>
+                    <partial name="_London" />
                 }
                 else
                 {
+                    <h1 class="govuk-heading-xl">Get an apprenticeship adviser</h1>
+                    <div class="govuk-inset-text">
+                        Advisers are currently only available for year 13 students in Lancashire and the North East.
+                    </div>
+
                     <p class="govuk-body">
                         Our advisers offer free support by email or phone. You can still be unsure about doing an
                         apprenticeship and speak to an adviser.
@@ -49,16 +48,16 @@
                             <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
                         </svg>
                     </button>
-                }
 
-                <h2 class="govuk-heading-m govuk-!-margin-top-8">Other resources</h2>
+                    <h2 class="govuk-heading-m govuk-!-margin-top-8">Other resources</h2>
 
-                <p class="govuk-body">Find out more about <a href="https://www.gov.uk/become-apprentice" class="govuk-link" target="_blank">how apprenticeships work</a>.</p>
+                    <p class="govuk-body">Find out more about <a href="https://www.gov.uk/become-apprentice" class="govuk-link" target="_blank">how apprenticeships work</a>.</p>
 
-                <p class="govuk-body">
-                    You can search and apply for apprenticeships in England on <a href="https://www.gov.uk/apply-apprenticeship"
+                    <p class="govuk-body">
+                        You can search and apply for apprenticeships in England on <a href="https://www.gov.uk/apply-apprenticeship"
                                                                                       class="govuk-link" target="_blank">Find an apprenticeship</a>.
-                </p>
+                    </p>
+                }
             </form>
         </div>
     </div>
