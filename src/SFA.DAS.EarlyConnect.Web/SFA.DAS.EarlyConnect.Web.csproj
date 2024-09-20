@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-    <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.37" />
+    <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.39" />
     <PackageReference Include="SFA.DAS.Validation.Mvc" Version="6.0.30" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.8" />
     <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
