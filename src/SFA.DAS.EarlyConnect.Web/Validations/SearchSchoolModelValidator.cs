@@ -8,7 +8,7 @@ namespace SFA.DAS.EarlyConnect.Web.Validations
         public SearchSchoolModelValidator()
         {
             RuleFor(x => x.SchoolSearchTerm)
-                .NotEmpty().WithMessage("Enter the name of your school or college");
+                .NotEmpty().WithMessage("Enter the name of your school or college, or select 'I cannot find my school-enter manually'");
         }
     }
 }
