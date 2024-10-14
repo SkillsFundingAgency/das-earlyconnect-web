@@ -27,6 +27,78 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             _fixture = new Fixture();
         }
+
+        [Test]
+        public async Task SearchSchool_Get_ReturnsCorrectViewModel()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
+
+            var surveyId = new Guid();
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { SchoolName = "Test School", StudentSurvey = new StudentSurveyDto() };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
+
+            var result = await controller.SearchSchool(new SearchSchoolViewModel { StudentSurveyId = surveyId }) as ViewResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Model, Is.InstanceOf<SearchSchoolEditViewModel>());
+            var viewModel = (SearchSchoolEditViewModel)result.Model;
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
+            Assert.That(viewModel.SchoolSearchTerm, Is.EqualTo(queryResult.SchoolName));
+        }
+
+        [Test]
+        public async Task SearchSchool_Get_RedirectsToSurveyComplete()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
+
+            var surveyId = new Guid();
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto { DateCompleted = DateTime.Now } };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
+
+            var result = await controller.SearchSchool(new SearchSchoolViewModel { StudentSurveyId = surveyId }) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(RouteNames.FormCompleted_Get, Is.EqualTo(result.RouteName));
+        }
+
+        [Test]
+        public void SearchSchool_Post_RedirectsToCorrectRoute()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>(); ;
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = new Guid(),
+                IsCheck = false,
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+            {
+                StudentSurvey = Survey
+            });
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(RouteNames.SelectSchool_Get, Is.EqualTo(result.RouteName));
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
+            Assert.That(viewModel.SchoolSearchTerm, Is.EqualTo(result.RouteValues["SchoolSearchTerm"]));
+        }
+
         [Test]
         public async Task SchoolName_Get_ReturnsCorrectViewModel()
         {
@@ -668,7 +740,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var result = controller.Industry(model).GetAwaiter().GetResult() as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.SchoolName_Get, Is.EqualTo(result.RouteName));
+            Assert.That(RouteNames.SearchSchool_Get, Is.EqualTo(result.RouteName));
         }
 
         [Test]

@@ -31,6 +31,42 @@ public class PersonalDetailsController : Controller
     }
 
     [HttpGet]
+    [Route("searchschool", Name = RouteNames.SearchSchool_Get)]
+    public async Task<IActionResult> SearchSchool(SearchSchoolViewModel m)
+    {
+        ClearModelState();
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
+
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
+        return View(new SearchSchoolEditViewModel
+        {
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
+            SchoolSearchTerm = result.SchoolName,
+            IsOther = result.DataSource == Datasource.Others
+        });
+
+    }
+
+    [HttpPost]
+    [Route("searchschool", Name = RouteNames.SearchSchool_Post)]
+    public IActionResult SearchSchool(SearchSchoolEditViewModel m)
+    {
+        return RedirectToRoute(RouteNames.SelectSchool_Get, new { m.StudentSurveyId, m.SchoolSearchTerm });
+    }
+
+    [HttpGet]
+    [Route("selectschool", Name = RouteNames.SelectSchool_Get)]
+    public IActionResult SelectSchool(SelectSchoolViewModel m)
+    {
+        return View();
+    }
+
+    [HttpGet]
     [Route("schoolname", Name = RouteNames.SchoolName_Get, Order = 0)]
     public async Task<IActionResult> SchoolName(SchoolNameViewModel m)
     {
@@ -208,7 +244,7 @@ public class PersonalDetailsController : Controller
 
         string routeName = m.IsOther
             ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get)
-            : (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get);
+            : (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SearchSchool_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
@@ -298,7 +334,7 @@ public class PersonalDetailsController : Controller
         });
 
 
-        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get;
+        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SearchSchool_Get;
 
         return RedirectToRoute(routeName, new { model.StudentSurveyId });
 
