@@ -16,13 +16,14 @@ namespace SFA.DAS.EarlyConnect.Application.Queries.GetEducationalOrganisations
 
         public async Task<GetEducationalOrganisationsResult> Handle(GetEducationalOrganisationsQuery request, CancellationToken cancellationToken)
         {
-            var result = await _apiClient.Get<List<GetEducationalOrganisationsResponse>>(new GetEducationalOrganisationsRequest(request.LepCode, request.SearchTerm, request.Page, request.PageSize));
+            var result = await _apiClient.Get<GetEducationalOrganisationsResponse>(new GetEducationalOrganisationsRequest(request.LepCode, request.SearchTerm, request.Page, request.PageSize));
 
             result.EnsureSuccessStatusCode();
 
             return new GetEducationalOrganisationsResult
             {
-                EducationalOrganisations = result.Body
+                TotalCount = result.Body.TotalCount,
+                EducationalOrganisations = result.Body.EducationalOrganisations
             };
         }
     }

@@ -65,23 +65,24 @@ public class PersonalDetailsController : Controller
         if (m.SchoolSearchTerm == studentSurveyResponse.SchoolName)
         {
             var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
-            return RedirectToRoute(routeName, new { m.StudentSurveyId, m.SchoolSearchTerm });
+            return RedirectToRoute(routeName, new { m.StudentSurveyId });
         }
 
         var educationalOrganisationsResponse = await _mediator.Send(new GetEducationalOrganisationsQuery
         {
             SearchTerm = m.SchoolSearchTerm,
-            LepCode = studentSurveyResponse.LepCode
+            LepCode = studentSurveyResponse.LepCode,
+            Page = 1,
+            PageSize = 1,
         });
 
         var finalRouteName = (educationalOrganisationsResponse?.EducationalOrganisations != null
-                              && educationalOrganisationsResponse.EducationalOrganisations.Count > 0)
+                              && educationalOrganisationsResponse.TotalCount > 0)
             ? RouteNames.SelectSchool_Get
             : RouteNames.NoResultsFound_Get;
 
         return RedirectToRoute(finalRouteName, new { m.StudentSurveyId, m.SchoolSearchTerm });
     }
-
 
     [HttpGet]
     [Route("selectschool", Name = RouteNames.SelectSchool_Get)]
@@ -116,7 +117,6 @@ public class PersonalDetailsController : Controller
             SchoolName = result.SchoolName,
             IsOther = result.DataSource == Datasource.Others
         });
-
     }
 
     [HttpPost]

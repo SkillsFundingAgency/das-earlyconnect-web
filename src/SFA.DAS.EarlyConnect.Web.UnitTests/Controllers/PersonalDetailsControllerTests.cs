@@ -99,7 +99,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(result, Is.Not.Null);
             Assert.That(result.RouteName, Is.EqualTo(RouteNames.CheckYourAnswers_Get));
             Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
-            Assert.That(result.RouteValues["SchoolSearchTerm"], Is.EqualTo(viewModel.SchoolSearchTerm));
         }
 
         [Test]
@@ -130,7 +129,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(result, Is.Not.Null);
             Assert.That(result.RouteName, Is.EqualTo(RouteNames.ApprenticeshipLevel_Get));
             Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
-            Assert.That(result.RouteValues["SchoolSearchTerm"], Is.EqualTo(viewModel.SchoolSearchTerm));
         }
 
         [Test]
@@ -159,9 +157,10 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
             {
-                EducationalOrganisations = new List<GetEducationalOrganisationsResponse>()
+                TotalCount = 1,
+                EducationalOrganisations = new List<EducationalOrganisationData>()
                 {
-                    new GetEducationalOrganisationsResponse
+                    new EducationalOrganisationData
                     {
                         Name = "Test School Organisation",
                         AddressLine1 = "Test address",
@@ -205,7 +204,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
             {
-                EducationalOrganisations = new List<GetEducationalOrganisationsResponse>()
+                EducationalOrganisations = new List<EducationalOrganisationData>()
             };
             mediatorMock.Setup(x => x.Send(It.IsAny<GetEducationalOrganisationsQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(educationalOrganisationsResponse);

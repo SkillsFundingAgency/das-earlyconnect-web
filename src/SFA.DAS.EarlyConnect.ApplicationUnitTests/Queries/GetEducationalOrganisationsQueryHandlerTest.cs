@@ -33,26 +33,30 @@ namespace SFA.DAS.EarlyConnect.Application.UnitTests.Queries
                 PageSize = 10
             };
 
-            var educationalOrganisationsResponse = new List<GetEducationalOrganisationsResponse>
+            var educationalOrganisationsResponse = new GetEducationalOrganisationsResponse
             {
-                new GetEducationalOrganisationsResponse
+                EducationalOrganisations = new List<EducationalOrganisationData>
                 {
-                    Name = "Test School",
-                    AddressLine1 = "Test address",
+                    new EducationalOrganisationData
+                    {
+                        Name = "Test School Organisation",
+                        AddressLine1 = "Test address"
+                    }
                 }
             };
 
+
             _apiClientMock
-                .Setup(x => x.Get<List<GetEducationalOrganisationsResponse>>(It.IsAny<GetEducationalOrganisationsRequest>()))
-                .ReturnsAsync(new ApiResponse<List<GetEducationalOrganisationsResponse>>(educationalOrganisationsResponse, HttpStatusCode.OK, string.Empty));
+                .Setup(x => x.Get<GetEducationalOrganisationsResponse>(It.IsAny<GetEducationalOrganisationsRequest>()))
+                .ReturnsAsync(new ApiResponse<GetEducationalOrganisationsResponse>(educationalOrganisationsResponse, HttpStatusCode.OK, string.Empty));
 
             var result = await _handler.Handle(query, CancellationToken.None);
 
-            _apiClientMock.Verify(x => x.Get<List<GetEducationalOrganisationsResponse>>(It.IsAny<GetEducationalOrganisationsRequest>()), Times.Once);
+            _apiClientMock.Verify(x => x.Get<GetEducationalOrganisationsResponse>(It.IsAny<GetEducationalOrganisationsRequest>()), Times.Once);
 
             Assert.That(result.EducationalOrganisations.Count, Is.EqualTo(1));
             var organisation = result.EducationalOrganisations.ElementAt(0); // Use ElementAt to access the first item
-            Assert.That(organisation.Name, Is.EqualTo("Test School"));
+            Assert.That(organisation.Name, Is.EqualTo("Test School Organisation"));
             Assert.That(organisation.AddressLine1, Is.EqualTo("Test address"));
         }
 
@@ -68,10 +72,10 @@ namespace SFA.DAS.EarlyConnect.Application.UnitTests.Queries
                 PageSize = 10
             };
 
-            var badResponse = new ApiResponse<List<GetEducationalOrganisationsResponse>>(null, HttpStatusCode.BadRequest, "Bad Request");
+            var badResponse = new ApiResponse<GetEducationalOrganisationsResponse>(null, HttpStatusCode.BadRequest, "Bad Request");
 
             _apiClientMock
-                .Setup(x => x.Get<List<GetEducationalOrganisationsResponse>>(It.IsAny<GetEducationalOrganisationsRequest>()))
+                .Setup(x => x.Get<GetEducationalOrganisationsResponse>(It.IsAny<GetEducationalOrganisationsRequest>()))
                 .ReturnsAsync(badResponse);
 
             Assert.ThrowsAsync<ApiResponseException>(async () => await _handler.Handle(query, CancellationToken.None));
@@ -88,16 +92,17 @@ namespace SFA.DAS.EarlyConnect.Application.UnitTests.Queries
                 PageSize = 10
             };
 
-            var emptyResponse = new List<GetEducationalOrganisationsResponse>();
+            var emptyResponse = new GetEducationalOrganisationsResponse();
+            emptyResponse.EducationalOrganisations = new List<EducationalOrganisationData>();
 
             _apiClientMock
-                .Setup(x => x.Get<List<GetEducationalOrganisationsResponse>>(It.IsAny<GetEducationalOrganisationsRequest>()))
-                .ReturnsAsync(new ApiResponse<List<GetEducationalOrganisationsResponse>>(emptyResponse, HttpStatusCode.OK, string.Empty));
+                .Setup(x => x.Get<GetEducationalOrganisationsResponse>(It.IsAny<GetEducationalOrganisationsRequest>()))
+                .ReturnsAsync(new ApiResponse<GetEducationalOrganisationsResponse>(emptyResponse, HttpStatusCode.OK, string.Empty));
 
             var result = await _handler.Handle(query, CancellationToken.None);
 
             Assert.That(result.EducationalOrganisations, Is.Empty);
-            _apiClientMock.Verify(x => x.Get<List<GetEducationalOrganisationsResponse>>(It.IsAny<GetEducationalOrganisationsRequest>()), Times.Once);
+            _apiClientMock.Verify(x => x.Get<GetEducationalOrganisationsResponse>(It.IsAny<GetEducationalOrganisationsRequest>()), Times.Once);
         }
     }
 }
