@@ -10,6 +10,7 @@ using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using System.Text.RegularExpressions;
+using SFA.DAS.EarlyConnect.Application.Queries.GetEducationalOrganisations;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -54,14 +55,44 @@ public class PersonalDetailsController : Controller
 
     [HttpPost]
     [Route("searchschool", Name = RouteNames.SearchSchool_Post)]
-    public IActionResult SearchSchool(SearchSchoolEditViewModel m)
+    public async Task<IActionResult> SearchSchool(SearchSchoolEditViewModel m)
     {
-        return RedirectToRoute(RouteNames.SelectSchool_Get, new { m.StudentSurveyId, m.SchoolSearchTerm });
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        if (m.SchoolSearchTerm == studentSurveyResponse.SchoolName)
+        {
+            var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
+            return RedirectToRoute(routeName, new { m.StudentSurveyId, m.SchoolSearchTerm });
+        }
+
+        var educationalOrganisationsResponse = await _mediator.Send(new GetEducationalOrganisationsQuery
+        {
+            SearchTerm = m.SchoolSearchTerm,
+            LepCode = studentSurveyResponse.LepCode
+        });
+
+        var finalRouteName = (educationalOrganisationsResponse?.EducationalOrganisations != null
+                              && educationalOrganisationsResponse.EducationalOrganisations.Count > 0)
+            ? RouteNames.SelectSchool_Get
+            : RouteNames.NoResultsFound_Get;
+
+        return RedirectToRoute(finalRouteName, new { m.StudentSurveyId, m.SchoolSearchTerm });
     }
+
 
     [HttpGet]
     [Route("selectschool", Name = RouteNames.SelectSchool_Get)]
     public IActionResult SelectSchool(SelectSchoolViewModel m)
+    {
+        return View();
+    }
+
+    [HttpGet]
+    [Route("noresultsfound", Name = RouteNames.NoResultsFound_Get)]
+    public IActionResult NoResultsFound()
     {
         return View();
     }

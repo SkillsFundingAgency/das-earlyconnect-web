@@ -6,7 +6,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
 {
     public class SearchSchoolEditViewModel : TriageRouteModel
     {
-        [RegularExpression(@"^[\w\s&-']+$", ErrorMessage = "Invalid school search term")]
+        [RegularExpression(@"^[\w\s]+$", ErrorMessage = "Invalid School Name")]
         public string? SchoolSearchTerm{ get; set; }
         public string? BacklinkRoute =>
             IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :

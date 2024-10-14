@@ -20,6 +20,7 @@ public static class RouteNames
     public const string SearchSchool_Post = "SearchSchool_Post";
     public const string SelectSchool_Get = "SelectSchool_Get";
     public const string SelectSchool_Post = "SelectSchool_Post";
+    public const string NoResultsFound_Get = "NoResultsFound_Get";
     public const string Industry_Get = "Industry_Get";
     public const string Industry_Post = "Industry_Post";
     public const string ApprenticeshipLevel_Get = "ApprenticeshipLevel_Get";

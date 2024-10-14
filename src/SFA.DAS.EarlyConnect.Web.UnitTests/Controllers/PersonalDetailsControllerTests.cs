@@ -5,7 +5,9 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
+using SFA.DAS.EarlyConnect.Application.Queries.GetEducationalOrganisations;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
+using SFA.DAS.EarlyConnect.Domain.GetEducationalOrganisations;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Controllers;
@@ -70,33 +72,150 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         }
 
         [Test]
-        public void SearchSchool_Post_RedirectsToCorrectRoute()
+        public async Task SearchSchool_Post_RedirectsToCheckYourAnswers_WhenSchoolSearchTermMatchesAndIsCheckIsTrue()
         {
             var mediatorMock = new Mock<IMediator>();
-            var loggerMock = new Mock<ILogger<PersonalDetailsController>>(); ;
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
             var areasOfInterestHelper = new Mock<IJsonHelper>();
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var viewModel = new SearchSchoolEditViewModel
             {
-                StudentSurveyId = new Guid(),
-                IsCheck = false,
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Test School",
+                IsCheck = true
             };
 
-            StudentSurveyDto Survey = new StudentSurveyDto();
-            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+            var studentSurveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
-                StudentSurvey = Survey
-            });
-            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
+                SchoolName = "Test School"
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(studentSurveyResponse);
 
-            var result = controller.SearchSchool(viewModel) as RedirectToRouteResult;
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(RouteNames.SelectSchool_Get, Is.EqualTo(result.RouteName));
-            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(result.RouteValues["StudentSurveyId"]));
-            Assert.That(viewModel.SchoolSearchTerm, Is.EqualTo(result.RouteValues["SchoolSearchTerm"]));
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.CheckYourAnswers_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+            Assert.That(result.RouteValues["SchoolSearchTerm"], Is.EqualTo(viewModel.SchoolSearchTerm));
+        }
+
+        [Test]
+        public async Task SearchSchool_Post_RedirectsToApprenticeshipLevel_WhenSchoolSearchTermMatchesAndIsCheckIsFalse()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Test School",
+                IsCheck = false
+            };
+
+            var studentSurveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                SchoolName = "Test School"
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(studentSurveyResponse);
+
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.ApprenticeshipLevel_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+            Assert.That(result.RouteValues["SchoolSearchTerm"], Is.EqualTo(viewModel.SchoolSearchTerm));
+        }
+
+        [Test]
+        public async Task SearchSchool_Post_RedirectsToSelectSchool_WhenSchoolSearchTermDoesNotMatchAndOrganisationsAreFound()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Different School",
+                IsCheck = false
+            };
+
+            var studentSurveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                SchoolName = "Test School",
+                LepCode = "123"
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(studentSurveyResponse);
+
+            var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
+            {
+                EducationalOrganisations = new List<GetEducationalOrganisationsResponse>()
+                {
+                    new GetEducationalOrganisationsResponse
+                    {
+                        Name = "Test School Organisation",
+                        AddressLine1 = "Test address",
+                    }
+                }
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetEducationalOrganisationsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(educationalOrganisationsResponse);
+
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.SelectSchool_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+            Assert.That(result.RouteValues["SchoolSearchTerm"], Is.EqualTo(viewModel.SchoolSearchTerm));
+        }
+
+        [Test]
+        public async Task SearchSchool_Post_RedirectsToNoResultsFound_WhenSchoolSearchTermDoesNotMatchAndNoOrganisationsAreFound()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();
+            var areasOfInterestHelper = new Mock<IJsonHelper>();
+
+            var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Different School",
+                IsCheck = false
+            };
+
+            var studentSurveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                SchoolName = "Test School",
+                LepCode = "123"
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(studentSurveyResponse);
+
+            var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
+            {
+                EducationalOrganisations = new List<GetEducationalOrganisationsResponse>()
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetEducationalOrganisationsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(educationalOrganisationsResponse);
+
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.NoResultsFound_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+            Assert.That(result.RouteValues["SchoolSearchTerm"], Is.EqualTo(viewModel.SchoolSearchTerm));
         }
 
         [Test]
@@ -109,7 +228,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
-            var queryResult = new GetStudentTriageDataBySurveyIdResult { Postcode = "12345", StudentSurvey= new StudentSurveyDto() };
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { Postcode = "12345", StudentSurvey = new StudentSurveyDto() };
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
 
             var result = await controller.SchoolName(new SchoolNameViewModel { StudentSurveyId = surveyId }) as ViewResult;
@@ -131,7 +250,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
-            var queryResult = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto { DateCompleted = DateTime.Now} };
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto { DateCompleted = DateTime.Now } };
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
 
             var result = await controller.SchoolName(new SchoolNameViewModel { StudentSurveyId = surveyId }) as RedirectToRouteResult;
@@ -144,7 +263,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         public async Task SchoolName_Post_RedirectsToCorrectRoute()
         {
             var mediatorMock = new Mock<IMediator>();
-            var loggerMock = new Mock<ILogger<PersonalDetailsController>>();;
+            var loggerMock = new Mock<ILogger<PersonalDetailsController>>(); ;
             var areasOfInterestHelper = new Mock<IJsonHelper>();
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
@@ -260,8 +379,8 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
                 {
-                    StudentSurvey = Survey 
-               });
+                    StudentSurvey = Survey
+                });
 
 
             mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default)).ReturnsAsync(new CreateStudentTriageDataCommandResult());
@@ -296,7 +415,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(surveyResponse);
 
-            var result = await controller.Name(new TriageRouteModel { IsCheck = false, StudentSurveyId = new Guid()}) as ViewResult;
+            var result = await controller.Name(new TriageRouteModel { IsCheck = false, StudentSurveyId = new Guid() }) as ViewResult;
 
             Assert.That(result, Is.Not.Null);
         }
@@ -312,7 +431,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
-                StudentSurvey = new StudentSurveyDto() { DateCompleted=DateTime.Now}
+                StudentSurvey = new StudentSurveyDto() { DateCompleted = DateTime.Now }
             };
 
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
@@ -444,7 +563,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
-            var queryResult = new GetStudentTriageDataBySurveyIdResult { Telephone = "07546666666" , StudentSurvey = new StudentSurveyDto()};
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { Telephone = "07546666666", StudentSurvey = new StudentSurveyDto() };
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
 
             var result = await controller.Telephone(new TriageRouteModel { StudentSurveyId = surveyId }) as ViewResult;
@@ -466,7 +585,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
             var surveyId = new Guid();
-            var queryResult = new GetStudentTriageDataBySurveyIdResult { Telephone = "07546666666", StudentSurvey = new StudentSurveyDto { DateCompleted=DateTime.Now} };
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { Telephone = "07546666666", StudentSurvey = new StudentSurveyDto { DateCompleted = DateTime.Now } };
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
 
             var result = await controller.Telephone(new TriageRouteModel { StudentSurveyId = surveyId }) as RedirectToRouteResult;
@@ -492,7 +611,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             };
 
             StudentSurveyDto Survey = new StudentSurveyDto();
-            
+
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
                 {
@@ -541,7 +660,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var dateOfBirth = "05/12/1999".AsUKDate();
 
             var surveyId = new Guid();
-            var queryResult = new GetStudentTriageDataBySurveyIdResult { DateOfBirth = dateOfBirth, StudentSurvey=new StudentSurveyDto { DateCompleted =  DateTime.Now} };
+            var queryResult = new GetStudentTriageDataBySurveyIdResult { DateOfBirth = dateOfBirth, StudentSurvey = new StudentSurveyDto { DateCompleted = DateTime.Now } };
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default)).ReturnsAsync(queryResult);
 
             var result = await controller.DateOfBirth(new TriageRouteModel { StudentSurveyId = surveyId }) as RedirectToRouteResult;
@@ -645,9 +764,9 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
                .ReturnsAsync(surveyResponse);
 
             AreasOfInterestModel areasofInterestModel = new AreasOfInterestModel()
-            { 
+            {
                 AreasOfInterest = new List<AreaOfInterest>()
-                { 
+                {
                     new AreaOfInterest
                     {
                         Area = "Area 1",
@@ -688,7 +807,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             var surveyResponse = new GetStudentTriageDataBySurveyIdResult
             {
-                StudentSurvey = new StudentSurveyDto() { DateCompleted=DateTime.Now}
+                StudentSurvey = new StudentSurveyDto() { DateCompleted = DateTime.Now }
             };
 
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
@@ -795,7 +914,7 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             var controller = new PersonalDetailsController(mediatorMock.Object, loggerMock.Object, areasOfInterestHelper.Object);
 
-            var surveyResponse = new GetStudentTriageDataBySurveyIdResult {StudentSurvey = new StudentSurveyDto() };
+            var surveyResponse = new GetStudentTriageDataBySurveyIdResult { StudentSurvey = new StudentSurveyDto() };
 
             var createCommandResult = _fixture.Build<CreateStudentTriageDataCommandResult>()
                 .With(x => x.Message, "Success")
