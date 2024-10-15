@@ -10,7 +10,6 @@ using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using System.Text.RegularExpressions;
-using SFA.DAS.EarlyConnect.Application.Queries.GetEducationalOrganisations;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
