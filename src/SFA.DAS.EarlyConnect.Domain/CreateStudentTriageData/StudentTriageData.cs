@@ -13,6 +13,7 @@ namespace SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData
         public string Telephone { get; set; }
         public string DataSource { get; set; }
         public string SchoolName { get; set; }
+        public string URN { get; set; } = string.Empty;
         public string Industry { get; set; }
         public StudentSurveyDto StudentSurvey { get; set; }
     }

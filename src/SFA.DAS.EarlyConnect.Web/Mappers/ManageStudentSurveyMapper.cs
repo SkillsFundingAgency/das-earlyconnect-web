@@ -5,7 +5,6 @@ using SFA.DAS.EarlyConnect.Web.Infrastructure;
 using SFA.DAS.EarlyConnect.Web.Mappers.SFA.DAS.EarlyConnect.Web.ViewModels;
 using SFA.DAS.EarlyConnect.Web.RouteModel;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
-using System.Reflection;
 
 namespace SFA.DAS.EarlyConnect.Web.Mappers
 {
@@ -19,6 +18,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
                 FirstName = studentTriageDataBySurveyIdResult.FirstName,
                 LastName = studentTriageDataBySurveyIdResult.LastName,
                 SchoolName = studentTriageDataBySurveyIdResult.SchoolName,
+                URN = studentTriageDataBySurveyIdResult.URN,
                 DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth,
                 Email = studentTriageDataBySurveyIdResult.Email,
                 Postcode = studentTriageDataBySurveyIdResult.Postcode,
@@ -76,6 +76,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
                 FirstName = studentTriageDataBySurveyIdResult.FirstName,
                 LastName = studentTriageDataBySurveyIdResult.LastName,
                 SchoolName = studentTriageDataBySurveyIdResult.SchoolName,
+                URN = studentTriageDataBySurveyIdResult.URN,
                 DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth,
                 Email = studentTriageDataBySurveyIdResult.Email,
                 Postcode = studentTriageDataBySurveyIdResult.Postcode,
