@@ -18,6 +18,138 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
     public class EducationalOrganisationControllerTests
     {
         [Test]
+        public async Task SelectSchool_Get_RedirectsToFormCompleted_WhenSurveyIsCompleted()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var surveyId = Guid.NewGuid();
+            var queryResult = new GetStudentTriageDataBySurveyIdResult
+            {
+                StudentSurvey = new StudentSurveyDto { DateCompleted = DateTime.Now }
+            };
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
+                .ReturnsAsync(queryResult);
+
+            var result = await controller.SelectSchool(new SelectSchoolViewModel { StudentSurveyId = surveyId }) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.FormCompleted_Get));
+        }
+
+        [Test]
+        public async Task SelectSchool_Get_ReturnsCorrectViewModel()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var surveyId = Guid.NewGuid();
+            var queryResult = new GetStudentTriageDataBySurveyIdResult
+            {
+                StudentSurvey = new StudentSurveyDto(),
+                LepCode = "123"
+            };
+
+            var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
+            {
+                EducationalOrganisations = new List<EducationalOrganisationData>
+                {
+                    new EducationalOrganisationData { Name = "Test School", AddressLine1 = "123 Main St" }
+                }
+            };
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
+                .ReturnsAsync(queryResult);
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetEducationalOrganisationsQuery>(), default))
+                .ReturnsAsync(educationalOrganisationsResponse);
+
+            var result = await controller.SelectSchool(new SelectSchoolViewModel
+            {
+                StudentSurveyId = surveyId,
+                SchoolSearchTerm = "Test"
+            }) as ViewResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Model, Is.InstanceOf<SelectSchoolEditViewModel>());
+
+            var viewModel = (SelectSchoolEditViewModel)result.Model;
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
+            Assert.That(viewModel.SchoolSearchTerm, Is.EqualTo("Test"));
+        }
+
+        [Test]
+        public async Task SelectSchool_Post_RedirectsToCheckYourAnswers_WhenIsCheckIsTrue()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new SelectSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SelectedSchool = "Test School,12345",
+                IsCheck = true
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+                {
+                    StudentSurvey = Survey
+                });
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = await controller.SelectSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.CheckYourAnswers_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+        }
+
+        [Test]
+        public async Task SelectSchool_Post_RedirectsToApprenticeshipLevel_WhenIsCheckIsFalse()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new SelectSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SelectedSchool = "Test School,12345",
+                IsCheck = false
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+                {
+                    StudentSurvey = Survey
+                });
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = await controller.SelectSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.ApprenticeshipLevel_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+        }
+
+        [Test]
         public async Task SearchSchool_Get_ReturnsCorrectViewModel()
         {
             var mediatorMock = new Mock<IMediator>();

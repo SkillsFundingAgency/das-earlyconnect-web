@@ -10,7 +10,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
             ErrorMessage =
                 "Enter the name of your school or college, or select 'I cannot find my school - enter manually'")]
         public string? SchoolSearchTerm { get; set; } = string.Empty;
-        public string? BacklinkRoute =>
+        public string BacklinkRoute =>
             IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :
             IsCheck && !IsOther ? RouteNames.CheckYourAnswers_Get :
             IsOther ? RouteNames.Industry_Get :

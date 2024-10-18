@@ -8,6 +8,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
     {
         [RegularExpression(@"^[\w\s&-']+$", ErrorMessage = "Invalid School Name")]
         public string? SchoolName { get; set; }
+        public string URN { get; set; } = string.Empty;
         public string? BacklinkRoute =>
             IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :
             IsCheck && !IsOther ? RouteNames.CheckYourAnswers_Get :

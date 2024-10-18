@@ -74,14 +74,65 @@ public class EducationalOrganisationController : Controller
             ? RouteNames.SelectSchool_Get
             : RouteNames.NoResultsFound_Get;
 
-        return RedirectToRoute(finalRouteName, new { m.StudentSurveyId, m.SchoolSearchTerm });
+        return RedirectToRoute(finalRouteName, new { m.StudentSurveyId, m.SchoolSearchTerm, m.IsCheck });
     }
 
     [HttpGet]
     [Route("selectschool", Name = RouteNames.SelectSchool_Get)]
-    public IActionResult SelectSchool(SelectSchoolViewModel m)
+    public async Task<IActionResult> SelectSchool(SelectSchoolViewModel m)
     {
-        return View();
+        ClearModelState();
+        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
+
+        if (result.StudentSurvey.DateCompleted.HasValue)
+        {
+            return RedirectToRoute(RouteNames.FormCompleted_Get);
+        }
+
+        var educationalOrganisationsResponse = await _mediator.Send(new GetEducationalOrganisationsQuery
+        {
+            SearchTerm = m.SchoolSearchTerm,
+            LepCode = result.LepCode,
+            Page = 1,
+            PageSize = 10,
+        });
+
+        var educationalOrganisations = (SelectSchoolEditViewModel)educationalOrganisationsResponse;
+
+        educationalOrganisations.SchoolSearchTerm = m.SchoolSearchTerm;
+        educationalOrganisations.StudentSurveyId = m.StudentSurveyId;
+        educationalOrganisations.IsCheck = m.IsCheck;
+        educationalOrganisations.IsOther = result.DataSource == Datasource.Others;
+
+        return View(educationalOrganisations);
+    }
+
+    [HttpPost]
+    [Route("selectschool", Name = RouteNames.SelectSchool_Post)]
+    public async Task<IActionResult> SelectSchool(SelectSchoolEditViewModel m)
+    {
+        var parts = m.SelectedSchool.Split(',');
+
+        if (parts.Length == 2)
+        {
+            m.SelectedSchool = parts[0];
+            m.SelectedURN = parts[1];
+        }
+
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
+        {
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        var response = await _mediator.Send(new CreateStudentTriageDataCommand
+        {
+            StudentData = m.MapFromSelectSchoolNameRequest(studentSurveyResponse),
+            SurveyGuid = m.StudentSurveyId
+        });
+
+        string routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
+
+        return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
 
     [HttpGet]
