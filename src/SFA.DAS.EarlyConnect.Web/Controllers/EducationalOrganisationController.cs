@@ -198,7 +198,6 @@ public class EducationalOrganisationController : Controller
     }
     private static PaginationViewModel SetupPagination(SelectSchoolEditViewModel request, string filterUrl)
     {
-        request.TotalCount = 100;
         var totalPages = (request.TotalCount > request.PageSize) ? (int)Math.Ceiling((double)request.TotalCount / request.PageSize) : 1;
 
         var pagination = new PaginationViewModel(request.Page, request.PageSize, totalPages, filterUrl);
