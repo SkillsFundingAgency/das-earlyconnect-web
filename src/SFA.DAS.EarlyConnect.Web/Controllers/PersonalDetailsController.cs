@@ -31,48 +31,6 @@ public class PersonalDetailsController : Controller
     }
 
     [HttpGet]
-    [Route("schoolname", Name = RouteNames.SchoolName_Get, Order = 0)]
-    public async Task<IActionResult> SchoolName(SchoolNameViewModel m)
-    {
-        ClearModelState();
-        var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
-
-        if (result.StudentSurvey.DateCompleted.HasValue)
-        {
-            return RedirectToRoute(RouteNames.FormCompleted_Get);
-        }
-
-        return View(new SchoolNameEditViewModel
-        {
-            StudentSurveyId = m.StudentSurveyId,
-            IsCheck = m.IsCheck,
-            SchoolName = result.SchoolName,
-            IsOther = result.DataSource == Datasource.Others
-        });
-
-    }
-
-    [HttpPost]
-    [Route("schoolname", Name = RouteNames.SchoolName_Post, Order = 0)]
-    public async Task<IActionResult> SchoolName(SchoolNameEditViewModel m)
-    {
-        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
-        {
-            SurveyGuid = m.StudentSurveyId
-        });
-
-        var response = await _mediator.Send(new CreateStudentTriageDataCommand
-        {
-            StudentData = m.MapFromSchoolNameRequest(studentSurveyResponse),
-            SurveyGuid = m.StudentSurveyId
-        });
-
-        string routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
-
-        return RedirectToRoute(routeName, new { m.StudentSurveyId });
-    }
-
-    [HttpGet]
     [Route("postcode", Name = RouteNames.Postcode_Get, Order = 0)]
     public async Task<IActionResult> Postcode(PostcodeViewModel m)
     {
@@ -208,7 +166,7 @@ public class PersonalDetailsController : Controller
 
         string routeName = m.IsOther
             ? (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.Industry_Get)
-            : (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get);
+            : (m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SearchSchool_Get);
 
         return RedirectToRoute(routeName, new { m.StudentSurveyId });
     }
@@ -298,7 +256,7 @@ public class PersonalDetailsController : Controller
         });
 
 
-        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SchoolName_Get;
+        var routeName = model.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.SearchSchool_Get;
 
         return RedirectToRoute(routeName, new { model.StudentSurveyId });
 
