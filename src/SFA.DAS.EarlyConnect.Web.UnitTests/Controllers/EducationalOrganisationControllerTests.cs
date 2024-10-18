@@ -45,22 +45,24 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         {
             var mediatorMock = new Mock<IMediator>();
             var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
-
             var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
 
             var surveyId = Guid.NewGuid();
+
             var queryResult = new GetStudentTriageDataBySurveyIdResult
             {
-                StudentSurvey = new StudentSurveyDto(),
-                LepCode = "123"
+                StudentSurvey = new StudentSurveyDto { DateCompleted = null },
+                LepCode = "123",
+                DataSource = Datasource.Others
             };
 
             var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
             {
                 EducationalOrganisations = new List<EducationalOrganisationData>
-                {
-                    new EducationalOrganisationData { Name = "Test School", AddressLine1 = "123 Main St" }
-                }
+        {
+            new EducationalOrganisationData { Name = "Test School", AddressLine1 = "123 Main St" }
+        },
+                TotalCount = 1
             };
 
             mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
@@ -72,15 +74,25 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             var result = await controller.SelectSchool(new SelectSchoolViewModel
             {
                 StudentSurveyId = surveyId,
-                SchoolSearchTerm = "Test"
+                SchoolSearchTerm = "Test",
+                Page = 1,
+                PageSize = 10,
+                IsCheck = true
             }) as ViewResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Model, Is.InstanceOf<SelectSchoolEditViewModel>());
 
             var viewModel = (SelectSchoolEditViewModel)result.Model;
+
             Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
             Assert.That(viewModel.SchoolSearchTerm, Is.EqualTo("Test"));
+            Assert.That(viewModel.IsCheck, Is.True);
+            Assert.That(viewModel.Page, Is.EqualTo(1));
+            Assert.That(viewModel.PageSize, Is.EqualTo(10));
+            Assert.That(viewModel.IsOther, Is.True);
+
+            Assert.That(viewModel.PaginationViewModel, Is.Not.Null);
         }
 
         [Test]
