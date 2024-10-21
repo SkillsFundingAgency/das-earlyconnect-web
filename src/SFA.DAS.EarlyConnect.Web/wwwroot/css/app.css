@@ -1,12 +1,12 @@
 @media (min-width: 40.0625em) {
-    .faa-pagination-wrap {
+    .erlyconnect-pagination-wrap {
         display: flex;
         justify-content: flex-start;
     }
 }
 
 @media (min-width: 1020px) {
-    .faa-pagination-wrap {
+    .erlyconnect-pagination-wrap {
         display: block;
     }
 }
