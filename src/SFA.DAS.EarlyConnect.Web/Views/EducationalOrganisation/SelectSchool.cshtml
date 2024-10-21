@@ -17,40 +17,51 @@
         <div class="govuk-grid-column-two-thirds">
             <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState }' />
 
-            <form asp-route="@RouteNames.SelectSchool_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" asp-route-schoolSearchTerm="@Model.SchoolSearchTerm" novalidate>
-                @Html.HiddenFor(model => model.IsCheck)
+            <form asp-route="@RouteNames.SelectSchool_Post" asp-all-route-data="@Model.RouteParameters" novalidate>
                 @Html.HiddenFor(model => model.IsOther)
 
                 <div class="govuk-form-group">
-                    <fieldset class="govuk-fieldset">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                            <h1 class="govuk-heading-l">
-                                @Model.TotalCount results found for '@Model.SchoolSearchTerm'
-                            </h1>
-                        </legend>
-                        <div> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SearchSchool_Get, new { studentSurveyId = Model.StudentSurveyId,Model.IsCheck})">Change your search</a></div>
-                        <h2 class="govuk-heading-m govuk-!-margin-top-4">
-                            School
-                        </h2>
-                        <div class="govuk-radios" data-module="govuk-radios">
-                            <div esfa-validation-marker-for="SelectedSchool" class="govuk-form-group">
-                                <span esfa-validation-message-for="SelectedSchool" class="govuk-error-message"></span>
-                                @foreach (var school in @Model.EducationalOrganisations)
-                                {
-                                    <div class="govuk-radios__item">
-                                        <input class="govuk-radios__input" type="radio" id="@school.SchoolName" value="@school.SchoolName,@school.URN" asp-for="@Model.SelectedSchool">
-                                        <label class="govuk-label govuk-radios__label" for="@school.SchoolName">
-                                            @school.SchoolName
-                                        </label>
-                                        <div class="govuk-hint govuk-radios__hint">
-                                            @school.Address
+                    <div>
+                        <fieldset class="govuk-fieldset">
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                <h1 class="govuk-heading-l">
+                                    @Model.TotalCount results found for '@Model.SchoolSearchTerm'
+                                </h1>
+                            </legend>
+                            <div> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SearchSchool_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">Change your search</a></div>
+                            <h2 class="govuk-heading-m govuk-!-margin-top-4">
+                                School
+                            </h2>
+                            <div class="govuk-radios govuk-!-margin-bottom-4" data-module="govuk-radios">
+                                <div esfa-validation-marker-for="SelectedSchool" class="govuk-form-group">
+                                    <span esfa-validation-message-for="SelectedSchool" class="govuk-error-message"></span>
+                                    @foreach (var school in @Model.EducationalOrganisations)
+                                    {
+                                        <div class="govuk-radios__item">
+                                            <input class="govuk-radios__input" type="radio" id="@school.SchoolName" value="@school.SchoolName,@school.URN" asp-for="@Model.SelectedSchool">
+                                            <label class="govuk-label govuk-radios__label" for="@school.SchoolName">
+                                                @school.SchoolName
+                                            </label>
+                                            <div class="govuk-hint govuk-radios__hint">
+                                                @school.Address
+                                            </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div class="govuk-!-margin-top-4"> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { studentSurveyId = Model.StudentSurveyId,Model.IsCheck})">I cannot find my school - enter manually</a></div>
-                    </fieldset>
+                            @if (@Model.TotalCount > 10)
+                            {
+                                <div class="govuk-!-margin-bottom-4">
+                                    @{
+                                        await Html.RenderPartialAsync("_" +
+                                        "Pagination" +
+                                        "", Model.PaginationViewModel);
+                                    }
+                                </div>
+                            }
+                        </fieldset>
+                    </div>
+                    <div> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">I cannot find my school - enter manually</a></div>
                 </div>
 
                 <button type="submit" class="govuk-button" data-module="govuk-button" esfa-automation="continue-button">

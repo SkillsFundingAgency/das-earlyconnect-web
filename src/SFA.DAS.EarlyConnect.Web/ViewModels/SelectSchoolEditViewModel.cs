@@ -10,8 +10,27 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
         public string SchoolSearchTerm { get; set; } = string.Empty;
         public string? SelectedSchool { get; set; }
         public string SelectedURN { get; set; } = string.Empty;
+        public int Page { get; set; }
+        public int PageSize { get; set; }
         public List<EducationalOrganisations> EducationalOrganisations { get; set; } = new List<EducationalOrganisations>();
+        public PaginationViewModel? PaginationViewModel { get; set; }
         public string BacklinkRoute => RouteNames.SearchSchool_Get;
+
+        public Dictionary<string, string> RouteParameters
+        {
+            get
+            {
+                var routeDictionary = new Dictionary<string, string>
+                {
+                    {"studentSurveyId", StudentSurveyId.ToString()},
+                    {"schoolSearchTerm", SchoolSearchTerm},
+                    {"page", Page.ToString()},
+                    {"pageSize", PageSize.ToString()},
+                    {"isCheck", IsCheck.ToString()}
+                };
+                return routeDictionary;
+            }
+        }
 
         public static implicit operator SelectSchoolEditViewModel(GetEducationalOrganisationsResult request)
         {

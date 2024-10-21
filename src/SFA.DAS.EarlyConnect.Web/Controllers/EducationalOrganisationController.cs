@@ -6,6 +6,7 @@ using SFA.DAS.EarlyConnect.Application.Commands.CreateOtherStudentTriageData;
 using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Mappers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.WebUtilities;
 using SFA.DAS.EarlyConnect.Application.Queries.GetEducationalOrganisations;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
@@ -58,7 +59,7 @@ public class EducationalOrganisationController : Controller
         if (m.SchoolSearchTerm == studentSurveyResponse.SchoolName)
         {
             var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
-            return RedirectToRoute(routeName, new { m.StudentSurveyId });
+            return RedirectToRoute(routeName, new { studentSurveyId = m.StudentSurveyId });
         }
 
         var educationalOrganisationsResponse = await _mediator.Send(new GetEducationalOrganisationsQuery
@@ -74,7 +75,14 @@ public class EducationalOrganisationController : Controller
             ? RouteNames.SelectSchool_Get
             : RouteNames.NoResultsFound_Get;
 
-        return RedirectToRoute(finalRouteName, new { m.StudentSurveyId, m.SchoolSearchTerm, m.IsCheck });
+        return RedirectToRoute(finalRouteName, new
+        {
+            studentSurveyId = m.StudentSurveyId,
+            schoolSearchTerm = m.SchoolSearchTerm,
+            isCheck = m.IsCheck,
+            page = 1,
+            pageSize = 10
+        });
     }
 
     [HttpGet]
@@ -93,8 +101,8 @@ public class EducationalOrganisationController : Controller
         {
             SearchTerm = m.SchoolSearchTerm,
             LepCode = result.LepCode,
-            Page = 1,
-            PageSize = 10,
+            Page = m.Page,
+            PageSize = m.PageSize,
         });
 
         var educationalOrganisations = (SelectSchoolEditViewModel)educationalOrganisationsResponse;
@@ -102,7 +110,13 @@ public class EducationalOrganisationController : Controller
         educationalOrganisations.SchoolSearchTerm = m.SchoolSearchTerm;
         educationalOrganisations.StudentSurveyId = m.StudentSurveyId;
         educationalOrganisations.IsCheck = m.IsCheck;
+        educationalOrganisations.Page = m.Page;
+        educationalOrganisations.PageSize = m.PageSize;
         educationalOrganisations.IsOther = result.DataSource == Datasource.Others;
+
+        var pagingUrl = GeneratePagingUrl(m);
+
+        educationalOrganisations.PaginationViewModel = SetupPagination(educationalOrganisations, pagingUrl);
 
         return View(educationalOrganisations);
     }
@@ -132,7 +146,7 @@ public class EducationalOrganisationController : Controller
 
         string routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
 
-        return RedirectToRoute(routeName, new { m.StudentSurveyId });
+        return RedirectToRoute(routeName, new { studentSurveyId = m.StudentSurveyId });
     }
 
     [HttpGet]
@@ -180,8 +194,29 @@ public class EducationalOrganisationController : Controller
 
         string routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
 
-        return RedirectToRoute(routeName, new { m.StudentSurveyId });
+        return RedirectToRoute(routeName, new { studentSurveyId = m.StudentSurveyId });
     }
+    private static PaginationViewModel SetupPagination(SelectSchoolEditViewModel request, string filterUrl)
+    {
+        var totalPages = (request.TotalCount > request.PageSize) ? (int)Math.Ceiling((double)request.TotalCount / request.PageSize) : 1;
+
+        var pagination = new PaginationViewModel(request.Page, request.PageSize, totalPages, filterUrl);
+
+        return pagination;
+    }
+
+    private string GeneratePagingUrl(SelectSchoolViewModel model)
+    {
+        var queryParams = new Dictionary<string, string?>
+        {
+            { "studentSurveyId", model.StudentSurveyId.ToString() },
+            { "schoolSearchTerm", model.SchoolSearchTerm },
+            { "isCheck", model.IsCheck.ToString() },
+        };
+
+        return QueryHelpers.AddQueryString("/selectschool", queryParams);
+    }
+
     private void ClearModelState()
     {
         if (ModelState.ContainsKey("Question.Answers"))
