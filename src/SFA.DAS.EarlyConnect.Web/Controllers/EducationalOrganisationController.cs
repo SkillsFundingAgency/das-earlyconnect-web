@@ -151,9 +151,14 @@ public class EducationalOrganisationController : Controller
 
     [HttpGet]
     [Route("noresultsfound", Name = RouteNames.NoResultsFound_Get)]
-    public IActionResult NoResultsFound()
+    public IActionResult NoResultsFound(NoResultsFoundViewModel m)
     {
-        return View();
+        return View(new NoResultsFoundViewModel()
+        {
+            StudentSurveyId = m.StudentSurveyId,
+            IsCheck = m.IsCheck,
+            SchoolSearchTerm = m.SchoolSearchTerm,
+        });
     }
 
     [HttpGet]

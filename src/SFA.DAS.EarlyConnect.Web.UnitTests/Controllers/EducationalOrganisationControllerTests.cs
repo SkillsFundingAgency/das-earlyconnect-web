@@ -364,6 +364,26 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
         }
 
         [Test]
+        public void NoResultFound_Get_ReturnsCorrectViewModel()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var surveyId = new Guid();
+            var searchTerm = "Test";
+
+            var result = controller.NoResultsFound(new NoResultsFoundViewModel { StudentSurveyId = surveyId, SchoolSearchTerm = searchTerm }) as ViewResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Model, Is.InstanceOf<NoResultsFoundViewModel>());
+            var viewModel = (NoResultsFoundViewModel)result.Model;
+            Assert.That(viewModel.StudentSurveyId, Is.EqualTo(surveyId));
+            Assert.That(viewModel.SchoolSearchTerm, Is.EqualTo(searchTerm));
+        }
+
+        [Test]
         public async Task SchoolName_Get_RedirectsToSurveyComplete()
         {
             var mediatorMock = new Mock<IMediator>();
