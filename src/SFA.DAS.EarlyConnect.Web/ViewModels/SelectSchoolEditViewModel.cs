@@ -39,7 +39,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
                 EducationalOrganisations = request.EducationalOrganisations.Select(org => new EducationalOrganisations
                 {
                     SchoolName = org.Name,
-                    Address = $"{org.AddressLine1},{org.Town},{org.County},{org.PostCode}",
+                    Address = FormatAddress(org.AddressLine1, org.Town, org.County, org.PostCode),
                     URN = org.URN
                 }).ToList(),
 
@@ -47,6 +47,17 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
             };
 
             return selectSchoolEditViewModel;
+        }
+        private static string FormatAddress(string addressLine1, string town, string county, string postCode)
+        {
+            var addressParts = new List<string>();
+
+            if (!string.IsNullOrEmpty(addressLine1)) addressParts.Add(addressLine1);
+            if (!string.IsNullOrEmpty(town)) addressParts.Add(town);
+            if (!string.IsNullOrEmpty(county)) addressParts.Add(county);
+            if (!string.IsNullOrEmpty(postCode)) addressParts.Add(postCode);
+
+            return addressParts.Any() ? string.Join(", ", addressParts) : "Not recorded";
         }
     }
 
