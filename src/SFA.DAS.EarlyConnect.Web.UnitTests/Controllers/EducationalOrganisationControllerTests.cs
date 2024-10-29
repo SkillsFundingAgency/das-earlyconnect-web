@@ -18,6 +18,66 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
     public class EducationalOrganisationControllerTests
     {
         [Test]
+        public async Task GetEducationalOrganisationsBySearch_ReturnsEducationalOrganisations_WhenCalledWithValidParameters()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var searchTerm = "Test School";
+            var lepCode = "123";
+            var educationalOrganisations = new List<EducationalOrganisationData>
+        {
+            new EducationalOrganisationData { Name = "Test School 1", AddressLine1 = "Address 1" },
+            new EducationalOrganisationData { Name = "Test School 2", AddressLine1 = "Address 2" }
+        };
+
+            var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
+            {
+                EducationalOrganisations = educationalOrganisations
+            };
+
+            mediatorMock
+                .Setup(x => x.Send(It.Is<GetEducationalOrganisationsQuery>(q => q.SearchTerm == searchTerm && q.LepCode == lepCode), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(educationalOrganisationsResponse);
+
+            var result = await controller.GetEducationalOrganisationsBySearch(searchTerm, lepCode) as OkObjectResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.StatusCode, Is.EqualTo(200));
+            Assert.That(result.Value, Is.EqualTo(educationalOrganisations));
+
+            mediatorMock.Verify(x => x.Send(It.Is<GetEducationalOrganisationsQuery>(q => q.SearchTerm == searchTerm && q.LepCode == lepCode), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
+        public async Task GetEducationalOrganisationsBySearch_ReturnsEmptyList_WhenNoOrganisationsFound()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var searchTerm = "Nonexistent School";
+            var lepCode = "456";
+            var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
+            {
+                EducationalOrganisations = new List<EducationalOrganisationData>()
+            };
+
+            mediatorMock
+                .Setup(x => x.Send(It.Is<GetEducationalOrganisationsQuery>(q => q.SearchTerm == searchTerm && q.LepCode == lepCode), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(educationalOrganisationsResponse);
+
+            var result = await controller.GetEducationalOrganisationsBySearch(searchTerm, lepCode) as OkObjectResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.StatusCode, Is.EqualTo(200));
+            Assert.That(result.Value, Is.EqualTo(new List<EducationalOrganisationData>()));
+
+            mediatorMock.Verify(x => x.Send(It.Is<GetEducationalOrganisationsQuery>(q => q.SearchTerm == searchTerm && q.LepCode == lepCode), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
         public async Task SelectSchool_Get_RedirectsToFormCompleted_WhenSurveyIsCompleted()
         {
             var mediatorMock = new Mock<IMediator>();
@@ -93,6 +153,178 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
             Assert.That(viewModel.IsOther, Is.True);
 
             Assert.That(viewModel.PaginationViewModel, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task SearchSchool_Post_RedirectsToCheckYourAnswers_WhenJsEnabledAndIsCheckIsTrue()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Test School",
+                IsJsEnabled = true,
+                IsCheck = true
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
+                    .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+                    {
+                        StudentSurvey = Survey
+                    });
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default))
+                .ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.CheckYourAnswers_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+        }
+
+        [Test]
+        public async Task SearchSchool_Post_RedirectsToApprenticeshipLevel_WhenJsEnabledAndIsCheckIsFalse()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Test School",
+                IsJsEnabled = true,
+                IsCheck = false
+            };
+
+            StudentSurveyDto Survey = new StudentSurveyDto();
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
+                .ReturnsAsync(new GetStudentTriageDataBySurveyIdResult
+                {
+                    StudentSurvey = Survey
+                });
+            mediatorMock.Setup(x => x.Send(It.IsAny<CreateStudentTriageDataCommand>(), default))
+                .ReturnsAsync(new CreateStudentTriageDataCommandResult());
+
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.ApprenticeshipLevel_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+        }
+
+        [Test]
+        public async Task SearchSchool_Post_RedirectsToCheckYourAnswers_WhenJsDisabledAndSchoolTermMatches()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Test School",
+                IsJsEnabled = false,
+                IsCheck = true
+            };
+
+            var studentSurveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                SchoolName = "Test School"
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
+                .ReturnsAsync(studentSurveyResponse);
+
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.CheckYourAnswers_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+        }
+
+        [Test]
+        public async Task SearchSchool_Post_RedirectsToSelectSchool_WhenNoMatchAndOrganisationsFound()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Different School",
+                IsJsEnabled = false
+            };
+
+            var studentSurveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                SchoolName = "Test School",
+                LepCode = "123"
+            };
+
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
+                .ReturnsAsync(studentSurveyResponse);
+
+            var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
+            {
+                TotalCount = 1,
+                EducationalOrganisations = new List<EducationalOrganisationData>
+        {
+            new EducationalOrganisationData { Name = "Test School Organisation", AddressLine1 = "Test address" }
+        }
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetEducationalOrganisationsQuery>(), default))
+                .ReturnsAsync(educationalOrganisationsResponse);
+
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.SelectSchool_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+            Assert.That(result.RouteValues["SchoolSearchTerm"], Is.EqualTo(viewModel.SchoolSearchTerm));
+        }
+
+        [Test]
+        public async Task SearchSchool_Post_RedirectsToNoResultsFound_WhenNoMatchAndNoOrganisationsFound()
+        {
+            var mediatorMock = new Mock<IMediator>();
+            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
+            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
+
+            var viewModel = new SearchSchoolEditViewModel
+            {
+                StudentSurveyId = Guid.NewGuid(),
+                SchoolSearchTerm = "Different School",
+                IsJsEnabled = false
+            };
+
+            var studentSurveyResponse = new GetStudentTriageDataBySurveyIdResult
+            {
+                SchoolName = "Test School",
+                LepCode = "123"
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), default))
+                .ReturnsAsync(studentSurveyResponse);
+
+            var educationalOrganisationsResponse = new GetEducationalOrganisationsResult
+            {
+                TotalCount = 0,
+                EducationalOrganisations = new List<EducationalOrganisationData>()
+            };
+            mediatorMock.Setup(x => x.Send(It.IsAny<GetEducationalOrganisationsQuery>(), default))
+                .ReturnsAsync(educationalOrganisationsResponse);
+
+            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.RouteName, Is.EqualTo(RouteNames.NoResultsFound_Get));
+            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
+            Assert.That(result.RouteValues["SchoolSearchTerm"], Is.EqualTo(viewModel.SchoolSearchTerm));
         }
 
         [Test]
@@ -226,35 +458,6 @@ namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.RouteName, Is.EqualTo(RouteNames.CheckYourAnswers_Get));
-            Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
-        }
-
-        [Test]
-        public async Task SearchSchool_Post_RedirectsToApprenticeshipLevel_WhenSchoolSearchTermMatchesAndIsCheckIsFalse()
-        {
-            var mediatorMock = new Mock<IMediator>();
-            var loggerMock = new Mock<ILogger<EducationalOrganisationController>>();
-
-            var controller = new EducationalOrganisationController(mediatorMock.Object, loggerMock.Object);
-
-            var viewModel = new SearchSchoolEditViewModel
-            {
-                StudentSurveyId = Guid.NewGuid(),
-                SchoolSearchTerm = "Test School",
-                IsCheck = false
-            };
-
-            var studentSurveyResponse = new GetStudentTriageDataBySurveyIdResult
-            {
-                SchoolName = "Test School"
-            };
-            mediatorMock.Setup(x => x.Send(It.IsAny<GetStudentTriageDataBySurveyIdQuery>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(studentSurveyResponse);
-
-            var result = await controller.SearchSchool(viewModel) as RedirectToRouteResult;
-
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.RouteName, Is.EqualTo(RouteNames.ApprenticeshipLevel_Get));
             Assert.That(result.RouteValues["StudentSurveyId"], Is.EqualTo(viewModel.StudentSurveyId));
         }
 

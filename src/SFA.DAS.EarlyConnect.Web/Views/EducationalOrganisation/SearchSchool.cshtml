@@ -20,6 +20,11 @@
             <partial name="@PartialNames.ValidationSummary" model='new ValidationSummaryViewModel { ModelState = ViewData.ModelState }' />
             <form asp-route="@RouteNames.SearchSchool_Post" asp-route-studentSurveyId="@Model.StudentSurveyId" asp-route-isCheck="@Model.IsCheck" novalidate>
                 @Html.HiddenFor(model => model.IsOther)
+                @Html.HiddenFor(model => model.LepCode, new { @id = "lepCode" })
+                @Html.HiddenFor(model => model.SelectedUrn, new { id = "selectedUrn" })
+                @Html.HiddenFor(model => model.IsJsEnabled, new { id = "isJsEnabled" })
+                @Html.HiddenFor(model => model.ExistingSchool)
+
                 <div class="govuk-form-group">
                     <h1 class="govuk-label-wrapper">
                         <label class="govuk-label govuk-label--l" for="SchoolSearchTerm">
@@ -28,10 +33,11 @@
                     </h1>
                     <div esfa-validation-marker-for="SchoolSearchTerm" class="govuk-form-group">
                         <span esfa-validation-message-for="SchoolSearchTerm" class="govuk-error-message"></span>
-                        <input asp-for="SchoolSearchTerm" id="schoolsearchterm" name="schoolsearchterm" class="govuk-input govuk-input--width-20" type="text">
+                        <input asp-for="SchoolSearchTerm" id="schoolsearchterm" name="schoolsearchterm" class="govuk-input autocomplete__input autocomplete__input--default school-search-autocomplete" data-track-user-selected="userSelected" type="text" autocomplete="off">
                     </div>
                 </div>
-                <button type="submit" class="govuk-button" data-module="govuk-button" esfa-automation="continue-button">
+                <div id="schoolmanualentry" style="display: none;" class="govuk-!-margin-bottom-4"> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">I cannot find my school - enter manually</a></div>
+                <button type="submit" class="govuk-button" data-module="govuk-button" esfa-automation="continue-button" id="searchschoolsubmit">
                     Search
                 </button>
             </form>

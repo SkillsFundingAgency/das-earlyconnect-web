@@ -26,6 +26,19 @@ public class EducationalOrganisationController : Controller
     }
 
     [HttpGet]
+    [Route("/educationalOrganisations/search")]
+    public async Task<IActionResult> GetEducationalOrganisationsBySearch([FromQuery] string searchTerm, [FromQuery] string lepCode)
+    {
+        var educationalOrganisationsResponse = await _mediator.Send(new GetEducationalOrganisationsQuery
+        {
+            SearchTerm = searchTerm,
+            LepCode = lepCode,
+        });
+
+        return Ok(educationalOrganisationsResponse.EducationalOrganisations);
+    }
+
+    [HttpGet]
     [Route("searchschool", Name = RouteNames.SearchSchool_Get)]
     public async Task<IActionResult> SearchSchool(SearchSchoolViewModel m)
     {
@@ -42,6 +55,9 @@ public class EducationalOrganisationController : Controller
             StudentSurveyId = m.StudentSurveyId,
             IsCheck = m.IsCheck,
             SchoolSearchTerm = result.SchoolName,
+            ExistingSchool = result.SchoolName,
+            LepCode = result.LepCode,
+            SelectedUrn = result.URN,
             IsOther = result.DataSource == Datasource.Others
         });
 
@@ -51,17 +67,7 @@ public class EducationalOrganisationController : Controller
     [Route("searchschool", Name = RouteNames.SearchSchool_Post)]
     public async Task<IActionResult> SearchSchool(SearchSchoolEditViewModel m)
     {
-        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery
-        {
-            SurveyGuid = m.StudentSurveyId
-        });
-
-        if (m.SchoolSearchTerm == studentSurveyResponse.SchoolName)
-        {
-            var routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
-            return RedirectToRoute(routeName, new { studentSurveyId = m.StudentSurveyId });
-        }
-
+        var studentSurveyResponse = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = m.StudentSurveyId });
         var educationalOrganisationsResponse = await _mediator.Send(new GetEducationalOrganisationsQuery
         {
             SearchTerm = m.SchoolSearchTerm,
@@ -70,19 +76,47 @@ public class EducationalOrganisationController : Controller
             PageSize = 1,
         });
 
-        var finalRouteName = (educationalOrganisationsResponse?.EducationalOrganisations != null
-                              && educationalOrganisationsResponse.TotalCount > 0)
-            ? RouteNames.SelectSchool_Get
-            : RouteNames.NoResultsFound_Get;
+        string routeName;
 
-        return RedirectToRoute(finalRouteName, new
+        if (m.IsJsEnabled)
         {
-            studentSurveyId = m.StudentSurveyId,
-            schoolSearchTerm = m.SchoolSearchTerm,
-            isCheck = m.IsCheck,
-            page = 1,
-            pageSize = 10
-        });
+            await _mediator.Send(new CreateStudentTriageDataCommand
+            {
+                StudentData = m.MapFromSearchSchoolNameRequest(studentSurveyResponse),
+                SurveyGuid = m.StudentSurveyId
+            });
+            routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
+        }
+        else if (m.SchoolSearchTerm == studentSurveyResponse.SchoolName)
+        {
+            routeName = m.IsCheck ? RouteNames.CheckYourAnswers_Get : RouteNames.ApprenticeshipLevel_Get;
+        }
+        else
+        {
+            routeName = educationalOrganisationsResponse?.EducationalOrganisations != null && educationalOrganisationsResponse.TotalCount > 0
+                ? RouteNames.SelectSchool_Get
+                : RouteNames.NoResultsFound_Get;
+        }
+
+        object routeValues;
+
+        if (routeName == RouteNames.SelectSchool_Get || routeName == RouteNames.NoResultsFound_Get)
+        {
+            routeValues = new
+            {
+                studentSurveyId = m.StudentSurveyId,
+                schoolSearchTerm = m.SchoolSearchTerm,
+                isCheck = m.IsCheck,
+                page = 1,
+                pageSize = 10
+            };
+        }
+        else
+        {
+            routeValues = new { studentSurveyId = m.StudentSurveyId };
+        }
+
+        return RedirectToRoute(routeName, routeValues);
     }
 
     [HttpGet]
