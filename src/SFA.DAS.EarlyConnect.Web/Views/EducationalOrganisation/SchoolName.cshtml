@@ -24,10 +24,13 @@
                 <div class="govuk-form-group">
                     <h1 class="govuk-label-wrapper">
                         <label class="govuk-label govuk-label--l" for="SchoolName">
-                            What is the name of your school or college?
+                            Enter the name of your school or college manually
                         </label>
                     </h1>
                     <div esfa-validation-marker-for="SchoolName" class="govuk-form-group">
+                        <label class="govuk-label" for="SchoolName">
+                            School or college name
+                        </label>
                         <span esfa-validation-message-for="SchoolName" class="govuk-error-message"></span>
                         <input asp-for="SchoolName" id="schoolname" name="schoolname" class="govuk-input govuk-input--width-20" type="text">
                     </div>

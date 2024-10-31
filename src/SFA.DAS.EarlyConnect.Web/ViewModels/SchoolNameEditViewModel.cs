@@ -12,7 +12,7 @@ namespace SFA.DAS.EarlyConnect.Web.ViewModels
         public string? BacklinkRoute =>
             IsCheck && IsOther ? RouteNames.CheckYourAnswers_Get :
             IsCheck && !IsOther ? RouteNames.CheckYourAnswers_Get :
-            IsOther ? RouteNames.Industry_Get :
-            RouteNames.Telephone_Get;
+            IsOther ? RouteNames.SearchSchool_Get :
+            RouteNames.SearchSchool_Get;
     }
 }
