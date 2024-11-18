@@ -18,8 +18,8 @@
                     <h1 class="govuk-heading-l">
                         No results found for '@Model.SchoolSearchTerm'
                     </h1>
-                    <div> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SearchSchool_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">Change your search</a> if you've made a mistake.</div>
-                    <div class="govuk-!-margin-top-4"> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">Enter your school name manually</a> if your school has not been found.</div>
+                    <div class="govuk-body"> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SearchSchool_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">Change your search</a> if you've made a mistake.</div>
+                    <div class="govuk-!-margin-top-4 govuk-body"> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">Enter your school name manually</a> if your school has not been found.</div>
                 </div>
             </div>
         </div>
