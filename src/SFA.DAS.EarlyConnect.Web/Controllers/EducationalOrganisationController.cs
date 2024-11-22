@@ -8,6 +8,8 @@ using SFA.DAS.EarlyConnect.Web.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.WebUtilities;
 using SFA.DAS.EarlyConnect.Application.Queries.GetEducationalOrganisations;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Text.Encodings.Web;
 
 namespace SFA.DAS.EarlyConnect.Web.Controllers;
 
@@ -49,6 +51,8 @@ public class EducationalOrganisationController : Controller
         {
             return RedirectToRoute(RouteNames.FormCompleted_Get);
         }
+
+        SanitizeModelState("SchoolSearchTerm");
 
         return View(new SearchSchoolEditViewModel
         {
@@ -235,6 +239,20 @@ public class EducationalOrganisationController : Controller
 
         return RedirectToRoute(routeName, new { studentSurveyId = m.StudentSurveyId });
     }
+
+    private void SanitizeModelState(string key)
+    {
+        if (ModelState.ContainsKey(key))
+        {
+            var unsafeValue = ModelState[key]?.AttemptedValue;
+            if (!string.IsNullOrEmpty(unsafeValue))
+            {
+                var sanitizedValue = HtmlEncoder.Default.Encode(unsafeValue);
+                ModelState.SetModelValue(key, new ValueProviderResult(sanitizedValue));
+            }
+        }
+    }
+
     private static PaginationViewModel SetupPagination(SelectSchoolEditViewModel request, string filterUrl)
     {
         var totalPages = (request.TotalCount > request.PageSize) ? (int)Math.Ceiling((double)request.TotalCount / request.PageSize) : 1;
