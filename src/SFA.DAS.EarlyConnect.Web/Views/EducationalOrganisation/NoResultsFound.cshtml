@@ -1,0 +1,27 @@
+﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
+@model SFA.DAS.EarlyConnect.Web.ViewModels.NoResultsFoundViewModel
+@{
+    ViewBag.Vpv = "/personal-details/page-no-results-found";
+    ViewBag.Title = "No results found";
+}
+
+@section BackLink {
+    <a asp-route="@RouteNames.SearchSchool_Get" asp-all-route-data="@Model.RouteDictionary" esfa-automation="link-back" class="govuk-back-link">Back</a>
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group">
+                <div>
+                    <h1 class="govuk-heading-l">
+                        No results found for '@Model.SchoolSearchTerm'
+                    </h1>
+                    <div class="govuk-body"> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SearchSchool_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">Change your search</a> if you've made a mistake.</div>
+                    <div class="govuk-!-margin-top-4 govuk-body"> <a class="govuk-link" href="@Url.RouteUrl(RouteNames.SchoolName_Get, new { studentSurveyId = Model.StudentSurveyId, Model.IsCheck })">Enter your school name manually</a> if your school has not been found.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

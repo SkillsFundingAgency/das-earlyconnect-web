@@ -11,7 +11,8 @@
             {
                 var routeDictionary = new Dictionary<string, string>
                 {
-                    {"studentSurveyId", StudentSurveyId.ToString()}
+                    {"studentSurveyId", StudentSurveyId.ToString()},
+                    {"IsCheck", IsCheck.ToString()}
                 };
                 return routeDictionary;
             }

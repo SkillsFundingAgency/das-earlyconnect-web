@@ -3,7 +3,6 @@ using SFA.DAS.EarlyConnect.Domain.CreateStudentTriageData;
 using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Web.Extensions;
 using SFA.DAS.EarlyConnect.Web.ViewModels;
-using System.Globalization;
 
 namespace SFA.DAS.EarlyConnect.Web.Mappers
 {
@@ -18,6 +17,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth;
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
+            manageStudentPersonalData.URN = studentTriageDataBySurveyIdResult.URN;
             manageStudentPersonalData.Postcode = request.PostalCode;
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
@@ -36,6 +36,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth;
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
+            manageStudentPersonalData.URN = studentTriageDataBySurveyIdResult.URN;
             manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
             manageStudentPersonalData.Telephone = request.Telephone ?? string.Empty;
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
@@ -53,6 +54,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.LastName = studentTriageDataBySurveyIdResult.LastName;
             manageStudentPersonalData.DateOfBirth = studentTriageDataBySurveyIdResult.DateOfBirth;
             manageStudentPersonalData.SchoolName = request.SchoolName;
+            manageStudentPersonalData.URN = request.URN;
             manageStudentPersonalData.Email = studentTriageDataBySurveyIdResult.Email;
             manageStudentPersonalData.Postcode = studentTriageDataBySurveyIdResult.Postcode;
             manageStudentPersonalData.Telephone = studentTriageDataBySurveyIdResult.Telephone;
@@ -76,6 +78,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
+            manageStudentPersonalData.URN = studentTriageDataBySurveyIdResult.URN;
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
             manageStudentPersonalData.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
             return manageStudentPersonalData;
@@ -94,6 +97,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = studentTriageDataBySurveyIdResult.Industry;
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
+            manageStudentPersonalData.URN = studentTriageDataBySurveyIdResult.URN;
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
             manageStudentPersonalData.StudentSurvey.ResponseAnswers = new List<ResponseAnswersDto>();
             return manageStudentPersonalData;
@@ -112,6 +116,7 @@ namespace SFA.DAS.EarlyConnect.Web.Mappers
             manageStudentPersonalData.DataSource = studentTriageDataBySurveyIdResult.DataSource;
             manageStudentPersonalData.Industry = string.Join("|", request.Sector);
             manageStudentPersonalData.SchoolName = studentTriageDataBySurveyIdResult.SchoolName;
+            manageStudentPersonalData.URN = studentTriageDataBySurveyIdResult.URN;
             manageStudentPersonalData.StudentSurvey = studentTriageDataBySurveyIdResult.StudentSurvey;
             manageStudentPersonalData.StudentSurvey.LastUpdated = DateTime.Now;
             return manageStudentPersonalData;

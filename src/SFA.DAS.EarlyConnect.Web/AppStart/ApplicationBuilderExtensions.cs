@@ -15,7 +15,7 @@ public static class ApplicationBuilderExtensions
                 $"style-src 'self' 'unsafe-inline' {dasCdn} *.tagmanager.google.com https://fonts.googleapis.com https://*.rcrsv.io ; " +
                 $"img-src {dasCdn} *.googletagmanager.com https://ssl.gstatic.com https://www.gstatic.com *.google-analytics.com https://*.rcrsv.io ; " +
                 $"font-src {dasCdn} https://fonts.gstatic.com https://*.rcrsv.io ;" +
-                "connect-src *.google-analytics.com https://*.rcrsv.io;" +
+                "connect-src 'self' *.google-analytics.com https://*.rcrsv.io;" +
                 "frame-src *.googletagmanager.com https://*.rcrsv.io";
             await next();
         });
