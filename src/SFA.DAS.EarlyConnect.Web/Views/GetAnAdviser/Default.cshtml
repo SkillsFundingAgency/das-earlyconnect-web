@@ -11,7 +11,7 @@
             <form asp-route="@RouteNames.GetAnAdviser_Post">
                 <h1 class="govuk-heading-xl">Get an apprenticeship adviser</h1>
                 <div class="govuk-inset-text">
-                    Advisers are currently only available for year 13 students in Greater London, Lancashire and the North East.
+                    Advisers are currently only available for year 13 students in Greater London and the North East.
                 </div>
                 <p class="govuk-body">
                     Our advisers offer free support by email or phone. You can still be unsure about doing an
@@ -35,9 +35,6 @@
                 <p class="govuk-body govuk-!-margin-top-8">Get an apprenticeship adviser by selecting your region:</p>
 
                 <ul class="govuk-list">
-                    <li>
-                        <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.LancashireLEPSCode})">Get an adviser in Lancashire</a>
-                    </li>
                     <li>
                         <a class="govuk-link" href="@Url.RouteUrl(RouteNames.ServiceStartDefault, new { lepsCode = Model.GreaterLondonLEPSCode })">Get an adviser in Greater London</a>
                     </li>
