@@ -34,7 +34,7 @@ A collection of functions, API’s and micro-site that supports a triage form wh
 * A clone of this repository
 * A code editor that supports .Net8.0
 * An Azure Service Bus instance
-* The [das-earlyconnect-api]([https://github.com/SkillsFundingAgency/das-audi](https://github.com/SkillsFundingAgency/das-earlyconnect-api)t) API available either running locally or accessible in an Azure tenancy    
+* The [das-earlyconnect-api](https://github.com/SkillsFundingAgency/das-earlyconnect-api) API available either running locally or accessible in an Azure tenancy    
 ```
 ### Config
 
