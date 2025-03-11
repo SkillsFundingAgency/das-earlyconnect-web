@@ -34,14 +34,12 @@ A collection of functions, API’s and micro-site that supports a triage form wh
 * A clone of this repository
 * A code editor that supports .Net8.0
 * An Azure Service Bus instance
-* The [das-earlyconnect-api] (https://github.com/SkillsFundingAgency/das-earlyconnect-api) API available either running locally or accessible in an Azure tenancy    
+* The [das-earlyconnect-api](https://github.com/SkillsFundingAgency/das-earlyconnect-api) API available either running locally or accessible in an Azure tenancy    
 ```
 ### Config
 
-```
 This utility uses the standard Apprenticeship Service configuration. All configuration can be found in the [das-employer-config repository](https://github.com/SkillsFundingAgency/das-employer-config).
 
-```
 AppSettings.Development.json file
 ```json
 {
@@ -95,8 +93,6 @@ Data:
 ```
 Check [das-employer-config repository](https://github.com/SkillsFundingAgency/das-employer-config) for subscription keys and LEPS codes.
 ## 🔗 External Dependencies
-
-_Add details of any external dependencies that are required for the project to run, this could be details of authentication providers, API's or stubs/test harnesses._
 
 
 ## Technologies
