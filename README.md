@@ -105,7 +105,9 @@ Check [das-employer-config repository](https://github.com/SkillsFundingAgency/da
 * FluentValidation  
 * Application Insights  
 * Newtonsoft.Json  
-* libphonenumber-csharp  
+* libphonenumber-csharp
+* NUnit
+* Moq
 ```
 
 ## 🐛 Known Issues
