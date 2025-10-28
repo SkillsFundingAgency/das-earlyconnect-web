@@ -1,55 +1,97 @@
-using AutoFixture;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EarlyConnect.Application.Queries.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Application.Services;
-using SFA.DAS.EarlyConnect.Domain.Configuration;
-using SFA.DAS.EarlyConnect.Domain.GetStudentTriageDataBySurveyId;
 using SFA.DAS.EarlyConnect.Domain.Interfaces;
 using SFA.DAS.EarlyConnect.Web.Controllers;
-using SFA.DAS.EarlyConnect.Web.Infrastructure;
-using SFA.DAS.EarlyConnect.Web.RouteModel;
 
 namespace SFA.DAS.EarlyConnectWeb.UnitTests.Controllers
 {
     [TestFixture]
     public class GetAnAdviserControllerTests
     {
-        private Mock<IOptions<SFA.DAS.EarlyConnect.Domain.Configuration.EarlyConnectWeb>> _configMock;
-        private Mock<HttpContext> mockContext;
+        private Mock<IMediator> _mediatorMock;
+        private Mock<ILogger<GetAnAdviserController>> _loggerMock;
+        private Mock<IUrlValidator> _urlValidatorMock;
+        private Mock<IAuthenticateService> _authenticateServiceMock;
+        private GetAnAdviserController _controller;
 
         [SetUp]
         public void SetUp()
         {
-            var config = new SFA.DAS.EarlyConnect.Domain.Configuration.EarlyConnectWeb
-            {
-                LepCodes = new LepsRegionCodes 
-                {
-                    GreaterLondon = "E37000051",
-                    Lancashire = "E37000019",
-                    NorthEast = "E37000025"
-                }
-            };
-            _configMock = new Mock<IOptions<SFA.DAS.EarlyConnect.Domain.Configuration.EarlyConnectWeb>>();
-            _configMock.Setup(ap => ap.Value).Returns(config);
+            // Create all the mock dependencies
+            _mediatorMock = new Mock<IMediator>();
+            _loggerMock = new Mock<ILogger<GetAnAdviserController>>();
+            _urlValidatorMock = new Mock<IUrlValidator>();
+            _authenticateServiceMock = new Mock<IAuthenticateService>();
 
-            var mockRequest = new Mock<HttpRequest>();
-            mockRequest.Setup(req => req.QueryString).Returns(new QueryString("?xyz"));
-
-            mockContext = new Mock<HttpContext>();
-            mockContext.Setup(con => con.Request).Returns(mockRequest.Object);
-
+            // Create the controller instance with all the mocked dependencies
+            _controller = new GetAnAdviserController(
+                _mediatorMock.Object,
+                _loggerMock.Object,
+                _urlValidatorMock.Object,
+                _authenticateServiceMock.Object
+            );
         }
 
-    
+        [Test]
+        public void Index_WhenCalled_ReturnsViewResult()
+        {
+            // Act
+            var result = _controller.Index();
 
-  
- 
+            // Assert
+            Assert.That(result, Is.InstanceOf<ViewResult>());
+        }
+
+        [Test]
+        public void Index_WhenCalled_ReturnsIndexView()
+        {
+            // Act
+            var result = _controller.Index() as ViewResult;
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.ViewName, Is.EqualTo("Index"));
+        }
+
+        [Test]
+        public void Index_WhenCalled_DoesNotReturnNull()
+        {
+            // Act
+            var result = _controller.Index();
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public void Index_WhenCalled_ModelIsNull()
+        {
+            // Act
+            var result = _controller.Index() as ViewResult;
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Model, Is.Null);
+        }
+
+        [Test]
+        public void Controller_CanBeCreated_WithAllDependencies()
+        {
+            // Arrange & Act
+            var controller = new GetAnAdviserController(
+                _mediatorMock.Object,
+                _loggerMock.Object,
+                _urlValidatorMock.Object,
+                _authenticateServiceMock.Object
+            );
+
+            // Assert
+            Assert.That(controller, Is.Not.Null);
+            Assert.That(controller, Is.InstanceOf<GetAnAdviserController>());
+        }
     }
-
 }

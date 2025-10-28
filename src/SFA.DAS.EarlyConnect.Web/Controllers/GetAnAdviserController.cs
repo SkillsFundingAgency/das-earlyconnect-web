@@ -22,16 +22,12 @@ public class GetAnAdviserController : Controller
     public GetAnAdviserController(IMediator mediator,
         ILogger<GetAnAdviserController> logger,
         IUrlValidator urlValidator,
-        IDataProtectorService dataProtectorService,
-        IOptions<EarlyConnectWeb> config,
         IAuthenticateService authenticateService
         )
     {
         _mediator = mediator;
         _logger = logger;
         _urlValidator = urlValidator;
-        _dataProtectorService = dataProtectorService;
-        _config = config;
         _authenticateService = authenticateService;
     }
 
