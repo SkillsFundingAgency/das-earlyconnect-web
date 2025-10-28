@@ -56,19 +56,15 @@ builder.Services.Configure<RouteOptions>(options =>
 
 }).EnableCookieBanner();
 
-builder.Services.AddDataProtection(rootConfiguration);
-
 builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddApplicationInsightsTelemetry();
-
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-
 }
 
 app.UseContentSecurityPolicy();
@@ -79,21 +75,37 @@ app.UseAuthentication();
 
 app.UseRouting();
 
+// Redirect middleware - add this section
+app.Use(async (context, next) =>
+{
+    // Allow the root path and static files to proceed normally
+    if (context.Request.Path == "/" || 
+        context.Request.Path.StartsWithSegments("/css") ||
+        context.Request.Path.StartsWithSegments("/js") ||
+        context.Request.Path.StartsWithSegments("/images") ||
+        context.Request.Path.StartsWithSegments("/lib") ||
+        context.Request.Path == "/ping")
+    {
+        await next();
+    }
+    else
+    {
+        // Redirect everything else to the homepage
+        context.Response.Redirect("/");
+        return;
+    }
+});
+
 app.UseAuthorization();
 
 app.UseStaticFiles();
 
-app.UseEndpoints(endpointBuilder =>
+app.UseEndpoints(endpoints =>
 {
-    endpointBuilder.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=GetAnAdviserController}/{action=Index}/");
-
-    endpointBuilder.MapControllerRoute(
-       name: "privacy",
-       pattern: "privacy",
-       defaults: new { controller = "Privacy", action = "Privacy" }
-   );
+    endpoints.MapControllerRoute(
+        name: "catch-all",
+        pattern: "{*url}",
+        defaults: new { controller = "GetAnAdviser", action = "Index" });
 });
 
 app.Run();

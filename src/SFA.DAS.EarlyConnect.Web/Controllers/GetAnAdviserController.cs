@@ -36,85 +36,9 @@ public class GetAnAdviserController : Controller
     }
 
     [HttpGet]
-    [Route("{lepsCode?}", Name = RouteNames.ServiceStartDefault, Order = 0)]
-    public IActionResult Index(string? lepsCode)
+    public IActionResult Index()
     {
-        return string.IsNullOrEmpty(lepsCode)
-            ? View("Default", GetAdviserLinksModel())
-            : (_urlValidator.IsValidLepsCode(lepsCode) ? View("Index",lepsCode) : NotFound());
-    }
-
-    [HttpPost]
-    [Route("{lepsCode}", Name = RouteNames.GetAnAdviser_Post, Order = 0)]
-    public IActionResult GetAnAdviser_Post(string lepsCode)
-    {
-        return RedirectToRoute(RouteNames.Email_Get, new { lepsCode = lepsCode });
-
-    }
-
-    [HttpGet]
-    [Route("ref", Name = RouteNames.UCASServiceStart_Get, Order = 0)]
-    public async Task<IActionResult> UCASIndex()
-    {
-        try
-        {
-            var linkCode = Request.QueryString.Value.Substring(Request.QueryString.Value.IndexOf("?") + 1);
-            var linkData = _dataProtectorService.DecodeData(linkCode).Split("|");
-
-            if (!_urlValidator.IsValidLinkDate(linkData[1].Trim()))
-            {
-                return View("Expired", GetAdviserLinksModel());
-            }
-
-            var result = await _mediator.Send(new GetStudentTriageDataBySurveyIdQuery { SurveyGuid = new Guid(linkData[0]) });
-            if (result == null)
-            {
-                return View("LinkFault", GetAdviserLinksModel());
-            }
-
-            if (result.StudentSurvey.DateCompleted.HasValue)
-            {
-                return RedirectToRoute(RouteNames.FormCompleted_Get);
-            }
-
-            return View(new GetAdvisorViewModel { StudentSurveyId = new Guid(linkData[0]), Email = result.Email });
-        }
-        catch
-        {
-            return View("LinkFault", GetAdviserLinksModel());
-        }
-    }
-
-    [HttpPost]
-    [Route("ref", Name = RouteNames.GetAnAdviserUCAS_Post, Order = 0)]
-    public async Task<IActionResult> GetAnAdviserUCAS_Post(GetAdvisorViewModel m)
-    {
-        await _authenticateService.SignInUser(m.Email, m.StudentSurveyId.ToString());
-
-        return RedirectToRoute(RouteNames.PersonalDetails_Get, new { StudentSurveyId = m.StudentSurveyId });
-
-    }
-
-    [Route("cookies", Name = RouteNames.Cookies_Get)]
-    public IActionResult Cookies()
-    {
-        return View();
-    }
-
-    [Route("cookies-details", Name = RouteNames.CookiesDetails_Get)]
-    public IActionResult CookiesDetails()
-    {
-        return View();
-    }
-
-    private AdviserLinksViewModel GetAdviserLinksModel()
-    {
-        return new AdviserLinksViewModel
-        {
-            GreaterLondonLEPSCode = _config.Value.LepCodes.GreaterLondon,
-            LancashireLEPSCode = _config.Value.LepCodes.Lancashire,
-            NorthEastLEPSCode = _config.Value.LepCodes.NorthEast
-        };
+        return View("Index");
     }
 }
 

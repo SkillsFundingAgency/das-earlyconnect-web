@@ -1,57 +1,111 @@
 ﻿@using SFA.DAS.EarlyConnect.Web.Infrastructure
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model string
 @{
-    ViewBag.Vpv = "/get-an-adviser/page-index";
-    ViewBag.Title = "Get an apprenticeship adviser";
+    ViewBag.Vpv = "/page-default";
+    ViewBag.Title = "Sorry, this service has closed";
 }
 
-<main class="govuk-main-wrapper " id="main-content" role="main">
+<main role="main" id="content" class="govuk-main-wrapper">
+    <span id="Top"></span>
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <form asp-route="@RouteNames.GetAnAdviser_Post">
-                <h1 class="govuk-heading-xl">Get an apprenticeship adviser</h1>
-                <div class="govuk-inset-text">
-                    Advisers are currently only available for year 13 students in Greater London, Lancashire and the North East.
+            <div class="gem-c-heading govuk-!-margin-bottom-8">
+                <h1 class="gem-c-heading__text govuk-heading-xl">
+                    Sorry, this service has closed
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="article-container group govuk-grid-column-two-thirds">
+            <div class="govuk-inset-text">
+                <p class="govuk-body">
+                    The Get an apprenticeship adviser service closed on 31 October 2025. If you're a student in Greater London, Lancashire, or the North East of England, there is still support available.
+                </p>
+                <p class="govuk-body">
+                    The Department for Education is not responsible for content on external sites.
+                </p>
+            </div>
+
+            <h2 class="govuk-heading-m">Greater London</h2>
+            <p class="govuk-body">
+                The Mayor of London's website has:
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>
+                    <a href="https://www.london.gov.uk/programmes-strategies/jobs-and-skills/apprenticeships-information-londoners" class="govuk-link">
+                        apprenticeship information for Londoners
+                    </a>
+                </li>
+                <li>
+                    details on how to access
+                    <a href="https://www.london.gov.uk/programmes-strategies/business-and-economy/mayors-priorities-londons-economy-and-business/uk-shared-prosperity-fund-ukspf/uk-shared-prosperity-fund-support-young-londoners" class="govuk-link">
+                        projects for Londoners aged 16 to 24 who are not in education, employment or training
+                    </a>
+                </li>
+            </ul>
+
+            <h2 class="govuk-heading-m">Lancashire</h2>
+            <p class="govuk-body">
+                <a href="https://www.lancashireskillshub.co.uk/apprenticeship-advice/" class="govuk-link">
+                    The Lancashire Skills and Employment hub
+                </a>
+                has information and resources about apprenticeships.
+            </p>
+
+            <h2 class="govuk-heading-m">North East</h2>
+            <p class="govuk-body">
+                <a href="https://ambition.northeast-ca.gov.uk/education/further-education/apprenticeready" class="govuk-link">
+                    North East Ambition's apprenticeReady service
+                </a>
+                has help and support for students who want to know more about apprenticeships, and details of local organisations who can help you.
+            </p>
+            <p class="govuk-body">
+                Email
+                <a href="mailto:NEambition@edt.org" class="govuk-link">
+                    NEambition@edt.org
+                </a>
+                for help finding vacancies.
+            </p>
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+            <div class="gem-c-contextual-sidebar govuk-!-display-none-print">
+                <div data-module="ga4-link-tracker" class="gem-c-related-navigation govuk-!-display-none-print">
+                    <h2 id="related-nav-related_items" class="govuk-heading-m">
+                        Other resources
+                    </h2>
+
+                    <nav class="gem-c-related-navigation__nav-section" aria-labelledby="related-nav-related_items">
+                        <p class="govuk-body">
+                            You can search and apply for apprenticeships in England on
+                            <a href="https://www.gov.uk/apply-apprenticeship" class="govuk-link">
+                                Find an apprenticeship
+                            </a>
+                        </p>
+                        <p class="govuk-body">
+                            Find out more about
+                            <a href="https://www.gov.uk/become-apprentice" class="govuk-link">
+                                how apprenticeships work
+                            </a>
+                        </p>
+                        <p class="govuk-body">
+                            You can find job opportunities and speak to an adviser at the
+                            <a href="https://nationalcareers.service.gov.uk/" class="govuk-link">
+                                National Careers Service
+                            </a>
+                        </p>
+                        <p class="govuk-body">
+                            <a href="http://apprenticeships.gov.uk/" class="govuk-link">
+                                Apprenticeships.gov.uk
+                            </a>
+                            has information on finding, applying for and doing an apprenticeship.
+                        </p>
+                    </nav>
                 </div>
-
-                <p class="govuk-body">
-                    Our advisers offer free support by email or phone. You can still be unsure about doing an
-                    apprenticeship and speak to an adviser.
-                </p>
-
-                <p class="govuk-body">
-                    Your adviser can help you:
-                </p>
-
-                <ul class="govuk-list govuk-list--bullet">
-                    <li>decide if an apprenticeship is right for you</li>
-                    <li>find the right apprenticeship based on your interests</li>
-                    <li>apply and interview, including help with your CV</li>
-                </ul>
-
-                <p class="govuk-body">
-                    Your apprenticeship adviser will be from your area. They'll know local companies that take on
-                    apprentices.
-                </p>
-
-                <button type="submit" class="govuk-button govuk-button--start" esfa-automation="continue-button">
-                    Get an adviser
-                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
-                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
-                    </svg>
-                </button>
-
-                <h2 class="govuk-heading-m govuk-!-margin-top-8">Other resources</h2>
-
-                <p class="govuk-body">Find out more about <a href="https://www.gov.uk/become-apprentice" class="govuk-link">how apprenticeships work</a>.</p>
-
-                <p class="govuk-body">
-                    You can search and apply for apprenticeships in England on
-                    <a href="https://www.gov.uk/apply-apprenticeship"
-                       class="govuk-link">Find an apprenticeship</a>.
-                </p>
-            </form>
+            </div>
         </div>
     </div>
 </main>
